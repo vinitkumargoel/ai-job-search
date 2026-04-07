@@ -117,7 +117,7 @@ export default function SitesPage() {
       ) : (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[700px]">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
@@ -136,7 +136,6 @@ export default function SitesPage() {
                   <tr key={site._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       <p className="font-semibold text-gray-900">{site.name}</p>
-                      <p className="text-xs text-gray-400 truncate max-w-xs mt-0.5">{site.url}</p>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4F6AF5] bg-[#EEF1FE] px-2.5 py-1 rounded-full whitespace-nowrap">
