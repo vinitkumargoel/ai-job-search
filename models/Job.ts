@@ -18,6 +18,7 @@ export interface IJob extends Document {
   matchedResumeId: Types.ObjectId | null;
   scrapedAt: Date;
   appliedAt: Date | null;
+  notes: string;
 }
 
 const JobSchema = new Schema(
@@ -41,6 +42,7 @@ const JobSchema = new Schema(
     matchedResumeId: { type: Schema.Types.ObjectId, ref: "Resume", default: null },
     scrapedAt: { type: Date, default: Date.now },
     appliedAt: { type: Date, default: null },
+    notes: { type: String, default: "" },
   },
   { timestamps: true }
 );

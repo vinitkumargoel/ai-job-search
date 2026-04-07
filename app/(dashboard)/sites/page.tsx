@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { SiteForm } from "@/components/SiteForm";
-import { Badge } from "@/components/ui/Badge";
 import { useToast } from "@/components/ui/Toast";
 
 interface Site {
@@ -64,108 +63,128 @@ export default function SitesPage() {
     setRunningId(null);
   };
 
-  const statusVariant = (s: string) => {
-    if (s === "success") return "green";
-    if (s === "failed") return "red";
-    return "gray";
+  const statusConfig = (s: string) => {
+    if (s === "success") return { dot: "bg-green-500", text: "text-green-700", bg: "bg-green-50", label: "Success" };
+    if (s === "failed") return { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50", label: "Failed" };
+    return { dot: "bg-gray-300", text: "text-gray-500", bg: "bg-gray-100", label: "Never" };
   };
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-light text-[#010D39]">Sites</h1>
-          <p className="text-[#3F486B] text-sm mt-1">Manage your job scraping sources</p>
+          <h1 className="text-2xl font-bold text-gray-900">Sites</h1>
+          <p className="text-gray-600 text-sm mt-1">Manage your job scraping sources</p>
         </div>
         <button
           onClick={() => { setEditSite(null); setShowForm(true); }}
-          className="px-5 py-2.5 bg-[#EA1815] text-white text-sm font-semibold rounded-xl hover:bg-[#B2100B] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#4F6AF5] text-white text-sm font-semibold rounded-lg hover:bg-[#3B56E0] transition-colors shadow-sm"
         >
-          + Add Site
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Site
         </button>
       </div>
 
       {loading ? (
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-20 rounded-2xl bg-[#E6EBF2] animate-pulse" />
+            <div key={i} className="h-20 rounded-xl bg-gray-100 animate-pulse" />
           ))}
         </div>
       ) : sites.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-[#E6EBF2] p-16 text-center">
-          <p className="text-[#C8C8D8] text-lg">No sites yet</p>
-          <p className="text-[#3F486B] text-sm mt-2">Add a site to start scraping jobs</p>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-16 text-center">
+          <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+            <svg width="24" height="24" fill="none" stroke="#9CA3AF" strokeWidth="1.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3.6 9h16.8M3.6 15h16.8M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9" />
+            </svg>
+          </div>
+          <p className="text-gray-900 font-semibold">No sites yet</p>
+          <p className="text-gray-400 text-sm mt-1">Add a site to start scraping jobs automatically</p>
           <button
             onClick={() => setShowForm(true)}
-            className="mt-4 px-5 py-2.5 bg-[#EA1815] text-white text-sm font-semibold rounded-xl hover:bg-[#B2100B] transition-colors"
+            className="mt-5 px-4 py-2 bg-[#4F6AF5] text-white text-sm font-semibold rounded-lg hover:bg-[#3B56E0] transition-colors shadow-sm"
           >
             Add Your First Site
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-[#E6EBF2] shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#E6EBF2] bg-[#F8F9FF]">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Name</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Scraper</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Schedule</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Last Run</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Status</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-[#3F486B] uppercase tracking-wider">Active</th>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Scraper</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Schedule</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Run</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Active</th>
                 <th className="px-6 py-3" />
               </tr>
             </thead>
-            <tbody>
-              {sites.map((site) => (
-                <tr key={site._id} className="border-b border-[#E6EBF2] last:border-0 hover:bg-[#F8F9FF] transition-colors">
-                  <td className="px-6 py-4">
-                    <p className="font-medium text-[#010D39]">{site.name}</p>
-                    <p className="text-xs text-[#C8C8D8] truncate max-w-xs">{site.url}</p>
-                  </td>
-                  <td className="px-6 py-4"><Badge variant="navy">{site.scraperKey}</Badge></td>
-                  <td className="px-6 py-4 font-mono text-xs text-[#3F486B]">{site.cronSchedule}</td>
-                  <td className="px-6 py-4 text-[#3F486B] text-xs">
-                    {site.lastRunAt ? new Date(site.lastRunAt).toLocaleString() : "Never"}
-                  </td>
-                  <td className="px-6 py-4">
-                    <Badge variant={statusVariant(site.lastRunStatus) as "green" | "red" | "gray"}>
-                      {site.lastRunStatus}
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => toggleActive(site)}
-                      className={`relative inline-flex h-6 w-11 rounded-full transition-colors ${site.isActive ? "bg-[#128986]" : "bg-[#C8C8D8]"}`}
-                    >
-                      <span className={`inline-block w-4 h-4 rounded-full bg-white shadow transition-transform mt-1 ${site.isActive ? "translate-x-6" : "translate-x-1"}`} />
-                    </button>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 justify-end">
+            <tbody className="divide-y divide-gray-50">
+              {sites.map((site) => {
+                const sc = statusConfig(site.lastRunStatus);
+                return (
+                  <tr key={site._id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4">
+                      <p className="font-semibold text-gray-900">{site.name}</p>
+                      <p className="text-xs text-gray-400 truncate max-w-xs mt-0.5">{site.url}</p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#4F6AF5] bg-[#EEF1FE] px-2.5 py-1 rounded-full">
+                        {site.scraperKey}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-mono text-xs text-gray-600">{site.cronSchedule}</td>
+                    <td className="px-6 py-4 text-gray-600 text-xs">
+                      {site.lastRunAt ? new Date(site.lastRunAt).toLocaleString() : "Never"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${sc.bg} ${sc.text}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                        {sc.label}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
                       <button
-                        onClick={() => runNow(site)}
-                        disabled={runningId === site._id}
-                        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#202B52] text-white hover:bg-[#010D39] transition-colors disabled:opacity-50"
+                        onClick={() => toggleActive(site)}
+                        className={`relative inline-flex h-5 w-9 rounded-full transition-colors focus:outline-none ${site.isActive ? "bg-[#4F6AF5]" : "bg-gray-200"}`}
                       >
-                        {runningId === site._id ? "Running..." : "Run Now"}
+                        <span className={`inline-block w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform mt-[3px] ${site.isActive ? "translate-x-[18px]" : "translate-x-[3px]"}`} />
                       </button>
-                      <button
-                        onClick={() => { setEditSite(site); setShowForm(true); }}
-                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#E6EBF2] text-[#3F486B] hover:bg-[#F8F9FF] transition-colors"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => deleteSite(site._id, site.name)}
-                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#EA1815]/30 text-[#EA1815] hover:bg-red-50 transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 justify-end">
+                        <button
+                          onClick={() => runNow(site)}
+                          disabled={runningId === site._id}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#4F6AF5] text-white hover:bg-[#3B56E0] transition-colors disabled:opacity-50"
+                        >
+                          <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24">
+                            <polygon points="5,3 19,12 5,21"/>
+                          </svg>
+                          {runningId === site._id ? "Running..." : "Run"}
+                        </button>
+                        <button
+                          onClick={() => { setEditSite(site); setShowForm(true); }}
+                          className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => deleteSite(site._id, site.name)}
+                          className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-100 text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

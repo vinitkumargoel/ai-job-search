@@ -14,6 +14,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (body.status === "applied") updates.appliedAt = new Date();
   }
   if (typeof body.isNew === "boolean") updates.isNew = body.isNew;
+  if (typeof body.notes === "string") updates.notes = body.notes;
 
   const job = await Job.findByIdAndUpdate(id, updates, { new: true });
   if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
