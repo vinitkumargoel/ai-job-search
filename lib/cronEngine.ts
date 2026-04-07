@@ -1,6 +1,6 @@
 import cron, { ScheduledTask } from "node-cron";
 import { connectDB } from "./mongodb";
-import { matchJobToResume } from "./ollama";
+import { matchJobToResume, isGermanyLocation, enrichJobDescription } from "./ollama";
 
 // Keep a map of running tasks so we can cancel/replace them
 const activeTasks = new Map<string, ScheduledTask>();
@@ -20,6 +20,7 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
   const { default: Site } = await import("../models/Site");
   const { default: Job } = await import("../models/Job");
   const { default: Resume } = await import("../models/Resume");
+  const { default: SkippedUrl } = await import("../models/SkippedUrl");
   const { scraperRegistry } = await import("../scrapers/index");
 
   const site = await Site.findById(siteId);
@@ -42,8 +43,21 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
     const newJobIds: string[] = [];
 
     for (const scraped of scrapedJobs) {
-      const existing = await Job.findOne({ url: scraped.url });
-      if (existing) continue;
+      // Skip if already in jobs DB (dedup) or previously classified as non-Germany
+      const [existing, skipped] = await Promise.all([
+        Job.findOne({ url: scraped.url }, "_id").lean(),
+        SkippedUrl.findOne({ url: scraped.url }, "_id").lean(),
+      ]);
+      if (existing || skipped) continue;
+
+      // Classify location before saving — skip non-Germany jobs entirely
+      const germany = await isGermanyLocation(scraped.location ?? "", scraped.title, scraped.company);
+      if (!germany) {
+        // Persist to SkippedUrl so future runs skip Ollama for this URL
+        await SkippedUrl.create({ url: scraped.url }).catch(() => {});
+        await log(siteId, site.name, `Skipped (not Germany): ${scraped.title} @ ${scraped.location}`, "info");
+        continue;
+      }
 
       const created = await Job.create({
         siteId: site._id,
@@ -57,6 +71,26 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
         status: "new",
         isNew: true,
       });
+
+      // Enrich description with Ollama immediately after saving
+      await log(siteId, site.name, `Enriching: ${scraped.title}`, "info");
+      const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
+      if (enriched) {
+        await Job.findByIdAndUpdate(created._id, {
+          description: enriched.description,
+          summary: enriched.summary,
+          skills: enriched.skills,
+          experienceLevel: enriched.experienceLevel,
+          employmentType: enriched.employmentType,
+          salary: enriched.salary,
+          benefits: enriched.benefits,
+          germanRequired: enriched.germanRequired,
+          yearsOfExperience: enriched.yearsOfExperience,
+        }, { strict: false });
+        await log(siteId, site.name, `Enriched: ${scraped.title} | German: ${enriched.germanRequired} | Skills: ${enriched.skills.slice(0,3).join(", ")}`, "success");
+      } else {
+        await log(siteId, site.name, `Enrichment failed for: ${scraped.title}`, "error");
+      }
 
       newJobIds.push(String(created._id));
       newCount++;

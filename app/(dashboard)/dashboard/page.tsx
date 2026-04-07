@@ -34,7 +34,7 @@ const STAT_CARDS = [
   },
   {
     key: "totalJobs",
-    label: "Total Jobs",
+    label: "🇩🇪 Germany Jobs",
     icon: (
       <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
         <rect x="2" y="7" width="20" height="14" rx="2" />

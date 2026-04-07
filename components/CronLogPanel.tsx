@@ -27,7 +27,7 @@ export function CronLogPanel({ siteId }: { siteId?: string }) {
   const [loading, setLoading] = useState(true);
 
   const fetchLogs = useCallback(async () => {
-    const url = siteId ? `/api/cron/logs?siteId=${siteId}&limit=50` : "/api/cron/logs?limit=50";
+    const url = siteId ? `/api/cron/logs?siteId=${siteId}&limit=200` : "/api/cron/logs?limit=200";
     const res = await fetch(url);
     if (res.ok) setLogs(await res.json());
     setLoading(false);
@@ -50,7 +50,7 @@ export function CronLogPanel({ siteId }: { siteId?: string }) {
           Refresh
         </button>
       </div>
-      <div className="h-72 overflow-y-auto p-4 font-mono text-xs flex flex-col gap-1">
+      <div className="h-[480px] overflow-y-auto p-4 font-mono text-xs flex flex-col gap-1">
         {loading && <span className="text-white/30">Loading...</span>}
         {!loading && logs.length === 0 && (
           <span className="text-white/30">No logs yet. Run a scrape to see activity here.</span>

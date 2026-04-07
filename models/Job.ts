@@ -8,6 +8,15 @@ export interface IJob extends Document {
   title: string;
   url: string;
   description: string;
+  // AI-enriched fields (populated by enrichJobDescription)
+  summary: string | null;
+  skills: string[];
+  experienceLevel: string | null;
+  employmentType: string | null;
+  salary: string | null;
+  benefits: string[];
+  germanRequired: string | null;
+  yearsOfExperience: string | null; // e.g. "3-5 years", "5+ years"
   company: string;
   location: string;
   postedAt: string;
@@ -28,6 +37,14 @@ const JobSchema = new Schema(
     title: { type: String, required: true },
     url: { type: String, required: true, unique: true },
     description: { type: String, default: "" },
+    summary: { type: String, default: null },
+    skills: { type: [String], default: [] },
+    experienceLevel: { type: String, default: null },
+    employmentType: { type: String, default: null },
+    salary: { type: String, default: null },
+    benefits: { type: [String], default: [] },
+    germanRequired: { type: String, default: null },
+    yearsOfExperience: { type: String, default: null },
     company: { type: String, default: "" },
     location: { type: String, default: "" },
     postedAt: { type: String, default: "" },

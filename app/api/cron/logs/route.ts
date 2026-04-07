@@ -5,7 +5,7 @@ import CronLog from "@/models/CronLog";
 export async function GET(req: NextRequest) {
   await connectDB();
   const { searchParams } = new URL(req.url);
-  const limit = parseInt(searchParams.get("limit") ?? "50");
+  const limit = parseInt(searchParams.get("limit") ?? "200");
   const siteId = searchParams.get("siteId");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
