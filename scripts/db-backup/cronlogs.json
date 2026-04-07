@@ -1,0 +1,1342 @@
+[
+  {
+    "_id": "69d4e47ee29f13cd8f8279e3",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Started scrape",
+    "level": "info",
+    "createdAt": "2026-04-07T11:03:26.258Z",
+    "updatedAt": "2026-04-07T11:03:26.258Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4e48fe29f13cd8f8279e4",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Scraper returned 50 jobs",
+    "level": "info",
+    "createdAt": "2026-04-07T11:03:43.826Z",
+    "updatedAt": "2026-04-07T11:03:43.826Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4e5d462fa0ce52249488a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Started scrape",
+    "level": "info",
+    "createdAt": "2026-04-07T11:09:08.757Z",
+    "updatedAt": "2026-04-07T11:09:08.757Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4e5e762fa0ce52249488b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Scraper returned 50 jobs",
+    "level": "info",
+    "createdAt": "2026-04-07T11:09:27.057Z",
+    "updatedAt": "2026-04-07T11:09:27.057Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ed3a4a21d8ea6fc3c5e2",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Started scrape",
+    "level": "info",
+    "createdAt": "2026-04-07T11:40:42.989Z",
+    "updatedAt": "2026-04-07T11:40:42.989Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ed454a21d8ea6fc3c5e3",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Scraper returned 0 jobs",
+    "level": "info",
+    "createdAt": "2026-04-07T11:40:53.512Z",
+    "updatedAt": "2026-04-07T11:40:53.512Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ed454a21d8ea6fc3c5e4",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Saved 0 new jobs",
+    "level": "success",
+    "createdAt": "2026-04-07T11:40:53.513Z",
+    "updatedAt": "2026-04-07T11:40:53.513Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ede54a21d8ea6fc3c5e5",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Started scrape",
+    "level": "info",
+    "createdAt": "2026-04-07T11:43:33.905Z",
+    "updatedAt": "2026-04-07T11:43:33.905Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4edf94a21d8ea6fc3c5e6",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Scraper returned 50 jobs",
+    "level": "info",
+    "createdAt": "2026-04-07T11:43:53.519Z",
+    "updatedAt": "2026-04-07T11:43:53.519Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4edf94a21d8ea6fc3c5e8",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Research Engineer for AI Validation (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:43:53.530Z",
+    "updatedAt": "2026-04-07T11:43:53.530Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ee554a21d8ea6fc3c5e9",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Research Engineer for AI Validation (f/m/div.) | German: Not required | Skills: AI Validation, Probabilistic Models, Generative Models",
+    "level": "success",
+    "createdAt": "2026-04-07T11:45:25.252Z",
+    "updatedAt": "2026-04-07T11:45:25.252Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ee554a21d8ea6fc3c5eb",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship Machine Learning & Predictive Analytics for Heat Pump",
+    "level": "info",
+    "createdAt": "2026-04-07T11:45:25.261Z",
+    "updatedAt": "2026-04-07T11:45:25.261Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ee934a21d8ea6fc3c5ec",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship Machine Learning & Predictive Analytics for Heat Pump | German: Not required | Skills: Machine Learning, Predictive Analytics, Feature Engineering",
+    "level": "success",
+    "createdAt": "2026-04-07T11:46:27.957Z",
+    "updatedAt": "2026-04-07T11:46:27.957Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ee934a21d8ea6fc3c5ee",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Product Manager*in (m/w/div.) Climate & Comfort",
+    "level": "info",
+    "createdAt": "2026-04-07T11:46:27.963Z",
+    "updatedAt": "2026-04-07T11:46:27.963Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eeb44a21d8ea6fc3c5ef",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Product Manager*in (m/w/div.) Climate & Comfort | German: C1-C2 (Fluent) | Skills: Product Management, Market Analysis, Competitive Analysis",
+    "level": "success",
+    "createdAt": "2026-04-07T11:47:00.926Z",
+    "updatedAt": "2026-04-07T11:47:00.926Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eeb44a21d8ea6fc3c5f1",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: PreMaster Programm - GapYear - Software Engineer CI/CD",
+    "level": "info",
+    "createdAt": "2026-04-07T11:47:00.930Z",
+    "updatedAt": "2026-04-07T11:47:00.930Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eec94a21d8ea6fc3c5f2",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: PreMaster Programm - GapYear - Software Engineer CI/CD | German: C1-C2 (Fluent) | Skills: CI/CD, Informatics, Network Know-How",
+    "level": "success",
+    "createdAt": "2026-04-07T11:47:21.041Z",
+    "updatedAt": "2026-04-07T11:47:21.041Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eec94a21d8ea6fc3c5f4",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship in Development of AI-Based Solutions for Embedded Middleware Software ",
+    "level": "info",
+    "createdAt": "2026-04-07T11:47:21.047Z",
+    "updatedAt": "2026-04-07T11:47:21.047Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eee04a21d8ea6fc3c5f5",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship in Development of AI-Based Solutions for Embedded Middleware Software  | German: A1-A2 (Basic) | Skills: Linux, Shell, Python",
+    "level": "success",
+    "createdAt": "2026-04-07T11:47:44.995Z",
+    "updatedAt": "2026-04-07T11:47:44.995Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eee14a21d8ea6fc3c5f7",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching:  Promotionsstelle: Systemarchitektur für invasive Mikro-Drucksensoren",
+    "level": "info",
+    "createdAt": "2026-04-07T11:47:45.001Z",
+    "updatedAt": "2026-04-07T11:47:45.001Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eef34a21d8ea6fc3c5f8",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched:  Promotionsstelle: Systemarchitektur für invasive Mikro-Drucksensoren | German: C1-C2 (Fluent) | Skills: System Architecture, Hardware Architecture, Software Architecture",
+    "level": "success",
+    "createdAt": "2026-04-07T11:48:03.285Z",
+    "updatedAt": "2026-04-07T11:48:03.285Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eef34a21d8ea6fc3c5fa",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Graduate Specialist Program (Trainee) - Technischer Vertrieb Connected Hydraulics",
+    "level": "info",
+    "createdAt": "2026-04-07T11:48:03.289Z",
+    "updatedAt": "2026-04-07T11:48:03.289Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ef5b4a21d8ea6fc3c5fb",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Graduate Specialist Program (Trainee) - Technischer Vertrieb Connected Hydraulics | German: C1-C2 (Fluent) | Skills: Technical Sales, Product Management, Application Engineering",
+    "level": "success",
+    "createdAt": "2026-04-07T11:49:47.054Z",
+    "updatedAt": "2026-04-07T11:49:47.054Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4ef5b4a21d8ea6fc3c5fd",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Graduate Specialist Program (Trainee) - Technischer Vertrieb mit Schwerpunkt Fabrikautomation",
+    "level": "info",
+    "createdAt": "2026-04-07T11:49:47.059Z",
+    "updatedAt": "2026-04-07T11:49:47.059Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4efe54a21d8ea6fc3c5fe",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Graduate Specialist Program (Trainee) - Technischer Vertrieb mit Schwerpunkt Fabrikautomation | German: C1-C2 (Fluent) | Skills: Technical Sales, Factory Automation, Product Management",
+    "level": "success",
+    "createdAt": "2026-04-07T11:52:05.479Z",
+    "updatedAt": "2026-04-07T11:52:05.479Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4efe54a21d8ea6fc3c600",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Graduate Specialist Program (Trainee) - Fertigung Gießerei",
+    "level": "info",
+    "createdAt": "2026-04-07T11:52:05.487Z",
+    "updatedAt": "2026-04-07T11:52:05.487Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eff94a21d8ea6fc3c601",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Graduate Specialist Program (Trainee) - Fertigung Gießerei | German: C1-C2 (Fluent) | Skills: Mechanical Engineering, Foundry Technology, Construction",
+    "level": "success",
+    "createdAt": "2026-04-07T11:52:25.732Z",
+    "updatedAt": "2026-04-07T11:52:25.732Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4eff94a21d8ea6fc3c603",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Chief Expert - RADAR and ADAS Sensors - Research (SL2, w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:52:25.736Z",
+    "updatedAt": "2026-04-07T11:52:25.736Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0104a21d8ea6fc3c604",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Chief Expert - RADAR and ADAS Sensors - Research (SL2, w/m/div.) | German: C1-C2 (Fluent) | Skills: RADAR, Video Sensors, USS (Ultrasonic Sensors)",
+    "level": "success",
+    "createdAt": "2026-04-07T11:52:48.825Z",
+    "updatedAt": "2026-04-07T11:52:48.825Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0104a21d8ea6fc3c606",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Embedded Software Entwickler Work Construction (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:52:48.828Z",
+    "updatedAt": "2026-04-07T11:52:48.828Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0404a21d8ea6fc3c607",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Embedded Software Entwickler Work Construction (w/m/div.) | German: C1-C2 (Fluent) | Skills: Embedded Software Development, Requirements Analysis, Software Architecture",
+    "level": "success",
+    "createdAt": "2026-04-07T11:53:36.495Z",
+    "updatedAt": "2026-04-07T11:53:36.495Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0404a21d8ea6fc3c609",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Werkstudent in der elektrischen Entwicklung (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:53:36.498Z",
+    "updatedAt": "2026-04-07T11:53:36.498Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0784a21d8ea6fc3c60a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Werkstudent in der elektrischen Entwicklung (w/m/div.) | German: C1-C2 (Fluent) | Skills: Electrical Engineering, Energy Technology, PLC controls",
+    "level": "success",
+    "createdAt": "2026-04-07T11:54:32.846Z",
+    "updatedAt": "2026-04-07T11:54:32.846Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0784a21d8ea6fc3c60c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Softwareentwickler für Developer Productivity & KI (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:54:32.851Z",
+    "updatedAt": "2026-04-07T11:54:32.851Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0cc4a21d8ea6fc3c60d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Softwareentwickler für Developer Productivity & KI (w/m/div.) | German: C1-C2 (Fluent) | Skills: Softwareentwicklung, Embedded-Software, C",
+    "level": "success",
+    "createdAt": "2026-04-07T11:55:56.677Z",
+    "updatedAt": "2026-04-07T11:55:56.677Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0cc4a21d8ea6fc3c60f",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Junior Managers Program - Research & Development Software and Application - Trainee Program (m/f/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:55:56.682Z",
+    "updatedAt": "2026-04-07T11:55:56.682Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0e54a21d8ea6fc3c610",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Junior Managers Program - Research & Development Software and Application - Trainee Program (m/f/div.) | German: C1-C2 (Fluent) | Skills: Embedded Software Development, C++, C",
+    "level": "success",
+    "createdAt": "2026-04-07T11:56:21.321Z",
+    "updatedAt": "2026-04-07T11:56:21.321Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f0e54a21d8ea6fc3c612",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Junior Managers Program - Research & Development Corporate Research - Trainee program (m/f/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:56:21.326Z",
+    "updatedAt": "2026-04-07T11:56:21.326Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f11b4a21d8ea6fc3c613",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Junior Managers Program - Research & Development Corporate Research - Trainee program (m/f/div.) | German: B1-B2 (Conversational) | Skills: Java, C++, C",
+    "level": "success",
+    "createdAt": "2026-04-07T11:57:15.631Z",
+    "updatedAt": "2026-04-07T11:57:15.631Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f11b4a21d8ea6fc3c615",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Junior Managers Program - Information Technology - Trainee Program (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:57:15.639Z",
+    "updatedAt": "2026-04-07T11:57:15.639Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f13b4a21d8ea6fc3c616",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Junior Managers Program - Information Technology - Trainee Program (f/m/div.) | German: B1-B2 (Conversational) | Skills: Cloud technologies, Web services, IoT",
+    "level": "success",
+    "createdAt": "2026-04-07T11:57:47.009Z",
+    "updatedAt": "2026-04-07T11:57:47.009Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f13b4a21d8ea6fc3c618",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Maintenance Engineer Wet Chemistry (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T11:57:47.016Z",
+    "updatedAt": "2026-04-07T11:57:47.016Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f1cc4a21d8ea6fc3c619",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Maintenance Engineer Wet Chemistry (w/m/div.) | German: C1-C2 (Fluent) | Skills: Preventive Maintenance, Troubleshooting, Electrical systems",
+    "level": "success",
+    "createdAt": "2026-04-07T12:00:12.187Z",
+    "updatedAt": "2026-04-07T12:00:12.187Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f1cc4a21d8ea6fc3c61b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Research Engineer Foundation Model ML Ops (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:00:12.192Z",
+    "updatedAt": "2026-04-07T12:00:12.192Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f1e64a21d8ea6fc3c61c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Research Engineer Foundation Model ML Ops (f/m/div.) | German: Not required | Skills: LLMs, Generative AI, GenAI",
+    "level": "success",
+    "createdAt": "2026-04-07T12:00:38.674Z",
+    "updatedAt": "2026-04-07T12:00:38.674Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f1e64a21d8ea6fc3c61e",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Werkstudent im Bereich Vertrieb (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:00:38.678Z",
+    "updatedAt": "2026-04-07T12:00:38.678Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f2384a21d8ea6fc3c61f",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Werkstudent im Bereich Vertrieb (w/m/div.) | German: C1-C2 (Fluent) | Skills: MS Office, Excel, PowerPoint",
+    "level": "success",
+    "createdAt": "2026-04-07T12:02:00.077Z",
+    "updatedAt": "2026-04-07T12:02:00.077Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f2384a21d8ea6fc3c621",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Master Thesis Data-Efficient Hybrid Machine Learning for Robust Vibration System Prediction",
+    "level": "info",
+    "createdAt": "2026-04-07T12:02:00.079Z",
+    "updatedAt": "2026-04-07T12:02:00.079Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f2544a21d8ea6fc3c622",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Master Thesis Data-Efficient Hybrid Machine Learning for Robust Vibration System Prediction | German: A1-A2 (Basic) | Skills: Machine Learning, Python, PyTorch",
+    "level": "success",
+    "createdAt": "2026-04-07T12:02:28.410Z",
+    "updatedAt": "2026-04-07T12:02:28.410Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f2544a21d8ea6fc3c624",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Instandhalter (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:02:28.418Z",
+    "updatedAt": "2026-04-07T12:02:28.418Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f30a4a21d8ea6fc3c625",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Instandhalter (w/m/div.) | German: C1-C2 (Fluent) | Skills: Maintenance, Repair, Troubleshooting",
+    "level": "success",
+    "createdAt": "2026-04-07T12:05:30.297Z",
+    "updatedAt": "2026-04-07T12:05:30.297Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f30a4a21d8ea6fc3c627",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Fertigungsplaner (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:05:30.304Z",
+    "updatedAt": "2026-04-07T12:05:30.304Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f34a4a21d8ea6fc3c628",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Fertigungsplaner (w/m/div.) | German: C1-C2 (Fluent) | Skills: Production Planning, FMEA, MTM",
+    "level": "success",
+    "createdAt": "2026-04-07T12:06:34.869Z",
+    "updatedAt": "2026-04-07T12:06:34.869Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f34a4a21d8ea6fc3c62a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Kundenbetreuer im Flottenmanagement (w/m/div.) - befristet 1 Jahr",
+    "level": "info",
+    "createdAt": "2026-04-07T12:06:34.874Z",
+    "updatedAt": "2026-04-07T12:06:34.874Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3574a21d8ea6fc3c62b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Kundenbetreuer im Flottenmanagement (w/m/div.) - befristet 1 Jahr | German: Native | Skills: Customer Service, MS Office, German",
+    "level": "success",
+    "createdAt": "2026-04-07T12:06:47.042Z",
+    "updatedAt": "2026-04-07T12:06:47.042Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3574a21d8ea6fc3c62d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Praktikum der Digitalisierung von Fertigungsplanung/-steuerung",
+    "level": "info",
+    "createdAt": "2026-04-07T12:06:47.045Z",
+    "updatedAt": "2026-04-07T12:06:47.045Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3694a21d8ea6fc3c62e",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Praktikum der Digitalisierung von Fertigungsplanung/-steuerung | German: C1-C2 (Fluent) | Skills: Production Planning, Production Control, Engineering-To-Order",
+    "level": "success",
+    "createdAt": "2026-04-07T12:07:05.605Z",
+    "updatedAt": "2026-04-07T12:07:05.605Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3694a21d8ea6fc3c630",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship in UX/UI for Automotive Software Development",
+    "level": "info",
+    "createdAt": "2026-04-07T12:07:05.612Z",
+    "updatedAt": "2026-04-07T12:07:05.612Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3774a21d8ea6fc3c631",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship in UX/UI for Automotive Software Development | German: Not required | Skills: User Research, User Flows, Wireframing",
+    "level": "success",
+    "createdAt": "2026-04-07T12:07:19.646Z",
+    "updatedAt": "2026-04-07T12:07:19.646Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3774a21d8ea6fc3c633",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Research Engineer for Scaling of Large Time-Series Models (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:07:19.654Z",
+    "updatedAt": "2026-04-07T12:07:19.654Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3b24a21d8ea6fc3c634",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Research Engineer for Scaling of Large Time-Series Models (f/m/div.) | German: Not required | Skills: Scalable machine learning architectures, Distributed training, Multi-GPU training",
+    "level": "success",
+    "createdAt": "2026-04-07T12:08:18.665Z",
+    "updatedAt": "2026-04-07T12:08:18.665Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3b24a21d8ea6fc3c636",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Pflichtpraktikum im Bereich Applikation Steuergeräte im Fahrzeug",
+    "level": "info",
+    "createdAt": "2026-04-07T12:08:18.669Z",
+    "updatedAt": "2026-04-07T12:08:18.669Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3c94a21d8ea6fc3c637",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Pflichtpraktikum im Bereich Applikation Steuergeräte im Fahrzeug | German: C1-C2 (Fluent) | Skills: Fahrzeugtechnik, Mechatronik, Elektrotechnik",
+    "level": "success",
+    "createdAt": "2026-04-07T12:08:41.647Z",
+    "updatedAt": "2026-04-07T12:08:41.647Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3c94a21d8ea6fc3c639",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Senior HW/SW System Engineer (Stolen Vehicle Telematics) (m/w/d) ",
+    "level": "info",
+    "createdAt": "2026-04-07T12:08:41.653Z",
+    "updatedAt": "2026-04-07T12:08:41.653Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3dd4a21d8ea6fc3c63a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Senior HW/SW System Engineer (Stolen Vehicle Telematics) (m/w/d)  | German: C1-C2 (Fluent) | Skills: Electronics development, Embedded Systems Design, Telematics",
+    "level": "success",
+    "createdAt": "2026-04-07T12:09:01.157Z",
+    "updatedAt": "2026-04-07T12:09:01.157Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3dd4a21d8ea6fc3c63c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: PreMaster Program - Development of Quality Agents",
+    "level": "info",
+    "createdAt": "2026-04-07T12:09:01.164Z",
+    "updatedAt": "2026-04-07T12:09:01.164Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3f34a21d8ea6fc3c63d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: PreMaster Program - Development of Quality Agents | German: C1-C2 (Fluent) | Skills: Artificial Intelligence, Low-code platforms, No-code platforms",
+    "level": "success",
+    "createdAt": "2026-04-07T12:09:23.260Z",
+    "updatedAt": "2026-04-07T12:09:23.260Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f3f34a21d8ea6fc3c63f",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship in ADAS Product Lifecycle Management and RPP",
+    "level": "info",
+    "createdAt": "2026-04-07T12:09:23.269Z",
+    "updatedAt": "2026-04-07T12:09:23.269Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f40d4a21d8ea6fc3c640",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship in ADAS Product Lifecycle Management and RPP | German: Native | Skills: Ratio Project Planning (RPP), Project Planning and Control, Data Collection",
+    "level": "success",
+    "createdAt": "2026-04-07T12:09:49.189Z",
+    "updatedAt": "2026-04-07T12:09:49.189Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f40d4a21d8ea6fc3c642",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: PreMaster im Bereich Semiconductor Manufacturing im Projekt APC - Advanced Process Control  (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:09:49.193Z",
+    "updatedAt": "2026-04-07T12:09:49.193Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4884a21d8ea6fc3c643",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: PreMaster im Bereich Semiconductor Manufacturing im Projekt APC - Advanced Process Control  (w/m/div.) | German: C1-C2 (Fluent) | Skills: Semiconductor production, Programming, Data analysis",
+    "level": "success",
+    "createdAt": "2026-04-07T12:11:52.559Z",
+    "updatedAt": "2026-04-07T12:11:52.559Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4884a21d8ea6fc3c645",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: IT Product Security Specialist (m/w/div.) ",
+    "level": "info",
+    "createdAt": "2026-04-07T12:11:52.562Z",
+    "updatedAt": "2026-04-07T12:11:52.562Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4b74a21d8ea6fc3c646",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: IT Product Security Specialist (m/w/div.)  | German: C1-C2 (Fluent) | Skills: Product Security, Application Security, Secure SDLC",
+    "level": "success",
+    "createdAt": "2026-04-07T12:12:39.031Z",
+    "updatedAt": "2026-04-07T12:12:39.031Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4b74a21d8ea6fc3c648",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Product Engineering and Compliance Officer (m/w/div) ",
+    "level": "info",
+    "createdAt": "2026-04-07T12:12:39.038Z",
+    "updatedAt": "2026-04-07T12:12:39.038Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4dc4a21d8ea6fc3c649",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Product Engineering and Compliance Officer (m/w/div)  | German: C1-C2 (Fluent) | Skills: Product Compliance, Product Engineering, Product Cybersecurity",
+    "level": "success",
+    "createdAt": "2026-04-07T12:13:16.223Z",
+    "updatedAt": "2026-04-07T12:13:16.223Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f4dc4a21d8ea6fc3c64b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Teamleiter 3rd Level Support (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:13:16.227Z",
+    "updatedAt": "2026-04-07T12:13:16.227Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5124a21d8ea6fc3c64c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Teamleiter 3rd Level Support (w/m/div.) | German: C1-C2 (Fluent) | Skills: Leadership, 3rd Level Support, Root Cause Analysis",
+    "level": "success",
+    "createdAt": "2026-04-07T12:14:10.431Z",
+    "updatedAt": "2026-04-07T12:14:10.431Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5124a21d8ea6fc3c64e",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Praktikum Qualitätsmanagement - systematische Problemlösung",
+    "level": "info",
+    "createdAt": "2026-04-07T12:14:10.434Z",
+    "updatedAt": "2026-04-07T12:14:10.434Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5264a21d8ea6fc3c64f",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Praktikum Qualitätsmanagement - systematische Problemlösung | German: C1-C2 (Fluent) | Skills: 8D, MS Office, Qualitätsmethoden",
+    "level": "success",
+    "createdAt": "2026-04-07T12:14:30.024Z",
+    "updatedAt": "2026-04-07T12:14:30.024Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5264a21d8ea6fc3c651",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Werkstudent Mechanische Entwicklung (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:14:30.032Z",
+    "updatedAt": "2026-04-07T12:14:30.032Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f54e4a21d8ea6fc3c652",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Werkstudent Mechanische Entwicklung (w/m/div.) | German: C1-C2 (Fluent) | Skills: Mechanical Development, Technical Design, Plant Engineering (Anlagenbau)",
+    "level": "success",
+    "createdAt": "2026-04-07T12:15:10.961Z",
+    "updatedAt": "2026-04-07T12:15:10.961Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f54e4a21d8ea6fc3c654",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Development Engineer Power Semiconductors Automotive (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:15:10.964Z",
+    "updatedAt": "2026-04-07T12:15:10.964Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5664a21d8ea6fc3c655",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Development Engineer Power Semiconductors Automotive (f/m/div.) | German: C1-C2 (Fluent) | Skills: Power Semiconductor Development, Si Power MOSFETs, Semiconductor Device Physics",
+    "level": "success",
+    "createdAt": "2026-04-07T12:15:34.586Z",
+    "updatedAt": "2026-04-07T12:15:34.586Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5664a21d8ea6fc3c657",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship Data & AI for Platform Operations for Global Energy Management System",
+    "level": "info",
+    "createdAt": "2026-04-07T12:15:34.592Z",
+    "updatedAt": "2026-04-07T12:15:34.592Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5794a21d8ea6fc3c658",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship Data & AI for Platform Operations for Global Energy Management System | German: Not required | Skills: GenAI, Chatbots, Knowledge Assistant",
+    "level": "success",
+    "createdAt": "2026-04-07T12:15:53.400Z",
+    "updatedAt": "2026-04-07T12:15:53.400Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5794a21d8ea6fc3c65a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Internship in the Development of MEMS Test Equipment",
+    "level": "info",
+    "createdAt": "2026-04-07T12:15:53.407Z",
+    "updatedAt": "2026-04-07T12:15:53.407Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f58f4a21d8ea6fc3c65b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Internship in the Development of MEMS Test Equipment | German: Not required | Skills: MEMS sensors, IoT devices, Metering equipment",
+    "level": "success",
+    "createdAt": "2026-04-07T12:16:15.981Z",
+    "updatedAt": "2026-04-07T12:16:15.981Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f58f4a21d8ea6fc3c65d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Master Thesis GPU-Accelerated Particle Simulation for OpenFOAM",
+    "level": "info",
+    "createdAt": "2026-04-07T12:16:15.986Z",
+    "updatedAt": "2026-04-07T12:16:15.986Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5ba4a21d8ea6fc3c65e",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Master Thesis GPU-Accelerated Particle Simulation for OpenFOAM | German: B1-B2 (Conversational) | Skills: Lagrangian Particle Tracking, GPU computing, CFD",
+    "level": "success",
+    "createdAt": "2026-04-07T12:16:58.934Z",
+    "updatedAt": "2026-04-07T12:16:58.934Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5ba4a21d8ea6fc3c660",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: ASIC Verification Engineer (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:16:58.939Z",
+    "updatedAt": "2026-04-07T12:16:58.939Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5c94a21d8ea6fc3c661",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: ASIC Verification Engineer (f/m/div.) | German: B1-B2 (Conversational) | Skills: ASIC Verification, Mixed-Signal ASICs, Functional Verification",
+    "level": "success",
+    "createdAt": "2026-04-07T12:17:13.343Z",
+    "updatedAt": "2026-04-07T12:17:13.343Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5c94a21d8ea6fc3c663",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Servicetechniker (w/m/div.) Gebäudeautomation",
+    "level": "info",
+    "createdAt": "2026-04-07T12:17:13.346Z",
+    "updatedAt": "2026-04-07T12:17:13.346Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5dc4a21d8ea6fc3c664",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Servicetechniker (w/m/div.) Gebäudeautomation | German: C1-C2 (Fluent) | Skills: Building Automation, MSR (Measuring, Control, and Regulation), Service and Maintenance",
+    "level": "success",
+    "createdAt": "2026-04-07T12:17:32.567Z",
+    "updatedAt": "2026-04-07T12:17:32.567Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5dc4a21d8ea6fc3c666",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Software Architekt (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:17:32.571Z",
+    "updatedAt": "2026-04-07T12:17:32.571Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5f24a21d8ea6fc3c667",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Software Architekt (w/m/div.) | German: C1-C2 (Fluent) | Skills: Software Architecture, Python, Angular",
+    "level": "success",
+    "createdAt": "2026-04-07T12:17:54.852Z",
+    "updatedAt": "2026-04-07T12:17:54.852Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f5f24a21d8ea6fc3c669",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Werkstudent UX-/UI-Design (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:17:54.856Z",
+    "updatedAt": "2026-04-07T12:17:54.856Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6044a21d8ea6fc3c66a",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Werkstudent UX-/UI-Design (w/m/div.) | German: C1-C2 (Fluent) | Skills: UX Design, UI Design, User-Centered Design (UCD)",
+    "level": "success",
+    "createdAt": "2026-04-07T12:18:12.076Z",
+    "updatedAt": "2026-04-07T12:18:12.076Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6044a21d8ea6fc3c66c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: PhD Thesis - Scalable and explainable End2End Driving Model (SEED)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:18:12.081Z",
+    "updatedAt": "2026-04-07T12:18:12.081Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f61c4a21d8ea6fc3c66d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: PhD Thesis - Scalable and explainable End2End Driving Model (SEED) | German: C1-C2 (Fluent) | Skills: Computer Vision, 3D Vision, Machine Learning",
+    "level": "success",
+    "createdAt": "2026-04-07T12:18:36.515Z",
+    "updatedAt": "2026-04-07T12:18:36.515Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f61c4a21d8ea6fc3c66f",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Werkstudent für MATLAB Simulink im Bereich hydraulische Funktionen/Software (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:18:36.519Z",
+    "updatedAt": "2026-04-07T12:18:36.519Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6334a21d8ea6fc3c670",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Werkstudent für MATLAB Simulink im Bereich hydraulische Funktionen/Software (w/m/div.) | German: C1-C2 (Fluent) | Skills: MATLAB, Simulink, CI/CD",
+    "level": "success",
+    "createdAt": "2026-04-07T12:18:59.254Z",
+    "updatedAt": "2026-04-07T12:18:59.254Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6334a21d8ea6fc3c672",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Acoustics Engineer - MEMS (f/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:18:59.260Z",
+    "updatedAt": "2026-04-07T12:18:59.260Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6434a21d8ea6fc3c673",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Acoustics Engineer - MEMS (f/m/div.) | German: B1-B2 (Conversational) | Skills: Acoustics, MEMS, Sensor characterization",
+    "level": "success",
+    "createdAt": "2026-04-07T12:19:15.559Z",
+    "updatedAt": "2026-04-07T12:19:15.559Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6434a21d8ea6fc3c675",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Mandatory Internship Automating High-Speed PCB Material Databases Using AI and Data Engineering",
+    "level": "info",
+    "createdAt": "2026-04-07T12:19:15.562Z",
+    "updatedAt": "2026-04-07T12:19:15.562Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6544a21d8ea6fc3c676",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Mandatory Internship Automating High-Speed PCB Material Databases Using AI and Data Engineering | German: Not required | Skills: AI, Data Engineering, Machine Learning",
+    "level": "success",
+    "createdAt": "2026-04-07T12:19:32.369Z",
+    "updatedAt": "2026-04-07T12:19:32.369Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6544a21d8ea6fc3c678",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Process & Maintenance Engineer Automation / Transportsystem (w/m/div.)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:19:32.374Z",
+    "updatedAt": "2026-04-07T12:19:32.374Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6634a21d8ea6fc3c679",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Process & Maintenance Engineer Automation / Transportsystem (w/m/div.) | German: C1-C2 (Fluent) | Skills: Maintenance, Automation Systems, Sorter",
+    "level": "success",
+    "createdAt": "2026-04-07T12:19:47.357Z",
+    "updatedAt": "2026-04-07T12:19:47.357Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6634a21d8ea6fc3c67b",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriching: Senior Java Entwickler (m/w/d)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:19:47.361Z",
+    "updatedAt": "2026-04-07T12:19:47.361Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6764a21d8ea6fc3c67c",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Enriched: Senior Java Entwickler (m/w/d) | German: C1-C2 (Fluent) | Skills: Java, API, REST",
+    "level": "success",
+    "createdAt": "2026-04-07T12:20:06.500Z",
+    "updatedAt": "2026-04-07T12:20:06.500Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6764a21d8ea6fc3c67d",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "Saved 50 new jobs",
+    "level": "success",
+    "createdAt": "2026-04-07T12:20:06.501Z",
+    "updatedAt": "2026-04-07T12:20:06.501Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f6764a21d8ea6fc3c67e",
+    "siteId": "69d4e465528fd73efe1f92c4",
+    "siteName": "Bosch",
+    "message": "No active resume found — skipping AI matching",
+    "level": "info",
+    "createdAt": "2026-04-07T12:20:06.503Z",
+    "updatedAt": "2026-04-07T12:20:06.503Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7504a21d8ea6fc3c67f",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Started scrape",
+    "level": "info",
+    "createdAt": "2026-04-07T12:23:44.308Z",
+    "updatedAt": "2026-04-07T12:23:44.308Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7514a21d8ea6fc3c680",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Scraper returned 11 jobs",
+    "level": "info",
+    "createdAt": "2026-04-07T12:23:45.868Z",
+    "updatedAt": "2026-04-07T12:23:45.868Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7514a21d8ea6fc3c682",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Data Platform Engineer (Mid-Level) (m/f/d)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:23:45.874Z",
+    "updatedAt": "2026-04-07T12:23:45.874Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7694a21d8ea6fc3c683",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Data Platform Engineer (Mid-Level) (m/f/d) | German: Not required | Skills: AWS, Kubernetes, Kafka",
+    "level": "success",
+    "createdAt": "2026-04-07T12:24:09.434Z",
+    "updatedAt": "2026-04-07T12:24:09.434Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7694a21d8ea6fc3c685",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Full-stack (Kotlin) Engineer (m/f/d) - Team Payments",
+    "level": "info",
+    "createdAt": "2026-04-07T12:24:09.440Z",
+    "updatedAt": "2026-04-07T12:24:09.440Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7814a21d8ea6fc3c686",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Full-stack (Kotlin) Engineer (m/f/d) - Team Payments | German: Not required | Skills: Kotlin, Spring Boot, TypeScript",
+    "level": "success",
+    "createdAt": "2026-04-07T12:24:33.268Z",
+    "updatedAt": "2026-04-07T12:24:33.268Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7814a21d8ea6fc3c688",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Kotlin Backend Engineer (m/f/d)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:24:33.275Z",
+    "updatedAt": "2026-04-07T12:24:33.275Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f79a4a21d8ea6fc3c689",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Kotlin Backend Engineer (m/f/d) | German: Not required | Skills: Kotlin, Backend Development, Spring ecosystem",
+    "level": "success",
+    "createdAt": "2026-04-07T12:24:58.548Z",
+    "updatedAt": "2026-04-07T12:24:58.548Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f79a4a21d8ea6fc3c68b",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Kotlin Backend Engineer (m/f/d)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:24:58.557Z",
+    "updatedAt": "2026-04-07T12:24:58.557Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7b14a21d8ea6fc3c68c",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Kotlin Backend Engineer (m/f/d) | German: Not required | Skills: Kotlin, Backend Development, Spring Ecosystem",
+    "level": "success",
+    "createdAt": "2026-04-07T12:25:21.489Z",
+    "updatedAt": "2026-04-07T12:25:21.489Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7b14a21d8ea6fc3c68e",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Kotlin Engineer (m/f/d) - Team Payments",
+    "level": "info",
+    "createdAt": "2026-04-07T12:25:21.496Z",
+    "updatedAt": "2026-04-07T12:25:21.496Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7c34a21d8ea6fc3c68f",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Kotlin Engineer (m/f/d) - Team Payments | German: Not required | Skills: Kotlin, Spring Boot, TypeScript",
+    "level": "success",
+    "createdAt": "2026-04-07T12:25:39.876Z",
+    "updatedAt": "2026-04-07T12:25:39.876Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7c34a21d8ea6fc3c691",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Kotlin Engineer (m/f/d) - Team Payments",
+    "level": "info",
+    "createdAt": "2026-04-07T12:25:39.882Z",
+    "updatedAt": "2026-04-07T12:25:39.882Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7de4a21d8ea6fc3c692",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Kotlin Engineer (m/f/d) - Team Payments | German: Not required | Skills: Kotlin, Spring Boot, TypeScript",
+    "level": "success",
+    "createdAt": "2026-04-07T12:26:06.540Z",
+    "updatedAt": "2026-04-07T12:26:06.540Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7de4a21d8ea6fc3c694",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Kotlin Engineer (m/f/d) - Team Payments",
+    "level": "info",
+    "createdAt": "2026-04-07T12:26:06.548Z",
+    "updatedAt": "2026-04-07T12:26:06.548Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7f34a21d8ea6fc3c695",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Kotlin Engineer (m/f/d) - Team Payments | German: Not required | Skills: Kotlin, Spring Boot, TypeScript",
+    "level": "success",
+    "createdAt": "2026-04-07T12:26:27.071Z",
+    "updatedAt": "2026-04-07T12:26:27.071Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f7f34a21d8ea6fc3c697",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Senior Full Stack Engineer (m/f/d)",
+    "level": "info",
+    "createdAt": "2026-04-07T12:26:27.078Z",
+    "updatedAt": "2026-04-07T12:26:27.078Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f8084a21d8ea6fc3c698",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Senior Full Stack Engineer (m/f/d) | German: Not required | Skills: Fullstack development, Architecture, System design",
+    "level": "success",
+    "createdAt": "2026-04-07T12:26:48.296Z",
+    "updatedAt": "2026-04-07T12:26:48.296Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f8084a21d8ea6fc3c69a",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Senior Full-Stack Engineer (m/f/d) - Station Management & Inventory",
+    "level": "info",
+    "createdAt": "2026-04-07T12:26:48.299Z",
+    "updatedAt": "2026-04-07T12:26:48.299Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f81f4a21d8ea6fc3c69b",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Senior Full-Stack Engineer (m/f/d) - Station Management & Inventory | German: Not required | Skills: Java, Kotlin, JVM",
+    "level": "success",
+    "createdAt": "2026-04-07T12:27:11.276Z",
+    "updatedAt": "2026-04-07T12:27:11.276Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f81f4a21d8ea6fc3c69d",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Senior Full-Stack Kotlin Engineer (m/f/d) - Station Management & Inventory",
+    "level": "info",
+    "createdAt": "2026-04-07T12:27:11.282Z",
+    "updatedAt": "2026-04-07T12:27:11.282Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f8354a21d8ea6fc3c69e",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriched: Senior Full-Stack Kotlin Engineer (m/f/d) - Station Management & Inventory | German: Not required | Skills: Kotlin, JVM, Ktor",
+    "level": "success",
+    "createdAt": "2026-04-07T12:27:33.640Z",
+    "updatedAt": "2026-04-07T12:27:33.640Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d4f8354a21d8ea6fc3c6a0",
+    "siteId": "69d4f72a528fd73efe1f92cd",
+    "siteName": "Flix",
+    "message": "Enriching: Senior Mobile Engineer - Android (m/f/d) ",
+    "level": "info",
+    "createdAt": "2026-04-07T12:27:33.644Z",
+    "updatedAt": "2026-04-07T12:27:33.644Z",
+    "__v": 0
+  }
+]
