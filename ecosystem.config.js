@@ -6,11 +6,13 @@ module.exports = {
       args: "start",
       env: {
         NODE_ENV: "production",
+        PORT: process.env.PORT || 3000,
       },
       instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: "1G",
+      exec_mode: "fork",
       error_file: "./logs/pm2-err.log",
       out_file: "./logs/pm2-out.log",
       log_file: "./logs/pm2-combined.log",
