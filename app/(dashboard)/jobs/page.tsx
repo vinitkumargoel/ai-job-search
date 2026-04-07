@@ -122,9 +122,9 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Jobs</h1>
           <p className="text-gray-600 text-sm mt-1">
@@ -175,7 +175,7 @@ export default function JobsPage() {
       ) : (
         <>
           {/* Tabs */}
-          <div className="flex gap-0 bg-white border border-gray-100 rounded-xl p-1 mb-6 w-fit shadow-sm">
+          <div className="flex gap-0 bg-white border border-gray-100 rounded-xl p-1 mb-6 overflow-x-auto shadow-sm w-full max-w-full">
             {TABS.map((t) => (
               <button
                 key={t.key}

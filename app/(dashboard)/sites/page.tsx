@@ -70,8 +70,8 @@ export default function SitesPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <div className="flex items-start justify-between mb-8">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+      <div className="flex items-start justify-between gap-3 mb-8 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Sites</h1>
           <p className="text-gray-600 text-sm mt-1">Manage your job scraping sources</p>

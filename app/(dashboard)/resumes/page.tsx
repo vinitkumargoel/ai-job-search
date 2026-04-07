@@ -47,8 +47,8 @@ export default function ResumesPage() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="flex items-start justify-between mb-8">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
+      <div className="flex items-start justify-between gap-3 mb-8 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Resumes</h1>
           <p className="text-gray-500 text-sm mt-1">
@@ -96,7 +96,7 @@ export default function ResumesPage() {
           {resumes.map((resume) => (
             <div
               key={resume._id}
-              className={`bg-white rounded-xl border-2 p-5 flex items-center gap-4 shadow-sm transition-all ${
+              className={`bg-white rounded-xl border-2 p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm transition-all ${
                 resume.isActive ? "border-green-500" : "border-gray-100 hover:border-gray-200"
               }`}
             >
@@ -126,7 +126,7 @@ export default function ResumesPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 shrink-0 mt-2 sm:mt-0">
                 {!resume.isActive && (
                   <button
                     onClick={() => activate(resume._id, resume.name)}

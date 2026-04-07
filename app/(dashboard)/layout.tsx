@@ -19,7 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <ToastProvider>
       <div className="flex min-h-screen">
         <Sidebar newJobsCount={newJobsCount} />
-        <main className="flex-1 overflow-auto bg-[#F8F9FF]">
+        <main className="flex-1 overflow-auto bg-[#F3F4F8] pt-14 md:pt-0">
           {children}
         </main>
       </div>

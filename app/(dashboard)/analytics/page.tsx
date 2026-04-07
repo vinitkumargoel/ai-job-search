@@ -55,7 +55,7 @@ export default function AnalyticsPage() {
     : 0;
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
@@ -64,11 +64,11 @@ export default function AnalyticsPage() {
 
       {/* Top KPIs */}
       {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {[...Array(4)].map((_, i) => <div key={i} className="h-28 rounded-xl bg-gray-100 animate-pulse" />)}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           <StatCard label="Total Jobs" value={totalJobs} sub="scraped" color="#111827" />
           <StatCard label="Applied" value={appliedCount} sub={totalJobs ? `${Math.round(appliedCount / totalJobs * 100)}% conversion` : "—"} color="#16A34A" />
           <StatCard label="AI Matched" value={matchedJobs} sub="with score" color="#4F6AF5" />
@@ -77,7 +77,7 @@ export default function AnalyticsPage() {
       )}
 
       {/* Charts row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         {/* Timeline */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="text-sm font-bold text-gray-900 mb-4">Jobs Scraped — Last 30 Days</h2>
@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Charts row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Score Distribution */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="text-sm font-bold text-gray-900 mb-4">AI Match Score Distribution</h2>

@@ -120,9 +120,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between gap-3 mb-8 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600 text-sm mt-1">Your AI Job Search overview</p>
@@ -141,13 +141,13 @@ export default function DashboardPage() {
 
       {/* Stat Cards */}
       {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="h-28 rounded-xl bg-gray-200 animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
           {STAT_CARDS.map(({ key, label, icon, color, bg, accent }) => (
             <div key={key} className={`bg-white rounded-xl p-5 flex flex-col gap-3 shadow-sm border border-gray-100 border-l-4 ${accent}`}>
               <div className={`w-9 h-9 rounded-lg ${bg} ${color} flex items-center justify-center`}>

@@ -66,9 +66,9 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4">
         {COLUMNS.map((col) => (
-          <div key={col.key} className="flex flex-col gap-3">
+          <div key={col.key} className="flex flex-col gap-3 min-w-[260px] md:min-w-0">
             {/* Column header */}
             <div className="flex items-center gap-2 px-1">
               <span className={`w-2 h-2 rounded-full ${col.dot}`} />

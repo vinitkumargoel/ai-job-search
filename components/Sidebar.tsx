@@ -75,7 +75,13 @@ const NAV = [
   },
 ];
 
-export function Sidebar({ newJobsCount }: { newJobsCount?: number }) {
+function NavContent({
+  newJobsCount,
+  onClose,
+}: {
+  newJobsCount?: number;
+  onClose?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
@@ -89,16 +95,25 @@ export function Sidebar({ newJobsCount }: { newJobsCount?: number }) {
   };
 
   return (
-    <aside className="w-60 min-h-screen bg-white border-r border-gray-200 flex flex-col shrink-0">
+    <>
       {/* Logo */}
       <div className="px-5 py-5 border-b border-gray-100">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#4F6AF5] to-[#7C3AED] flex items-center justify-center shrink-0">
-            <svg width="14" height="14" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-            </svg>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#4F6AF5] to-[#7C3AED] flex items-center justify-center shrink-0">
+              <svg width="14" height="14" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              </svg>
+            </div>
+            <span className="font-bold text-[#111827] text-[15px] tracking-tight">vinitk.dev</span>
           </div>
-          <span className="font-bold text-[#111827] text-[15px] tracking-tight">vinitk.dev</span>
+          {onClose && (
+            <button onClick={onClose} className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
         </div>
         <p className="text-[11px] text-gray-400 mt-1.5 font-medium uppercase tracking-widest ml-0.5">
           Job Search
@@ -113,6 +128,7 @@ export function Sidebar({ newJobsCount }: { newJobsCount?: number }) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group ${
                 active
                   ? "bg-[#EEF1FE] text-[#4F6AF5]"
@@ -148,6 +164,54 @@ export function Sidebar({ newJobsCount }: { newJobsCount?: number }) {
           <span>{loggingOut ? "Logging out..." : "Sign Out"}</span>
         </button>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export function Sidebar({ newJobsCount }: { newJobsCount?: number }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex w-60 min-h-screen bg-white border-r border-gray-200 flex-col shrink-0">
+        <NavContent newJobsCount={newJobsCount} />
+      </aside>
+
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 flex items-center justify-between px-4 h-14">
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[#4F6AF5] to-[#7C3AED] flex items-center justify-center">
+            <svg width="12" height="12" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            </svg>
+          </div>
+          <span className="font-bold text-gray-900 text-sm tracking-tight">vinitk.dev</span>
+        </div>
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+        >
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+          />
+          {/* Drawer */}
+          <div className="relative w-64 bg-white flex flex-col h-full shadow-2xl">
+            <NavContent newJobsCount={newJobsCount} onClose={() => setMobileOpen(false)} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
