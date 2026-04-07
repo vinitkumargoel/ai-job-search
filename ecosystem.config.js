@@ -6,7 +6,8 @@ module.exports = {
       args: "start",
       env: {
         NODE_ENV: "production",
-        PORT: process.env.PORT || 3000,
+        PORT: 8127,
+        SECURE_COOKIE: "false",
       },
       instances: 1,
       autorestart: true,
@@ -17,6 +18,7 @@ module.exports = {
       out_file: "./logs/pm2-out.log",
       log_file: "./logs/pm2-combined.log",
       time: true,
+      env_file: ".env",
     },
   ],
 };
