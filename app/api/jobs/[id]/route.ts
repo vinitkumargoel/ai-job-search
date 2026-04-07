@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Job from "@/models/Job";
+import SkippedUrl from "@/models/SkippedUrl";
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
@@ -20,4 +21,24 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json(job);
+}
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  await connectDB();
+  const { id } = await params;
+
+  const job = await Job.findById(id);
+  if (!job) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Add URL to skipped URLs to prevent re-scraping
+  await SkippedUrl.findOneAndUpdate(
+    { url: job.url },
+    { url: job.url },
+    { upsert: true, new: true }
+  );
+
+  // Delete the job
+  await Job.findByIdAndDelete(id);
+
+  return NextResponse.json({ success: true, deletedId: id });
 }

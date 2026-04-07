@@ -35,6 +35,7 @@ interface Props {
   onClose: () => void;
   onStatusChange: (id: string, status: string) => void;
   onRematch: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; text: string }> = {
@@ -44,7 +45,7 @@ const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; te
   rejected: { label: "Rejected", dot: "bg-red-400",    bg: "bg-red-50",    text: "text-red-700"  },
 };
 
-export function JobDetailModal({ job, onClose, onStatusChange, onRematch }: Props) {
+export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDelete }: Props) {
   const [notes, setNotes]               = useState(job.notes ?? "");
   const [savingNotes, setSavingNotes]   = useState(false);
   const [loading, setLoading]           = useState(false);
@@ -74,6 +75,20 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch }: Prop
         body: JSON.stringify({ status }),
       });
       if (res.ok) { onStatusChange(job._id, status); toast(`Marked as ${status}`, "success"); }
+    } finally { setLoading(false); }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm("Delete this job and add to skip list?")) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/jobs/${job._id}`, { method: "DELETE" });
+      if (res.ok) {
+        onDelete(job._id);
+        toast("Job deleted and added to skip list", "success");
+      } else {
+        toast("Failed to delete job", "error");
+      }
     } finally { setLoading(false); }
   };
 
@@ -382,6 +397,15 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch }: Prop
                 Open Job Posting
               </a>
 
+              {/* Delete button */}
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="w-full py-2 text-xs font-semibold rounded-xl border border-red-200 text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+              >
+                Delete (Skip)
+              </button>
+
               <div className="flex gap-2">
                 {job.status !== "applied" && (
                   <button onClick={() => handleStatus("applied")} disabled={loading}
@@ -397,8 +421,8 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch }: Prop
                 )}
                 {job.status !== "rejected" && (
                   <button onClick={() => handleStatus("rejected")} disabled={loading}
-                    className="flex-1 py-2 text-xs font-semibold rounded-xl border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors disabled:opacity-50">
-                    Pass
+                    className="flex-1 py-2 text-xs font-semibold rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50">
+                    ✕ Reject
                   </button>
                 )}
               </div>

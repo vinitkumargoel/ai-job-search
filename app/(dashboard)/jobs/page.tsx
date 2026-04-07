@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { JobCard } from "@/components/JobCard";
 import { KanbanBoard } from "@/components/KanbanBoard";
+import { FiltersModal } from "@/components/FiltersModal";
 import { useToast } from "@/components/ui/Toast";
 
 type TabStatus = "new" | "all" | "applied" | "saved" | "rejected";
@@ -52,11 +53,17 @@ export default function JobsPage() {
   const [matchingAll, setMatchingAll] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Filters
-  const [filterGerman, setFilterGerman]     = useState("");
-  const [filterExp, setFilterExp]           = useState("");
+  // Actual filters (applied)
+  const [filterGerman, setFilterGerman] = useState("");
+  const [filterExp, setFilterExp] = useState("");
   const [filterEmployment, setFilterEmployment] = useState("");
-  const [filterSalary, setFilterSalary]     = useState(false);
+  const [filterSalary, setFilterSalary] = useState(false);
+
+  // Temporary filters (in modal, not yet applied)
+  const [tempFilterGerman, setTempFilterGerman] = useState("");
+  const [tempFilterExp, setTempFilterExp] = useState("");
+  const [tempFilterEmployment, setTempFilterEmployment] = useState("");
+  const [tempFilterSalary, setTempFilterSalary] = useState(false);
 
   const activeFilterCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : ""].filter(Boolean).length;
 
@@ -66,10 +73,10 @@ export default function JobsPage() {
     setLoading(true);
     const params = new URLSearchParams({ limit: "20", page: String(activePage) });
     if (activeTab !== "all") params.set("status", activeTab);
-    if (filterGerman)     params.set("germanRequired", filterGerman);
-    if (filterExp)        params.set("experienceLevel", filterExp);
+    if (filterGerman) params.set("germanRequired", filterGerman);
+    if (filterExp) params.set("experienceLevel", filterExp);
     if (filterEmployment) params.set("employmentType", filterEmployment);
-    if (filterSalary)     params.set("hasSalary", "true");
+    if (filterSalary) params.set("hasSalary", "true");
 
     const res = await fetch(`/api/jobs?${params.toString()}`);
     if (res.ok) {
@@ -116,9 +123,39 @@ export default function JobsPage() {
     setBoardJobs((prev) => prev.map((j) => j._id === id ? { ...j, status } : j));
   };
 
+  const handleDelete = (id: string) => {
+    setJobs((prev) => prev.filter((j) => j._id !== id));
+    setBoardJobs((prev) => prev.filter((j) => j._id !== id));
+    setTotal((t) => t - 1);
+  };
+
   const handleRematch = () => {
     setTimeout(() => fetchJobs(tab, page), 3000);
     toast("Matching job against active resume...", "info");
+  };
+
+  const openFiltersModal = () => {
+    setTempFilterGerman(filterGerman);
+    setTempFilterExp(filterExp);
+    setTempFilterEmployment(filterEmployment);
+    setTempFilterSalary(filterSalary);
+    setShowFilters(true);
+  };
+
+  const applyFilters = () => {
+    setFilterGerman(tempFilterGerman);
+    setFilterExp(tempFilterExp);
+    setFilterEmployment(tempFilterEmployment);
+    setFilterSalary(tempFilterSalary);
+    setPage(1);
+    setShowFilters(false);
+  };
+
+  const clearAllFilters = () => {
+    setTempFilterGerman("");
+    setTempFilterExp("");
+    setTempFilterEmployment("");
+    setTempFilterSalary(false);
   };
 
   const matchAll = async () => {
@@ -191,9 +228,9 @@ export default function JobsPage() {
           </button>
 
           <button
-            onClick={() => setShowFilters((v) => !v)}
+            onClick={openFiltersModal}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-all ${
-              showFilters || activeFilterCount > 0
+              activeFilterCount > 0
                 ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
                 : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
             }`}
@@ -228,86 +265,6 @@ export default function JobsPage() {
             ))}
           </div>
 
-          {/* Filter bar */}
-          {showFilters && (
-            <div className="bg-white border border-gray-100 rounded-xl p-4 mb-5 shadow-sm flex flex-wrap gap-3 items-end">
-              {/* German requirement */}
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">🇩🇪 German</label>
-                <select
-                  value={filterGerman}
-                  onChange={(e) => { setFilterGerman(e.target.value); setPage(1); }}
-                  className="text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-[#4F6AF5]"
-                >
-                  <option value="">Any</option>
-                  <option value="not-required">Not required</option>
-                  <option value="any-required">Required (any level)</option>
-                </select>
-              </div>
-
-              {/* Experience level */}
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Experience</label>
-                <select
-                  value={filterExp}
-                  onChange={(e) => { setFilterExp(e.target.value); setPage(1); }}
-                  className="text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-[#4F6AF5]"
-                >
-                  <option value="">Any level</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Entry Level">Entry Level</option>
-                  <option value="Mid Level">Mid Level</option>
-                  <option value="Senior">Senior</option>
-                  <option value="Lead">Lead</option>
-                  <option value="Manager">Manager</option>
-                  <option value="Director">Director</option>
-                  <option value="VP">VP</option>
-                </select>
-              </div>
-
-              {/* Employment type */}
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Type</label>
-                <select
-                  value={filterEmployment}
-                  onChange={(e) => { setFilterEmployment(e.target.value); setPage(1); }}
-                  className="text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 focus:outline-none focus:border-[#4F6AF5]"
-                >
-                  <option value="">Any type</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Internship">Internship</option>
-                </select>
-              </div>
-
-              {/* Salary disclosed */}
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Salary</label>
-                <button
-                  onClick={() => { setFilterSalary((v) => !v); setPage(1); }}
-                  className={`text-xs font-semibold px-3 py-2 rounded-lg border transition-all ${
-                    filterSalary
-                      ? "bg-green-50 border-green-300 text-green-700"
-                      : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                  }`}
-                >
-                  💰 {filterSalary ? "Disclosed only" : "Any"}
-                </button>
-              </div>
-
-              {/* Clear */}
-              {activeFilterCount > 0 && (
-                <button
-                  onClick={() => { setFilterGerman(""); setFilterExp(""); setFilterEmployment(""); setFilterSalary(false); setPage(1); }}
-                  className="text-xs font-semibold text-gray-400 hover:text-gray-600 px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 transition-all"
-                >
-                  Clear filters
-                </button>
-              )}
-            </div>
-          )}
-
           {/* Grid */}
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -335,6 +292,7 @@ export default function JobsPage() {
                     job={job}
                     onStatusChange={handleStatusChange}
                     onRematch={handleRematch}
+                    onDelete={handleDelete}
                   />
                 ))}
               </div>
@@ -368,6 +326,22 @@ export default function JobsPage() {
           )}
         </>
       )}
+
+      {/* Filters Modal */}
+      <FiltersModal
+        open={showFilters}
+        onClose={() => setShowFilters(false)}
+        filterGerman={tempFilterGerman}
+        setFilterGerman={setTempFilterGerman}
+        filterExp={tempFilterExp}
+        setFilterExp={setTempFilterExp}
+        filterEmployment={tempFilterEmployment}
+        setFilterEmployment={setTempFilterEmployment}
+        filterSalary={tempFilterSalary}
+        setFilterSalary={setTempFilterSalary}
+        onClear={clearAllFilters}
+        onApply={applyFilters}
+      />
     </div>
   );
 }

@@ -34,6 +34,7 @@ interface JobCardProps {
   job: Job;
   onStatusChange: (id: string, status: string) => void;
   onRematch: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 const STATUS_PILL: Record<string, { bg: string; text: string; dot: string }> = {
@@ -43,7 +44,7 @@ const STATUS_PILL: Record<string, { bg: string; text: string; dot: string }> = {
   rejected: { bg: "bg-red-50",     text: "text-red-700",    dot: "bg-red-400" },
 };
 
-export function JobCard({ job, onStatusChange, onRematch }: JobCardProps) {
+export function JobCard({ job, onStatusChange, onRematch, onDelete }: JobCardProps) {
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -203,6 +204,10 @@ export function JobCard({ job, onStatusChange, onRematch }: JobCardProps) {
           }}
           onRematch={(id) => {
             onRematch(id);
+            setShowDetail(false);
+          }}
+          onDelete={(id) => {
+            onDelete(id);
             setShowDetail(false);
           }}
         />

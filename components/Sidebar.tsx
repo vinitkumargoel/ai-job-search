@@ -41,6 +41,18 @@ const NAV = [
     ),
   },
   {
+    href: "/skip",
+    label: "Skipped",
+    icon: (
+      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="4.17" y1="8" x2="19.83" y2="8" />
+        <path d="M12 3c-1.5 2-2.5 4.5-2.5 9s1 7 2.5 9" />
+        <path d="M12 3c1.5 2 2.5 4.5 2.5 9s-1 7-2.5 9" />
+      </svg>
+    ),
+  },
+  {
     href: "/resumes",
     label: "Resumes",
     icon: (
