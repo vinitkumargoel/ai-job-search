@@ -11,6 +11,8 @@ export interface ScrapedJob {
 export interface SiteConfig {
   url: string;
   keywords?: string;
+  /** If true, Puppeteer scrapers stop after the first page (used in smoke tests) */
+  firstPageOnly?: boolean;
 }
 
 export interface ScraperStrategy {
