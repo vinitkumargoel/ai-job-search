@@ -146,42 +146,46 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
       try {
         const posting = JSON.parse(ldJson);
         if (posting.description && posting.description.length > 50) {
+          console.log(`[Siemens] Found JSON-LD description (${posting.description.length} chars)`);
           return { description: posting.description.replace(/<[^>]+>/g, " ").trim(), rawHtml: posting.description };
         }
       } catch { /* fall through */ }
     }
 
-    // Fallback: extract from rendered HTML - try multiple selectors
-    const result = await page.evaluate(() => {
+    // Try main content area (Siemens uses main for job content)
+    const mainContent = await page.evaluate(() => {
+      // Try specific selectors first
       const selectors = [
-        ".section--job-description", ".jobdescription", ".jobDescription",
-        "#jobDescription", ".iContent .description", "#iContent",
-        ".job-description", "[class*='description']",
-        ".content", ".posting", ".job-content", "article",
+        ".main__content", ".section__content--view", "main",
+        ".section--job-description", ".jobdescription", ".jobDescription"
       ];
-      for (const s of selectors) {
-        const el = document.querySelector(s);
-        const text = el?.textContent?.trim();
-        if (text && text.length > 50) {
+
+      for (const sel of selectors) {
+        const el = document.querySelector<HTMLElement>(sel);
+        const text = el?.innerText?.trim();
+        if (text && text.length > 200) {
           return { description: text, rawHtml: el!.innerHTML };
         }
       }
 
-      // Last resort: get body text (truncated)
-      const body = document.body;
-      const text = body?.textContent?.trim() || "";
-      if (text.length > 100) {
-        return { description: text.slice(0, 8000), rawHtml: body?.innerHTML?.slice(0, 15000) || "" };
+      // Fallback: get full body text (let LLM parse it)
+      const bodyText = (document.body as HTMLElement)?.innerText?.trim() || "";
+      const bodyHtml = document.body?.innerHTML || "";
+
+      if (bodyText.length > 500) {
+        return { description: bodyText.slice(0, 15000), rawHtml: bodyHtml.slice(0, 50000) };
       }
 
       return { description: "", rawHtml: "" };
     });
 
-    if (!result.description) {
-      console.log(`[Siemens] No description found for: ${url}`);
+    if (mainContent.description) {
+      console.log(`[Siemens] Extracted content: ${mainContent.description.length} chars`);
+    } else {
+      console.log(`[Siemens] No content found for: ${url}`);
     }
 
-    return result;
+    return mainContent;
   });
 }
 
