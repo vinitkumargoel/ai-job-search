@@ -44,7 +44,6 @@ async function runScraper(key: string): Promise<TestResult> {
     const jobs = await scraper.scrape({
       url:           "",
       keywords:      KEYWORDS,
-      // @ts-expect-error — firstPageOnly is a non-standard extension used in smoke tests
       firstPageOnly: true,
     });
     const elapsed = Date.now() - start;
