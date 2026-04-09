@@ -131,7 +131,7 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
           const hasMore = allJobs.length > INITIAL_VISIBLE;
 
           return (
-            <div key={col.key} className="flex flex-col gap-2 min-w-[280px] max-w-[300px]">
+            <div key={col.key} className="flex flex-col gap-2 flex-shrink-0 w-[300px]">
               {/* Column header */}
               <div className="flex items-center gap-2 px-1 sticky top-0 bg-[#F3F4F8] py-1 z-10">
                 <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`} />
