@@ -56,6 +56,33 @@ interface Props {
 
 type RightTab = "details" | "cover-letter" | "resume";
 
+// Domain mapping for favicon lookup
+const SITE_DOMAINS: Record<string, string> = {
+  amazon: "amazon.com", bosch: "bosch.com", celonis: "celonis.com", check24: "check24.de",
+  commercetools: "commercetools.com", contentful: "contentful.com", deliveryhero: "deliveryhero.com",
+  flix: "flixbus.com", getyourguide: "getyourguide.com", hellofresh: "hellofresh.com",
+  n26: "n26.com", raisin: "raisin.com", sap: "sap.com", sapfioneer: "sapfioneer.com",
+  scout24: "scout24.com", siemens: "siemens.com", softwareag: "softwareag.com",
+  teamviewer: "teamviewer.com", zalando: "zalando.com", zeiss: "zeiss.com",
+  parloa: "parloa.com", helsing: "helsing.ai", blackforestlabs: "blackforestlabs.ai",
+  n8n: "n8n.io", deepl: "deepl.com", alephalpha: "aleph-alpha.de", sereact: "sereact.ai",
+  quantumsystems: "quantum-systems.com", sumup: "sumup.com", traderepublic: "traderepublic.com",
+  grover: "grover.com", staffbase: "staffbase.com", isaraerospace: "isaraerospace.com",
+  personio: "personio.com", enpal: "enpal.de", forto: "forto.com", billie: "billie.io",
+  sennder: "sennder.com", wolt: "wolt.com", ionos: "ionos.com", doctolib: "doctolib.de",
+  moia: "moia.io", wayve: "wayve.ai", wunderflats: "wunderflats.com", adyen: "adyen.com",
+  tulip: "tulip.com", hetzner: "hetzner.com", "telekom-it": "telekom.com",
+  trivago: "trivago.com", flaconi: "flaconi.com", freenow: "free-now.com",
+  auto1: "auto1.com", aboutyou: "aboutyou.com", scalablecapital: "scalable.capital",
+  sixt: "sixt.com", babbel: "babbel.com", idealo: "idealo.de", mambu: "mambu.com",
+};
+
+const getFaviconUrl = (siteName: string, size = 32) => {
+  const scraperKey = siteName.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "");
+  const domain = SITE_DOMAINS[scraperKey] || SITE_DOMAINS[Object.keys(SITE_DOMAINS).find(k => scraperKey.includes(k)) || ""] || siteName.toLowerCase().replace(/\s+/g, "") + ".com";
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`;
+};
+
 const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; text: string }> = {
   new:      { label: "New",      dot: "bg-[#4F6AF5]", bg: "bg-[#EEF1FE]", text: "text-[#4F6AF5]" },
   saved:    { label: "Saved",    dot: "bg-amber-400",  bg: "bg-amber-50",  text: "text-amber-700" },
@@ -203,7 +230,13 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 <span className={`w-1.5 h-1.5 rounded-full ${statusCfg.dot}`} />
                 {statusCfg.label}
               </span>
-              <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                <img
+                  src={getFaviconUrl(job.siteName, 16)}
+                  alt={job.siteName}
+                  className="w-3.5 h-3.5 rounded-sm"
+                  loading="lazy"
+                />
                 {job.siteName}
               </span>
               <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">

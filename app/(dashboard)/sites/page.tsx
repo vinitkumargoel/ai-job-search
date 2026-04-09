@@ -16,70 +16,74 @@ interface Site {
   lastRunStatus: string;
 }
 
-// ── Scraper metadata: ATS group + display label + icon (emoji or favicon) ───────────────────────────────
-const SCRAPER_META: Record<string, { label: string; ats: string; city?: string; icon?: string }> = {
+// ── Scraper metadata: ATS group + display label + domain for favicon ───────────────────────────────
+const SCRAPER_META: Record<string, { label: string; ats: string; city?: string; domain?: string }> = {
   // Original
-  amazon:          { label: "Amazon Jobs",     ats: "Custom",          city: "Global",      icon: "📦" },
-  bosch:           { label: "Bosch",            ats: "SmartRecruiters", city: "Stuttgart",   icon: "🔧" },
-  celonis:         { label: "Celonis",          ats: "Greenhouse",      city: "Munich",      icon: "⚡" },
-  check24:         { label: "Check24",          ats: "Custom",          city: "Munich",      icon: "✓" },
-  commercetools:   { label: "commercetools",    ats: "Greenhouse",      city: "Munich",      icon: "🛒" },
-  contentful:      { label: "Contentful",       ats: "Greenhouse",      city: "Berlin",      icon: "📝" },
-  deliveryhero:    { label: "Delivery Hero",    ats: "Custom",          city: "Berlin",      icon: "🍔" },
-  flix:            { label: "Flix",             ats: "Greenhouse",      city: "Munich",      icon: "🚌" },
-  getyourguide:    { label: "GetYourGuide",     ats: "Greenhouse",      city: "Berlin",      icon: "🗺️" },
-  hellofresh:      { label: "HelloFresh",       ats: "Greenhouse",      city: "Berlin",      icon: "🥗" },
-  n26:             { label: "N26",               ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
-  raisin:          { label: "Raisin",           ats: "Greenhouse",      city: "Berlin",      icon: "🍇" },
-  sap:             { label: "SAP",              ats: "SuccessFactors",  city: "Walldorf",    icon: "💼" },
-  sapfioneer:      { label: "SAP Fioneer",      ats: "Custom",          city: "Walldorf",    icon: "🏦" },
-  scout24:         { label: "Scout24",          ats: "Greenhouse",      city: "Munich",      icon: "🔍" },
-  siemens:         { label: "Siemens",          ats: "Avature",         city: "Munich",      icon: "⚙️" },
-  softwareag:      { label: "Software AG",      ats: "Dayforce",        city: "Darmstadt",   icon: "🖥️" },
-  teamviewer:      { label: "TeamViewer",       ats: "Teamtailor",      city: "Göppingen",   icon: "🖥️" },
-  zalando:         { label: "Zalando",          ats: "Custom",          city: "Berlin",      icon: "👗" },
-  zeiss:           { label: "ZEISS",            ats: "Workday",         city: "Jena",        icon: "🔬" },
+  amazon:          { label: "Amazon Jobs",     ats: "Custom",          city: "Global",      domain: "amazon.com" },
+  bosch:           { label: "Bosch",            ats: "SmartRecruiters", city: "Stuttgart",   domain: "bosch.com" },
+  celonis:         { label: "Celonis",          ats: "Greenhouse",      city: "Munich",      domain: "celonis.com" },
+  check24:         { label: "Check24",          ats: "Custom",          city: "Munich",      domain: "check24.de" },
+  commercetools:   { label: "commercetools",    ats: "Greenhouse",      city: "Munich",      domain: "commercetools.com" },
+  contentful:      { label: "Contentful",       ats: "Greenhouse",      city: "Berlin",      domain: "contentful.com" },
+  deliveryhero:    { label: "Delivery Hero",    ats: "Custom",          city: "Berlin",      domain: "deliveryhero.com" },
+  flix:            { label: "Flix",             ats: "Greenhouse",      city: "Munich",      domain: "flixbus.com" },
+  getyourguide:    { label: "GetYourGuide",     ats: "Greenhouse",      city: "Berlin",      domain: "getyourguide.com" },
+  hellofresh:      { label: "HelloFresh",       ats: "Greenhouse",      city: "Berlin",      domain: "hellofresh.com" },
+  n26:             { label: "N26",               ats: "Greenhouse",      city: "Berlin",      domain: "n26.com" },
+  raisin:          { label: "Raisin",           ats: "Greenhouse",      city: "Berlin",      domain: "raisin.com" },
+  sap:             { label: "SAP",              ats: "SuccessFactors",  city: "Walldorf",    domain: "sap.com" },
+  sapfioneer:      { label: "SAP Fioneer",      ats: "Custom",          city: "Walldorf",    domain: "sapfioneer.com" },
+  scout24:         { label: "Scout24",          ats: "Greenhouse",      city: "Munich",      domain: "scout24.com" },
+  siemens:         { label: "Siemens",          ats: "Avature",         city: "Munich",      domain: "siemens.com" },
+  softwareag:      { label: "Software AG",      ats: "Dayforce",        city: "Darmstadt",   domain: "softwareag.com" },
+  teamviewer:      { label: "TeamViewer",       ats: "Teamtailor",      city: "Göppingen",   domain: "teamviewer.com" },
+  zalando:         { label: "Zalando",          ats: "Custom",          city: "Berlin",      domain: "zalando.com" },
+  zeiss:           { label: "ZEISS",            ats: "Workday",         city: "Jena",        domain: "zeiss.com" },
   // Wave 1
-  parloa:          { label: "Parloa",           ats: "Greenhouse",      city: "Berlin",      icon: "🎙️" },
-  helsing:         { label: "Helsing",          ats: "Greenhouse",      city: "Munich",      icon: "🛡️" },
-  blackforestlabs: { label: "Black Forest Labs",ats: "Greenhouse",     city: "Freiburg",    icon: "🎨" },
-  n8n:             { label: "n8n",              ats: "Ashby",           city: "Berlin",      icon: "🔗" },
-  deepl:           { label: "DeepL",            ats: "Ashby",           city: "Cologne",     icon: "🌐" },
-  alephalpha:      { label: "Aleph Alpha",      ats: "Ashby",           city: "Heidelberg",  icon: "🧠" },
-  sereact:         { label: "Sereact",          ats: "Ashby",           city: "Stuttgart",   icon: "🤖" },
-  quantumsystems:  { label: "Quantum Systems",  ats: "Personio",        city: "Munich",      icon: "🚁" },
+  parloa:          { label: "Parloa",           ats: "Greenhouse",      city: "Berlin",      domain: "parloa.com" },
+  helsing:         { label: "Helsing",          ats: "Greenhouse",      city: "Munich",      domain: "helsing.ai" },
+  blackforestlabs: { label: "Black Forest Labs",ats: "Greenhouse",     city: "Freiburg",    domain: "blackforestlabs.ai" },
+  n8n:             { label: "n8n",              ats: "Ashby",           city: "Berlin",      domain: "n8n.io" },
+  deepl:           { label: "DeepL",            ats: "Ashby",           city: "Cologne",     domain: "deepl.com" },
+  alephalpha:      { label: "Aleph Alpha",      ats: "Ashby",           city: "Heidelberg",  domain: "aleph-alpha.de" },
+  sereact:         { label: "Sereact",          ats: "Ashby",           city: "Stuttgart",   domain: "sereact.ai" },
+  quantumsystems:  { label: "Quantum Systems",  ats: "Personio",        city: "Munich",      domain: "quantum-systems.com" },
   // Wave 2
-  sumup:           { label: "SumUp",            ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
-  traderepublic:   { label: "Trade Republic",   ats: "Greenhouse",      city: "Berlin",      icon: "📈" },
-  grover:          { label: "Grover",           ats: "Greenhouse",      city: "Berlin",      icon: "📱" },
-  staffbase:       { label: "Staffbase",        ats: "Greenhouse",      city: "Chemnitz",    icon: "👥" },
-  isaraerospace:   { label: "Isar Aerospace",   ats: "Greenhouse",      city: "Munich",      icon: "🚀" },
-  personio:        { label: "Personio",         ats: "Ashby",           city: "Munich",      icon: "👥" },
-  enpal:           { label: "Enpal",            ats: "Ashby",           city: "Berlin",      icon: "☀️" },
-  forto:           { label: "Forto",            ats: "Ashby",           city: "Berlin",      icon: "📦" },
-  billie:          { label: "Billie",           ats: "Ashby",           city: "Berlin",      icon: "💳" },
-  sennder:         { label: "Sennder",          ats: "SmartRecruiters", city: "Berlin",      icon: "🚚" },
+  sumup:           { label: "SumUp",            ats: "Greenhouse",      city: "Berlin",      domain: "sumup.com" },
+  traderepublic:   { label: "Trade Republic",   ats: "Greenhouse",      city: "Berlin",      domain: "traderepublic.com" },
+  grover:          { label: "Grover",           ats: "Greenhouse",      city: "Berlin",      domain: "grover.com" },
+  staffbase:       { label: "Staffbase",        ats: "Greenhouse",      city: "Chemnitz",    domain: "staffbase.com" },
+  isaraerospace:   { label: "Isar Aerospace",   ats: "Greenhouse",      city: "Munich",      domain: "isaraerospace.com" },
+  personio:        { label: "Personio",         ats: "Ashby",           city: "Munich",      domain: "personio.com" },
+  enpal:           { label: "Enpal",            ats: "Ashby",           city: "Berlin",      domain: "enpal.de" },
+  forto:           { label: "Forto",            ats: "Ashby",           city: "Berlin",      domain: "forto.com" },
+  billie:          { label: "Billie",           ats: "Ashby",           city: "Berlin",      domain: "billie.io" },
+  sennder:         { label: "Sennder",          ats: "SmartRecruiters", city: "Berlin",      domain: "sennder.com" },
   // Wave 4
-  wolt:            { label: "Wolt",             ats: "Greenhouse",      city: "Berlin",      icon: "🛵" },
-  ionos:           { label: "IONOS",             ats: "Greenhouse",      city: "Karlsruhe",   icon: "🌐" },
-  doctolib:        { label: "Doctolib",          ats: "Greenhouse",      city: "Berlin",      icon: "🏥" },
-  moia:            { label: "MOIA",              ats: "Greenhouse",      city: "Hamburg",     icon: "🚐" },
-  wayve:           { label: "Wayve",             ats: "Greenhouse",      city: "Germany",     icon: "🚗" },
-  wunderflats:     { label: "Wunderflats",       ats: "Greenhouse",      city: "Berlin",      icon: "🏠" },
-  adyen:           { label: "Adyen",             ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
-  tulip:           { label: "Tulip",             ats: "Greenhouse",      city: "Munich",      icon: "🌷" },
-  hetzner:         { label: "Hetzner",           ats: "Custom",          city: "Nuremberg",    icon: "🖥️" },
-  "telekom-it":    { label: "Deutsche Telekom IT",ats: "SmartRecruiters", city: "Darmstadt",  icon: "📡" },
-  flaconi:         { label: "Flaconi",           ats: "Greenhouse",      city: "Berlin",      icon: "💄" },
-  freenow:         { label: "FREE NOW",          ats: "Greenhouse",      city: "Hamburg",     icon: "🚕" },
-  auto1:           { label: "AUTO1 Group",       ats: "SmartRecruiters", city: "Berlin",      icon: "🚗" },
-  aboutyou:        { label: "About You",         ats: "SmartRecruiters", city: "Hamburg",     icon: "👕" },
-  scalablecapital: { label: "Scalable Capital",  ats: "SmartRecruiters", city: "Munich",      icon: "💰" },
-  sixt:            { label: "SIXT",              ats: "SmartRecruiters", city: "Munich",      icon: "🚙" },
-  babbel:          { label: "Babbel",            ats: "Personio",        city: "Berlin",      icon: "🗣️" },
-  idealo:          { label: "Idealo",            ats: "Personio",        city: "Berlin",      icon: "💰" },
-  mambu:           { label: "Mambu",             ats: "Personio",        city: "Berlin",      icon: "🏦" },
+  wolt:            { label: "Wolt",             ats: "Greenhouse",      city: "Berlin",      domain: "wolt.com" },
+  ionos:           { label: "IONOS",             ats: "Greenhouse",      city: "Karlsruhe",   domain: "ionos.com" },
+  doctolib:        { label: "Doctolib",          ats: "Greenhouse",      city: "Berlin",      domain: "doctolib.de" },
+  moia:            { label: "MOIA",              ats: "Greenhouse",      city: "Hamburg",     domain: "moia.io" },
+  wayve:           { label: "Wayve",             ats: "Greenhouse",      city: "Germany",     domain: "wayve.ai" },
+  wunderflats:     { label: "Wunderflats",       ats: "Greenhouse",      city: "Berlin",      domain: "wunderflats.com" },
+  adyen:           { label: "Adyen",             ats: "Greenhouse",      city: "Berlin",      domain: "adyen.com" },
+  tulip:           { label: "Tulip",             ats: "Greenhouse",      city: "Munich",      domain: "tulip.com" },
+  hetzner:         { label: "Hetzner",           ats: "Custom",          city: "Nuremberg",    domain: "hetzner.com" },
+  "telekom-it":    { label: "Deutsche Telekom IT",ats: "SmartRecruiters", city: "Darmstadt",   domain: "telekom.com" },
+  flaconi:         { label: "Flaconi",           ats: "Greenhouse",      city: "Berlin",      domain: "flaconi.com" },
+  freenow:         { label: "FREE NOW",          ats: "Greenhouse",      city: "Hamburg",     domain: "free-now.com" },
+  auto1:           { label: "AUTO1 Group",       ats: "SmartRecruiters", city: "Berlin",      domain: "auto1.com" },
+  aboutyou:        { label: "About You",         ats: "SmartRecruiters", city: "Hamburg",     domain: "aboutyou.com" },
+  scalablecapital: { label: "Scalable Capital",  ats: "SmartRecruiters", city: "Munich",      domain: "scalable.capital" },
+  sixt:            { label: "SIXT",              ats: "SmartRecruiters", city: "Munich",      domain: "sixt.com" },
+  babbel:          { label: "Babbel",            ats: "Personio",        city: "Berlin",      domain: "babbel.com" },
+  idealo:          { label: "Idealo",            ats: "Personio",        city: "Berlin",      domain: "idealo.de" },
+  mambu:           { label: "Mambu",             ats: "Personio",        city: "Berlin",      domain: "mambu.com" },
 };
+
+// Helper to get favicon URL
+const getFaviconUrl = (domain: string, size = 32) =>
+  `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`;
 
 const ATS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
   Greenhouse:      { bg: "bg-green-50",   text: "text-green-700",  dot: "bg-green-500" },
@@ -147,13 +151,16 @@ function SiteCard({
 
       {/* Card body */}
       <div className="px-4 pt-4 pb-3 flex flex-col gap-2.5">
-        {/* Top row: icon + name + toggle */}
+        {/* Top row: favicon + name + toggle */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2.5 min-w-0">
-            {meta.icon && (
-              <span className="text-lg shrink-0 mt-0.5" role="img" aria-label={meta.label}>
-                {meta.icon}
-              </span>
+            {meta.domain && (
+              <img
+                src={getFaviconUrl(meta.domain)}
+                alt={site.name}
+                className="w-5 h-5 shrink-0 mt-0.5 rounded-sm object-contain"
+                loading="lazy"
+              />
             )}
             <div className="min-w-0">
               <p className="text-sm font-semibold text-gray-900 truncate leading-tight">{site.name}</p>
