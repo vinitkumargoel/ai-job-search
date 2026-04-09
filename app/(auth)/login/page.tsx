@@ -54,10 +54,10 @@ export default function LoginPage() {
             Your AI-powered<br />job search engine
           </h2>
           <p className="text-white/50 text-sm leading-relaxed">
-            Automatically scrape job boards, match postings to your resume with AI, and track your entire application pipeline — all in one place.
+            Automatically scrape job boards, match postings to your profile with AI, and track your entire application pipeline — all in one place.
           </p>
           <div className="mt-10 flex flex-col gap-3">
-            {["Automated job scraping", "AI resume matching", "Application pipeline tracking"].map((f) => (
+            {["Automated job scraping", "AI profile matching", "Application pipeline tracking"].map((f) => (
               <div key={f} className="flex items-center gap-3">
                 <div className="w-5 h-5 rounded-full bg-[#4F6AF5]/20 flex items-center justify-center shrink-0">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

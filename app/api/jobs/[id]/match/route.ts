@@ -1,23 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Job from "@/models/Job";
-import Resume from "@/models/Resume";
+import Profile from "@/models/Profile";
 import { matchJobToResume } from "@/lib/ollama";
 
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
   const { id } = await params;
 
-  const [job, resume] = await Promise.all([
+  const [job, profile] = await Promise.all([
     Job.findById(id),
-    Resume.findOne({ isActive: true }),
+    Profile.findOne(),
   ]);
 
   if (!job) return NextResponse.json({ error: "Job not found" }, { status: 404 });
-  if (!resume) return NextResponse.json({ error: "No active resume found" }, { status: 400 });
+  if (!profile || !profile.prompt.trim()) {
+    return NextResponse.json({ error: "No profile configured. Go to Profile page and add your details." }, { status: 400 });
+  }
 
   const result = await matchJobToResume(
-    resume.contentText,
+    profile.prompt,
     job.title,
     job.company,
     job.description
@@ -29,7 +31,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
 
   const updated = await Job.findByIdAndUpdate(
     id,
-    { matchScore: result.score, matchReason: result.reason, matchedResumeId: resume._id },
+    { matchScore: result.score, matchReason: result.reason },
     { new: true }
   );
 

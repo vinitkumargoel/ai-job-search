@@ -181,7 +181,7 @@ export default function SettingsPage() {
               </div>
             )}
             <p className="text-xs text-gray-400 mt-2">
-              This model will be used for job enrichment and resume matching.
+              This model will be used for job enrichment and profile matching.
             </p>
           </div>
 

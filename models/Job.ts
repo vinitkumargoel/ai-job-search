@@ -24,7 +24,6 @@ export interface IJob extends Document {
   isNew: boolean;
   matchScore: number | null;
   matchReason: string | null;
-  matchedResumeId: Types.ObjectId | null;
   scrapedAt: Date;
   appliedAt: Date | null;
   notes: string;
@@ -56,7 +55,6 @@ const JobSchema = new Schema(
     isNew: { type: Boolean, default: true },
     matchScore: { type: Number, default: null },
     matchReason: { type: String, default: null },
-    matchedResumeId: { type: Schema.Types.ObjectId, ref: "Resume", default: null },
     scrapedAt: { type: Date, default: Date.now },
     appliedAt: { type: Date, default: null },
     notes: { type: String, default: "" },

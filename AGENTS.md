@@ -66,10 +66,10 @@ components/
 ├── JobCard.tsx            # Job card with notes + cover letter
 ├── KanbanBoard.tsx        # Drag-and-drop board view
 ├── SiteForm.tsx           # Add/edit site modal
-├── ResumeUploader.tsx     # PDF upload modal
+
 └── CronLogPanel.tsx       # Terminal-style log viewer
 
-models/                    # Mongoose schemas: Job, Site, Resume, CronLog
+models/                    # Mongoose schemas: Job, Site, Profile, CronLog, Setting, SkippedUrl
 lib/
 ├── mongodb.ts             # Connection caching
 ├── auth.ts                # JWT sign/verify
@@ -146,7 +146,7 @@ The `scraperKey` on a `Site` document determines which scraper runs. The UI drop
 
 **Site** — `scraperKey` maps to registry · `cronSchedule`: cron expression · `isActive`: enables scheduling
 
-**Resume** — only one `isActive: true` at a time · `contentText`: extracted PDF text used for AI matching
+**Profile** — single document · `prompt`: free-text system prompt (skills, experience, education, preferences) · `name`, `email`, `phone`, `location`, `linkedIn`, `website`: contact fields used in generated resumes/cover letters
 
 **CronLog** — TTL index auto-expires after 7 days · `level`: `info | error | success`
 

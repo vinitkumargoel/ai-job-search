@@ -30,6 +30,22 @@ interface Job {
   notes: string;
 }
 
+interface ResumeData {
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedIn: string;
+  website: string;
+  summary: string;
+  experience: { title: string; company: string; duration: string; location: string; bullets: string[] }[];
+  education: { degree: string; school: string; year: string; details: string }[];
+  skills: string[];
+  certifications: string[];
+  languages: string[];
+  projects: { name: string; description: string; tech: string }[];
+}
+
 interface Props {
   job: Job;
   onClose: () => void;
@@ -37,6 +53,8 @@ interface Props {
   onRematch: (id: string) => void;
   onDelete: (id: string) => void;
 }
+
+type RightTab = "details" | "cover-letter" | "resume";
 
 const STATUS_CONFIG: Record<string, { label: string; dot: string; bg: string; text: string }> = {
   new:      { label: "New",      dot: "bg-[#4F6AF5]", bg: "bg-[#EEF1FE]", text: "text-[#4F6AF5]" },
@@ -51,7 +69,9 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
   const [loading, setLoading]           = useState(false);
   const [coverLetter, setCoverLetter]   = useState("");
   const [generatingCL, setGeneratingCL] = useState(false);
-  const [rightTab, setRightTab]         = useState<"details" | "cover-letter">("details");
+  const [resumeData, setResumeData]     = useState<ResumeData | null>(null);
+  const [generatingResume, setGeneratingResume] = useState(false);
+  const [rightTab, setRightTab]         = useState<RightTab>("details");
   const notesRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
 
@@ -109,7 +129,10 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
     try {
       const res = await fetch(`/api/jobs/${job._id}/match`, { method: "POST" });
       if (res.ok) { onRematch(job._id); toast("Re-match started", "info"); }
-      else toast("Re-match failed — check Ollama is running", "error");
+      else {
+        const data = await res.json();
+        toast(data.error || "Re-match failed", "error");
+      }
     } finally { setLoading(false); }
   };
 
@@ -119,8 +142,48 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
     setRightTab("cover-letter");
     const res = await fetch(`/api/jobs/${job._id}/cover-letter`, { method: "POST" });
     if (res.ok) { const d = await res.json(); setCoverLetter(d.coverLetter ?? ""); }
-    else setCoverLetter("Failed to generate — ensure Ollama is running and a resume is active.");
+    else {
+      const d = await res.json().catch(() => ({}));
+      setCoverLetter(d.error || "Failed to generate — ensure Ollama is running and your Profile is configured.");
+    }
     setGeneratingCL(false);
+  };
+
+  const generateResume = async () => {
+    setGeneratingResume(true);
+    setResumeData(null);
+    setRightTab("resume");
+    const res = await fetch(`/api/jobs/${job._id}/generate-resume`, { method: "POST" });
+    if (res.ok) {
+      const d = await res.json();
+      setResumeData(d.resume ?? null);
+    } else {
+      const d = await res.json().catch(() => ({}));
+      toast(d.error || "Failed to generate resume", "error");
+    }
+    setGeneratingResume(false);
+  };
+
+  const downloadResumePDF = () => {
+    if (!resumeData) return;
+    // Build a print-optimized HTML document
+    const html = buildResumePrintHTML(resumeData, job.title, job.company);
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const win = window.open(url, "_blank");
+    if (win) {
+      win.onload = () => {
+        setTimeout(() => { win.print(); }, 500);
+      };
+    }
+    toast("Resume opened — use Print > Save as PDF", "info");
+  };
+
+  const copyResumeText = () => {
+    if (!resumeData) return;
+    const text = buildResumeText(resumeData);
+    navigator.clipboard.writeText(text);
+    toast("Resume text copied!", "success");
   };
 
   const statusCfg = STATUS_CONFIG[job.status] ?? STATUS_CONFIG.new;
@@ -130,10 +193,9 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      {/* Wide dialog — almost full screen */}
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl h-[92vh] flex flex-col overflow-hidden">
 
-        {/* ── Top bar ── */}
+        {/* Top bar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
@@ -145,7 +207,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 {job.siteName}
               </span>
               <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
-                🇩🇪 {job.location}
+                {job.location}
               </span>
               {job.experienceLevel && job.experienceLevel !== "Not specified" && (
                 <span className="text-xs font-semibold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">
@@ -159,12 +221,12 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
               )}
               {job.salary && (
                 <span className="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-                  💰 {job.salary}
+                  {job.salary}
                 </span>
               )}
               {job.yearsOfExperience && (
                 <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
-                  ⏱️ {job.yearsOfExperience}
+                  {job.yearsOfExperience}
                 </span>
               )}
               {job.germanRequired && (
@@ -173,7 +235,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     ? "bg-green-50 text-green-700"
                     : "bg-orange-50 text-orange-700"
                 }`}>
-                  🇩🇪 German: {job.germanRequired}
+                  German: {job.germanRequired}
                 </span>
               )}
             </div>
@@ -188,10 +250,10 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
           </button>
         </div>
 
-        {/* ── Two-column body ── */}
+        {/* Two-column body */}
         <div className="flex flex-1 overflow-hidden">
 
-          {/* ════ LEFT — full description ════ */}
+          {/* LEFT — full description */}
           <div className="flex-1 flex flex-col overflow-hidden border-r border-gray-100">
             <div className="px-6 py-4 border-b border-gray-100 shrink-0 bg-gradient-to-r from-white to-gray-50/50">
               <h2 className="text-lg font-bold text-gray-900 leading-snug">{job.title}</h2>
@@ -199,7 +261,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-5">
-              {/* AI Summary banner */}
               {job.summary && (
                 <div className="bg-gradient-to-br from-[#EEF1FE] to-[#E8EBFA] rounded-xl px-5 py-4 mb-6 border border-[#4F6AF5]/10">
                   <div className="flex items-center gap-2 mb-2">
@@ -213,7 +274,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 </div>
               )}
 
-              {/* Full markdown description */}
               <div className="prose prose-sm prose-slate max-w-none
                 prose-headings:font-semibold prose-headings:text-gray-900 prose-headings:tracking-tight
                 prose-h1:text-xl prose-h1:mt-8 prose-h1:mb-4 prose-h1:pb-2 prose-h1:border-b prose-h1:border-gray-200
@@ -239,12 +299,12 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
             </div>
           </div>
 
-          {/* ════ RIGHT — job details panel ════ */}
-          <div className="w-[360px] shrink-0 flex flex-col overflow-hidden bg-gray-50/40">
+          {/* RIGHT — tabs panel */}
+          <div className="w-[380px] shrink-0 flex flex-col overflow-hidden bg-gray-50/40">
 
-            {/* Right tab bar */}
+            {/* Tab bar */}
             <div className="flex border-b border-gray-100 shrink-0 bg-white">
-              {(["details", "cover-letter"] as const).map((t) => (
+              {(["details", "cover-letter", "resume"] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setRightTab(t)}
@@ -254,16 +314,15 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                       : "border-transparent text-gray-400 hover:text-gray-600"
                   }`}
                 >
-                  {t === "details" ? "Job Details" : "Cover Letter"}
+                  {t === "details" ? "Details" : t === "cover-letter" ? "Cover Letter" : "Resume"}
                 </button>
               ))}
             </div>
 
             <div className="flex-1 overflow-y-auto">
+              {/* Details Tab */}
               {rightTab === "details" && (
                 <div className="px-5 py-5 space-y-5">
-
-                  {/* Match score */}
                   {job.matchScore !== null && (
                     <div>
                       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">AI Match Score</p>
@@ -276,7 +335,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     </div>
                   )}
 
-                  {/* Skills */}
                   {job.skills?.length > 0 && (
                     <div>
                       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Required Skills</p>
@@ -290,7 +348,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     </div>
                   )}
 
-                  {/* Benefits */}
                   {job.benefits?.length > 0 && (
                     <div>
                       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Benefits & Perks</p>
@@ -307,21 +364,19 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     </div>
                   )}
 
-                  {/* Meta info */}
                   <div>
                     <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Job Info</p>
                     <div className="space-y-2">
                       {[
-                        { icon: "🏢", label: "Company",    value: job.company },
-                        { icon: "📍", label: "Location",   value: job.location },
-                        { icon: "🇩🇪", label: "German",     value: job.germanRequired ?? "Not required" },
-                        { icon: "⏱️",  label: "Experience", value: job.yearsOfExperience },
-                        { icon: "💰", label: "Salary",     value: job.salary },
-                        { icon: "📅", label: "Posted",     value: job.postedAt ? new Date(job.postedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : null },
-                        { icon: "🔍", label: "Source",     value: job.siteName },
-                      ].filter(r => r.value).map(({ icon, label, value }) => (
+                        { label: "Company",    value: job.company },
+                        { label: "Location",   value: job.location },
+                        { label: "German",     value: job.germanRequired ?? "Not required" },
+                        { label: "Experience", value: job.yearsOfExperience },
+                        { label: "Salary",     value: job.salary },
+                        { label: "Posted",     value: job.postedAt ? new Date(job.postedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : null },
+                        { label: "Source",     value: job.siteName },
+                      ].filter(r => r.value).map(({ label, value }) => (
                         <div key={label} className="flex items-start gap-2.5">
-                          <span className="text-sm shrink-0">{icon}</span>
                           <div>
                             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
                             <p className="text-xs text-gray-700 font-medium">{value}</p>
@@ -331,7 +386,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     </div>
                   </div>
 
-                  {/* Notes */}
                   <div>
                     <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Notes</p>
                     <textarea
@@ -339,15 +393,16 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       onBlur={saveNotes}
-                      placeholder="Recruiter name, salary info, interview notes…"
+                      placeholder="Recruiter name, salary info, interview notes..."
                       rows={3}
                       className="w-full text-xs text-gray-700 bg-white border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:border-[#4F6AF5] focus:ring-1 focus:ring-[#4F6AF5]/20 transition-all placeholder-gray-400"
                     />
-                    <p className="text-[10px] text-gray-400 mt-1">{savingNotes ? "Saving…" : "Auto-saves on blur"}</p>
+                    <p className="text-[10px] text-gray-400 mt-1">{savingNotes ? "Saving..." : "Auto-saves on blur"}</p>
                   </div>
                 </div>
               )}
 
+              {/* Cover Letter Tab */}
               {rightTab === "cover-letter" && (
                 <div className="px-5 py-5">
                   {!coverLetter && !generatingCL && (
@@ -361,7 +416,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-gray-800">Generate a cover letter</p>
-                        <p className="text-xs text-gray-400 mt-1">Uses your active resume + job description</p>
+                        <p className="text-xs text-gray-400 mt-1">Uses your profile + job description</p>
                       </div>
                       <button onClick={generateCoverLetter} className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-purple-600 text-white hover:bg-purple-700 transition-colors">
                         Generate with AI
@@ -371,7 +426,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                   {generatingCL && (
                     <div className="flex flex-col items-center justify-center py-12 gap-3">
                       <div className="w-8 h-8 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-                      <p className="text-sm text-gray-500">Generating with Ollama…</p>
+                      <p className="text-sm text-gray-500">Generating cover letter...</p>
                     </div>
                   )}
                   {coverLetter && !generatingCL && (
@@ -394,9 +449,180 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                   )}
                 </div>
               )}
+
+              {/* Resume Tab */}
+              {rightTab === "resume" && (
+                <div className="px-5 py-5">
+                  {!resumeData && !generatingResume && (
+                    <div className="flex flex-col items-center justify-center py-12 gap-4 text-center">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+                        <svg width="22" height="22" fill="none" stroke="#2563EB" strokeWidth="1.5" viewBox="0 0 24 24">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="12" y1="18" x2="12" y2="12"/>
+                          <line x1="9" y1="15" x2="15" y2="15"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm text-gray-800">Generate a tailored resume</p>
+                        <p className="text-xs text-gray-400 mt-1">ATS-optimized for this specific job</p>
+                      </div>
+                      <button onClick={generateResume} className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                        Generate Resume
+                      </button>
+                    </div>
+                  )}
+                  {generatingResume && (
+                    <div className="flex flex-col items-center justify-center py-12 gap-3">
+                      <div className="w-8 h-8 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+                      <p className="text-sm text-gray-500">Generating tailored resume...</p>
+                      <p className="text-xs text-gray-400">This may take a minute</p>
+                    </div>
+                  )}
+                  {resumeData && !generatingResume && (
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Generated Resume</p>
+                        <div className="flex gap-2">
+                          <button onClick={copyResumeText}
+                            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                            Copy Text
+                          </button>
+                          <button onClick={downloadResumePDF}
+                            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="7 10 12 15 17 10"/>
+                              <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download PDF
+                          </button>
+                          <button onClick={generateResume}
+                            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors">
+                            Redo
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Resume preview */}
+                      <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+                        {/* Header */}
+                        <div className="text-center pb-3 border-b border-gray-200">
+                          <h3 className="text-lg font-bold text-gray-900">{resumeData.name}</h3>
+                          <div className="flex items-center justify-center flex-wrap gap-2 mt-1.5">
+                            {[resumeData.email, resumeData.phone, resumeData.location].filter(Boolean).map((item, i) => (
+                              <span key={i} className="text-xs text-gray-500">{item}{i < [resumeData.email, resumeData.phone, resumeData.location].filter(Boolean).length - 1 ? " |" : ""}</span>
+                            ))}
+                          </div>
+                          <div className="flex items-center justify-center flex-wrap gap-2 mt-1">
+                            {resumeData.linkedIn && <a href={resumeData.linkedIn} target="_blank" rel="noopener noreferrer" className="text-xs text-[#4F6AF5] hover:underline">{resumeData.linkedIn}</a>}
+                            {resumeData.website && <a href={resumeData.website} target="_blank" rel="noopener noreferrer" className="text-xs text-[#4F6AF5] hover:underline">{resumeData.website}</a>}
+                          </div>
+                        </div>
+
+                        {/* Summary */}
+                        {resumeData.summary && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Professional Summary</p>
+                            <p className="text-xs text-gray-700 leading-relaxed">{resumeData.summary}</p>
+                          </div>
+                        )}
+
+                        {/* Experience */}
+                        {resumeData.experience?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Experience</p>
+                            {resumeData.experience.map((exp, i) => (
+                              <div key={i} className="mb-3">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <p className="text-xs font-semibold text-gray-900">{exp.title}</p>
+                                    <p className="text-xs text-gray-500">{exp.company}{exp.location ? ` | ${exp.location}` : ""}</p>
+                                  </div>
+                                  <p className="text-[10px] text-gray-400 shrink-0 ml-2">{exp.duration}</p>
+                                </div>
+                                {exp.bullets?.length > 0 && (
+                                  <ul className="mt-1 space-y-0.5">
+                                    {exp.bullets.map((b, j) => (
+                                      <li key={j} className="text-xs text-gray-600 leading-relaxed pl-3 relative before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:bg-gray-300 before:rounded-full">{b}</li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Education */}
+                        {resumeData.education?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Education</p>
+                            {resumeData.education.map((edu, i) => (
+                              <div key={i} className="mb-2">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <p className="text-xs font-semibold text-gray-900">{edu.degree}</p>
+                                    <p className="text-xs text-gray-500">{edu.school}</p>
+                                  </div>
+                                  <p className="text-[10px] text-gray-400 shrink-0 ml-2">{edu.year}</p>
+                                </div>
+                                {edu.details && <p className="text-[10px] text-gray-500 mt-0.5">{edu.details}</p>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Skills */}
+                        {resumeData.skills?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Skills</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {resumeData.skills.map((s, i) => (
+                                <span key={i} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-700">{s}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Certifications */}
+                        {resumeData.certifications?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Certifications</p>
+                            {resumeData.certifications.map((c, i) => (
+                              <p key={i} className="text-xs text-gray-700">{c}</p>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Languages */}
+                        {resumeData.languages?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Languages</p>
+                            <p className="text-xs text-gray-700">{resumeData.languages.join(" | ")}</p>
+                          </div>
+                        )}
+
+                        {/* Projects */}
+                        {resumeData.projects?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Projects</p>
+                            {resumeData.projects.map((p, i) => (
+                              <div key={i} className="mb-2">
+                                <p className="text-xs font-semibold text-gray-900">{p.name}</p>
+                                <p className="text-xs text-gray-600">{p.description}</p>
+                                {p.tech && <p className="text-[10px] text-gray-400">{p.tech}</p>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Action buttons pinned to bottom of right panel */}
+            {/* Action buttons pinned to bottom */}
             <div className="px-5 py-4 border-t border-gray-100 bg-white shrink-0 space-y-2">
               <a
                 href={job.url}
@@ -411,7 +637,6 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 Open Job Posting
               </a>
 
-              {/* Delete button */}
               <button
                 onClick={handleDelete}
                 disabled={loading}
@@ -424,7 +649,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 {job.status !== "applied" && (
                   <button onClick={() => handleStatus("applied")} disabled={loading}
                     className="flex-1 py-2 text-xs font-semibold rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50">
-                    ✓ Applied
+                    Applied
                   </button>
                 )}
                 {job.status !== "saved" && job.status !== "applied" && (
@@ -436,7 +661,7 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 {job.status !== "rejected" && (
                   <button onClick={() => handleStatus("rejected")} disabled={loading}
                     className="flex-1 py-2 text-xs font-semibold rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50">
-                    ✕ Reject
+                    Reject
                   </button>
                 )}
               </div>
@@ -445,6 +670,10 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                 <button onClick={generateCoverLetter} disabled={generatingCL}
                   className="flex-1 py-2 text-xs font-semibold rounded-xl border border-purple-200 text-purple-600 hover:bg-purple-50 transition-colors disabled:opacity-50">
                   Cover Letter
+                </button>
+                <button onClick={generateResume} disabled={generatingResume}
+                  className="flex-1 py-2 text-xs font-semibold rounded-xl border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-50">
+                  Resume
                 </button>
                 {job.matchScore === null && (
                   <button onClick={handleRematch} disabled={loading}
@@ -459,4 +688,177 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
       </div>
     </div>
   );
+}
+
+/* ─── Helper functions for resume export ─── */
+
+function buildResumeText(r: ResumeData): string {
+  const lines: string[] = [];
+  lines.push(r.name);
+  lines.push([r.email, r.phone, r.location].filter(Boolean).join(" | "));
+  if (r.linkedIn) lines.push(r.linkedIn);
+  if (r.website) lines.push(r.website);
+  lines.push("");
+
+  if (r.summary) {
+    lines.push("PROFESSIONAL SUMMARY");
+    lines.push(r.summary);
+    lines.push("");
+  }
+
+  if (r.experience?.length > 0) {
+    lines.push("EXPERIENCE");
+    for (const exp of r.experience) {
+      lines.push(`${exp.title} | ${exp.company}${exp.location ? ` | ${exp.location}` : ""} | ${exp.duration}`);
+      for (const b of exp.bullets ?? []) lines.push(`  - ${b}`);
+      lines.push("");
+    }
+  }
+
+  if (r.education?.length > 0) {
+    lines.push("EDUCATION");
+    for (const edu of r.education) {
+      lines.push(`${edu.degree} | ${edu.school} | ${edu.year}`);
+      if (edu.details) lines.push(`  ${edu.details}`);
+    }
+    lines.push("");
+  }
+
+  if (r.skills?.length > 0) {
+    lines.push("SKILLS");
+    lines.push(r.skills.join(", "));
+    lines.push("");
+  }
+
+  if (r.certifications?.length > 0) {
+    lines.push("CERTIFICATIONS");
+    lines.push(r.certifications.join(", "));
+    lines.push("");
+  }
+
+  if (r.languages?.length > 0) {
+    lines.push("LANGUAGES");
+    lines.push(r.languages.join(" | "));
+    lines.push("");
+  }
+
+  if (r.projects?.length > 0) {
+    lines.push("PROJECTS");
+    for (const p of r.projects) {
+      lines.push(`${p.name}: ${p.description}${p.tech ? ` (${p.tech})` : ""}`);
+    }
+    lines.push("");
+  }
+
+  return lines.join("\n");
+}
+
+function buildResumePrintHTML(r: ResumeData, jobTitle: string, company: string): string {
+  const escape = (s: string) => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+  const contactLine = [r.email, r.phone, r.location].filter(Boolean).map(escape).join(" &bull; ");
+  const links = [r.linkedIn, r.website].filter(Boolean);
+
+  let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>${escape(r.name)} - Resume</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1a1a1a; line-height: 1.5; max-width: 800px; margin: 0 auto; padding: 40px 50px; }
+  @media print {
+    body { padding: 20px 30px; }
+    @page { margin: 0.5in; size: A4; }
+  }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .contact { font-size: 12px; color: #555; margin-top: 4px; }
+  .contact a { color: #4F6AF5; text-decoration: none; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #4F6AF5; border-bottom: 1.5px solid #e5e7eb; padding-bottom: 4px; margin-top: 18px; margin-bottom: 8px; }
+  .summary { font-size: 13px; color: #333; }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
+  .exp-title { font-size: 13px; font-weight: 600; }
+  .exp-company { font-size: 12px; color: #555; }
+  .exp-date { font-size: 11px; color: #888; white-space: nowrap; }
+  .exp-bullets { list-style: disc; padding-left: 18px; margin-top: 4px; }
+  .exp-bullets li { font-size: 12px; color: #444; margin-bottom: 2px; line-height: 1.6; }
+  .exp-block { margin-bottom: 12px; }
+  .skills-list { font-size: 12px; color: #333; }
+  .edu-block { margin-bottom: 6px; }
+  .edu-degree { font-size: 13px; font-weight: 600; }
+  .edu-school { font-size: 12px; color: #555; }
+  .edu-date { font-size: 11px; color: #888; }
+  .edu-details { font-size: 11px; color: #666; }
+  .cert-item, .lang-item { font-size: 12px; color: #333; }
+  .proj-name { font-size: 13px; font-weight: 600; }
+  .proj-desc { font-size: 12px; color: #444; }
+  .proj-tech { font-size: 11px; color: #888; }
+</style>
+</head>
+<body>
+<div style="text-align:center; margin-bottom: 4px;">
+  <h1>${escape(r.name)}</h1>
+  <div class="contact">${contactLine}</div>
+  ${links.length > 0 ? `<div class="contact">${links.map(l => `<a href="${escape(l)}">${escape(l)}</a>`).join(" &bull; ")}</div>` : ""}
+</div>`;
+
+  if (r.summary) {
+    html += `<div class="section-title">Professional Summary</div>
+<p class="summary">${escape(r.summary)}</p>`;
+  }
+
+  if (r.experience?.length > 0) {
+    html += `<div class="section-title">Experience</div>`;
+    for (const exp of r.experience) {
+      html += `<div class="exp-block">
+  <div class="exp-header">
+    <div><span class="exp-title">${escape(exp.title)}</span><br/><span class="exp-company">${escape(exp.company)}${exp.location ? ` | ${escape(exp.location)}` : ""}</span></div>
+    <span class="exp-date">${escape(exp.duration)}</span>
+  </div>`;
+      if (exp.bullets?.length > 0) {
+        html += `<ul class="exp-bullets">${exp.bullets.map(b => `<li>${escape(b)}</li>`).join("")}</ul>`;
+      }
+      html += `</div>`;
+    }
+  }
+
+  if (r.education?.length > 0) {
+    html += `<div class="section-title">Education</div>`;
+    for (const edu of r.education) {
+      html += `<div class="edu-block">
+  <div class="exp-header"><div><span class="edu-degree">${escape(edu.degree)}</span><br/><span class="edu-school">${escape(edu.school)}</span></div><span class="edu-date">${escape(edu.year)}</span></div>
+  ${edu.details ? `<p class="edu-details">${escape(edu.details)}</p>` : ""}
+</div>`;
+    }
+  }
+
+  if (r.skills?.length > 0) {
+    html += `<div class="section-title">Skills</div>
+<p class="skills-list">${r.skills.map(escape).join(", ")}</p>`;
+  }
+
+  if (r.certifications?.length > 0) {
+    html += `<div class="section-title">Certifications</div>
+${r.certifications.map(c => `<p class="cert-item">${escape(c)}</p>`).join("")}`;
+  }
+
+  if (r.languages?.length > 0) {
+    html += `<div class="section-title">Languages</div>
+<p class="lang-item">${r.languages.map(escape).join(" | ")}</p>`;
+  }
+
+  if (r.projects?.length > 0) {
+    html += `<div class="section-title">Projects</div>`;
+    for (const p of r.projects) {
+      html += `<div style="margin-bottom:6px;">
+  <span class="proj-name">${escape(p.name)}</span>
+  <p class="proj-desc">${escape(p.description)}</p>
+  ${p.tech ? `<p class="proj-tech">${escape(p.tech)}</p>` : ""}
+</div>`;
+    }
+  }
+
+  html += `</body></html>`;
+  return html;
 }

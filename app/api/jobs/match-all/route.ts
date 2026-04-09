@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Job from "@/models/Job";
-import Resume from "@/models/Resume";
+import Profile from "@/models/Profile";
 import { matchJobToResume } from "@/lib/ollama";
 
 export async function POST() {
   await connectDB();
 
-  const resume = await Resume.findOne({ isActive: true });
-  if (!resume) {
-    return NextResponse.json({ error: "No active resume found" }, { status: 400 });
+  const profile = await Profile.findOne();
+  if (!profile || !profile.prompt.trim()) {
+    return NextResponse.json({ error: "No profile configured. Go to Profile page and add your details." }, { status: 400 });
   }
 
   const unmatched = await Job.find({ matchScore: null }).limit(50);
@@ -18,7 +18,7 @@ export async function POST() {
   (async () => {
     for (const job of unmatched) {
       const result = await matchJobToResume(
-        resume.contentText,
+        profile.prompt,
         job.title,
         job.company,
         job.description
@@ -27,7 +27,6 @@ export async function POST() {
         await Job.findByIdAndUpdate(job._id, {
           matchScore: result.score,
           matchReason: result.reason,
-          matchedResumeId: resume._id,
         });
       }
     }

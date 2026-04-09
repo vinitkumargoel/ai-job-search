@@ -33,10 +33,10 @@ export async function matchJobToResume(
   jobDescription: string
 ): Promise<MatchResult | null> {
   const settings = await getSettings();
-  const prompt = `You are a career assistant. Given a resume and a job description, evaluate how well the candidate matches the job.
+  const prompt = `You are a career assistant. Given a candidate's profile and a job description, evaluate how well the candidate matches the job.
 
-RESUME:
-${resumeText.slice(0, 4000)}
+CANDIDATE PROFILE:
+${resumeText.slice(0, 5000)}
 
 JOB TITLE: ${jobTitle}
 COMPANY: ${jobCompany}

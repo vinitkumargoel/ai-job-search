@@ -19,7 +19,7 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
 
   const { default: Site } = await import("../models/Site");
   const { default: Job } = await import("../models/Job");
-  const { default: Resume } = await import("../models/Resume");
+  const { default: Profile } = await import("../models/Profile");
   const { default: SkippedUrl } = await import("../models/SkippedUrl");
   const { scraperRegistry } = await import("../scrapers/index");
 
@@ -103,10 +103,10 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
 
     await log(siteId, site.name, `Saved ${newCount} new jobs`, "success");
 
-    // AI matching — run for each new job against active resume
+    // AI matching — run for each new job against the profile
     if (newJobIds.length > 0) {
-      const activeResume = await Resume.findOne({ isActive: true });
-      if (activeResume) {
+      const profile = await Profile.findOne();
+      if (profile && profile.prompt.trim()) {
         await log(siteId, site.name, `Starting AI matching for ${newJobIds.length} jobs`, "info");
         let matched = 0;
 
@@ -115,7 +115,7 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
           if (!job) continue;
 
           const result = await matchJobToResume(
-            activeResume.contentText,
+            profile.prompt,
             job.title,
             job.company,
             job.description
@@ -125,7 +125,6 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
             await Job.findByIdAndUpdate(jobId, {
               matchScore: result.score,
               matchReason: result.reason,
-              matchedResumeId: activeResume._id,
             });
             matched++;
           }
@@ -133,7 +132,7 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
 
         await log(siteId, site.name, `AI matching complete — ${matched}/${newJobIds.length} jobs scored`, "success");
       } else {
-        await log(siteId, site.name, `No active resume found — skipping AI matching`, "info");
+        await log(siteId, site.name, `No profile configured — skipping AI matching`, "info");
       }
     }
 

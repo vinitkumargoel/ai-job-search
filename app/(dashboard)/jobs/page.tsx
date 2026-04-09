@@ -169,7 +169,7 @@ export default function JobsPage() {
 
   const handleRematch = () => {
     setTimeout(() => fetchJobs(tab, page), 3000);
-    toast("Matching job against active resume...", "info");
+    toast("Matching job against your profile...", "info");
   };
 
   const openFiltersModal = () => {
@@ -212,7 +212,8 @@ export default function JobsPage() {
       const data = await res.json();
       toast(`Queued ${data.queued} job(s) for AI matching`, "success");
     } else {
-      toast("Match-all failed — is a resume active?", "error");
+      const err = await res.json().catch(() => ({}));
+      toast(err.error || "Match-all failed — configure your Profile first", "error");
     }
     setMatchingAll(false);
   };
