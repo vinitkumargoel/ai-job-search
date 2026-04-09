@@ -13,7 +13,8 @@ import { TeamViewerScraper } from "./teamviewer";
 import { ZalandoScraper } from "./zalando";
 import { ZeissScraper } from "./zeiss";
 import { QuantumSystemsScraper } from "./quantumsystems";
-import { SennderScraper } from "./smartrecruiters-companies";
+import { SennderScraper, Auto1Scraper, AboutYouScraper, ScalableCapitalScraper, SixtScraper } from "./smartrecruiters-companies";
+import { BabbelScraper, IdealoScraper, MambuScraper } from "./personio-companies";
 import {
   N26Scraper,
   RaisinScraper,
@@ -22,23 +23,27 @@ import {
   GetYourGuideScraper,
   FlixScraper,
   Scout24Scraper,
-  // Wave 1 (Apr 2026 — German IT Startups)
+  // Wave 1
   ParloaScraper,
   HelsingScraper,
   BlackForestLabsScraper,
-  // Wave 2 (Apr 2026 — German Unicorns & Scale-ups)
+  // Wave 2
   SumUpScraper,
   TradeRepublicScraper,
   GroverScraper,
   StaffbaseScraper,
   IsarAerospaceScraper,
+  // Wave 3
+  TrivagoScraper,
+  FlaconiScraper,
+  FreeNowScraper,
 } from "./greenhouse-companies";
 import {
   N8nScraper,
   DeepLScraper,
   AlephAlphaScraper,
   SereactScraper,
-  // Wave 2 (Apr 2026 — German Unicorns & Scale-ups)
+  // Wave 2
   PersonioScraper,
   EnpalScraper,
   FortoScraper,
@@ -46,7 +51,7 @@ import {
 } from "./ashby-companies";
 
 /**
- * Scraper Registry
+ * Scraper Registry — 48 scrapers across 7 ATS platforms
  *
  * To add a new scraper:
  * 1. Create scrapers/<name>.ts implementing ScraperStrategy
@@ -87,35 +92,43 @@ export const scraperRegistry: Record<string, ScraperStrategy> = {
   zeiss:             ZeissScraper,
 
   // ── Wave 1: German IT Startups (Apr 2026) ─────────────────────────────────
-  // Greenhouse
-  parloa:            ParloaScraper,          // parloa.com          — Berlin/Munich
-  helsing:           HelsingScraper,         // helsing.ai          — Berlin/Munich (defence AI)
-  blackforestlabs:   BlackForestLabsScraper, // blackforestlabs.ai  — Freiburg (image AI)
-  // Ashby
-  n8n:               N8nScraper,             // n8n.io              — Berlin (workflow automation)
-  deepl:             DeepLScraper,           // deepl.com           — Cologne/Berlin (AI translation)
-  alephalpha:        AlephAlphaScraper,      // aleph-alpha.com     — Heidelberg (sovereign LLMs)
-  sereact:           SereactScraper,         // sereact.ai          — Stuttgart (robotics AI)
-  // Personio
-  quantumsystems:    QuantumSystemsScraper,  // quantum-systems.com — Munich (autonomous drones)
+  parloa:            ParloaScraper,          // Greenhouse — Berlin/Munich
+  helsing:           HelsingScraper,         // Greenhouse — Berlin/Munich
+  blackforestlabs:   BlackForestLabsScraper, // Greenhouse — Freiburg
+  n8n:               N8nScraper,             // Ashby      — Berlin
+  deepl:             DeepLScraper,           // Ashby      — Cologne/Berlin
+  alephalpha:        AlephAlphaScraper,      // Ashby      — Heidelberg
+  sereact:           SereactScraper,         // Ashby      — Stuttgart
+  quantumsystems:    QuantumSystemsScraper,  // Personio   — Munich
 
   // ── Wave 2: German Unicorns & Scale-ups (Apr 2026) ────────────────────────
+  sumup:             SumUpScraper,           // Greenhouse — Berlin
+  traderepublic:     TradeRepublicScraper,   // Greenhouse — Berlin
+  grover:            GroverScraper,          // Greenhouse — Berlin
+  staffbase:         StaffbaseScraper,       // Greenhouse — Chemnitz/Berlin
+  isaraerospace:     IsarAerospaceScraper,   // Greenhouse — Munich
+  personio:          PersonioScraper,        // Ashby      — Munich/Berlin
+  enpal:             EnpalScraper,           // Ashby      — Berlin
+  forto:             FortoScraper,           // Ashby      — Berlin/Hamburg
+  billie:            BillieScraper,          // Ashby      — Berlin
+  sennder:           SennderScraper,         // SmartRec   — Berlin
+
+  // ── Wave 3: Biggest German Product Companies (Apr 2026) ───────────────────
   // Greenhouse
-  sumup:             SumUpScraper,           // sumup.com           — Berlin (fintech/payments)
-  traderepublic:     TradeRepublicScraper,   // traderepublic.com   — Berlin (neobroker)
-  grover:            GroverScraper,          // grover.com          — Berlin (tech rental)
-  staffbase:         StaffbaseScraper,       // staffbase.com       — Berlin/Chemnitz (HR comms)
-  isaraerospace:     IsarAerospaceScraper,   // isaraerospace.com   — Munich/Ottobrunn (rockets)
-  // Ashby
-  personio:          PersonioScraper,        // personio.com        — Munich/Berlin (HR SaaS)
-  enpal:             EnpalScraper,           // enpal.de            — Berlin (solar energy)
-  forto:             FortoScraper,           // forto.com           — Berlin/Hamburg (logistics)
-  billie:            BillieScraper,          // billie.io           — Berlin (B2B fintech)
+  trivago:           TrivagoScraper,         // trivago.com     — Düsseldorf
+  flaconi:           FlaconiScraper,         // flaconi.de      — Berlin
+  freenow:           FreeNowScraper,         // free-now.com    — Berlin/Hamburg
   // SmartRecruiters
-  sennder:           SennderScraper,         // sennder.com         — Berlin (freight logistics)
+  auto1:             Auto1Scraper,           // auto1-group.com — Berlin
+  aboutyou:          AboutYouScraper,        // aboutyou.com    — Hamburg
+  scalablecapital:   ScalableCapitalScraper, // scalable.capital — Berlin/Munich
+  sixt:              SixtScraper,            // sixt.com        — Munich
+  // Personio (verified via Personio subdomain; work on prod server)
+  babbel:            BabbelScraper,          // babbel.com      — Berlin
+  idealo:            IdealoScraper,          // idealo.de       — Berlin
+  mambu:             MambuScraper,           // mambu.com       — Berlin
 };
 
 export const availableScrapers = Object.keys(scraperRegistry);
-
 
 

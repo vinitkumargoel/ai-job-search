@@ -185,3 +185,30 @@ export const IsarAerospaceScraper = makeGreenhouseScraper(
   "Isar Aerospace",
   "IsarAerospace"
 );
+
+/**
+ * Trivago Scraper
+ * ATS: Greenhouse (board slug: Trivago)
+ * Career page: https://company.trivago.com/open-positions/
+ * Site URL to use: https://api.greenhouse.io/v1/boards/Trivago/jobs?content=true
+ * Germany jobs: 13 total (all Düsseldorf HQ)
+ */
+export const TrivagoScraper = makeGreenhouseScraper("trivago", "Trivago", "Trivago");
+
+/**
+ * Flaconi Scraper
+ * ATS: Greenhouse (board slug: Flaconi)
+ * Career page: https://www.flaconi.de/career/
+ * Site URL to use: https://api.greenhouse.io/v1/boards/Flaconi/jobs?content=true
+ * Germany jobs: 14 total (Berlin + Halle)
+ */
+export const FlaconiScraper = makeGreenhouseScraper("flaconi", "Flaconi", "Flaconi");
+
+/**
+ * FREE NOW Scraper
+ * ATS: Greenhouse (board slug: FreeNow)
+ * Career page: https://www.free-now.com/de/jobs/
+ * Site URL to use: https://api.greenhouse.io/v1/boards/FreeNow/jobs?content=true
+ * Germany jobs: ~33 of 63 total (Berlin, Hamburg, Munich)
+ */
+export const FreeNowScraper = makeGreenhouseScraper("freenow", "FREE NOW", "FreeNow");

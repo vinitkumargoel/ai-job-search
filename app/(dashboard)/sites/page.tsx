@@ -59,6 +59,17 @@ const SCRAPER_META: Record<string, { label: string; ats: string; city?: string }
   forto:           { label: "Forto",           ats: "Ashby",           city: "Berlin" },
   billie:          { label: "Billie",          ats: "Ashby",           city: "Berlin" },
   sennder:         { label: "Sennder",         ats: "SmartRecruiters", city: "Berlin" },
+  // Wave 3
+  trivago:         { label: "Trivago",          ats: "Greenhouse",      city: "Düsseldorf" },
+  flaconi:         { label: "Flaconi",          ats: "Greenhouse",      city: "Berlin" },
+  freenow:         { label: "FREE NOW",         ats: "Greenhouse",      city: "Hamburg" },
+  auto1:           { label: "AUTO1 Group",      ats: "SmartRecruiters", city: "Berlin" },
+  aboutyou:        { label: "About You",        ats: "SmartRecruiters", city: "Hamburg" },
+  scalablecapital: { label: "Scalable Capital", ats: "SmartRecruiters", city: "Munich" },
+  sixt:            { label: "SIXT",             ats: "SmartRecruiters", city: "Munich" },
+  babbel:          { label: "Babbel",           ats: "Personio",        city: "Berlin" },
+  idealo:          { label: "Idealo",           ats: "Personio",        city: "Berlin" },
+  mambu:           { label: "Mambu",            ats: "Personio",        city: "Berlin" },
 };
 
 const ATS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {

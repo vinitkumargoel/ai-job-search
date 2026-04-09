@@ -207,3 +207,55 @@ export const SennderScraper = makeSmartRecruitersScraper(
   "Sennder",
   "SennderGmbH"
 );
+
+/**
+ * Auto1 Group Scraper
+ * ATS: SmartRecruiters (slug: Auto1)
+ * Career page: https://www.auto1-group.com/jobs/
+ * Site URL to use: https://api.smartrecruiters.com/v1/companies/Auto1/postings?country=de
+ * Germany jobs: ~189 total (Berlin HQ + nationwide car centers)
+ */
+export const Auto1Scraper = makeSmartRecruitersScraper(
+  "auto1",
+  "AUTO1 Group",
+  "Auto1"
+);
+
+/**
+ * About You Scraper
+ * ATS: SmartRecruiters (slug: AboutYouGmbH)
+ * Career page: https://corporate.aboutyou.de/en/career
+ * Site URL to use: https://api.smartrecruiters.com/v1/companies/AboutYouGmbH/postings?country=de
+ * Germany jobs: ~91 total (Hamburg HQ)
+ */
+export const AboutYouScraper = makeSmartRecruitersScraper(
+  "aboutyou",
+  "About You",
+  "AboutYouGmbH"
+);
+
+/**
+ * Scalable Capital Scraper
+ * ATS: SmartRecruiters (slug: ScalableGmbH)
+ * Career page: https://de.scalable.capital/en/careers
+ * Site URL to use: https://api.smartrecruiters.com/v1/companies/ScalableGmbH/postings?country=de
+ * Germany jobs: ~108 total (Berlin + Munich)
+ */
+export const ScalableCapitalScraper = makeSmartRecruitersScraper(
+  "scalablecapital",
+  "Scalable Capital",
+  "ScalableGmbH"
+);
+
+/**
+ * SIXT Scraper
+ * ATS: SmartRecruiters (slug: Sixt)
+ * Career page: https://www.sixt.com/company/jobs/
+ * Site URL to use: https://api.smartrecruiters.com/v1/companies/Sixt/postings?country=de
+ * Germany jobs: ~241 total (Munich HQ + nationwide)
+ */
+export const SixtScraper = makeSmartRecruitersScraper(
+  "sixt",
+  "SIXT",
+  "Sixt"
+);
