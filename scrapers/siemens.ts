@@ -146,7 +146,7 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
 
       // Wait for main content to appear - critical for JS-rendered content
       try {
-        await page.waitForSelector(".main__content, main, .section__content--view", { timeout: 10000 });
+        await page.waitForSelector("#section1__content, .main__content, main, .section__content--view", { timeout: 10000 });
       } catch {
         console.log(`[Siemens] Timeout waiting for selector on: ${url}`);
       }
@@ -180,7 +180,7 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
     const mainContent = await page.evaluate(() => {
       // Try specific selectors first
       const selectors = [
-        ".main__content", ".section__content--view", "main",
+        "#section1__content", ".main__content", ".section__content--view", "main",
         ".section--job-description", ".jobdescription", ".jobDescription",
         "article.article--details", ".article__content"
       ];
