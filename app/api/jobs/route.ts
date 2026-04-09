@@ -16,6 +16,8 @@ export async function GET(req: NextRequest) {
   const employmentType   = searchParams.get("employmentType");   // exact value
   const hasSalary        = searchParams.get("hasSalary");        // "true"
   const dateRange        = searchParams.get("dateRange");        // "today" | "7d" | "30d" | "month"
+  const workLocation     = searchParams.get("workLocation");      // "Remote" | "Hybrid" | "On-site"
+  const visaSponsorship  = searchParams.get("visaSponsorship");   // "Yes" | "No"
   const page  = parseInt(searchParams.get("page")  ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "20");
 
@@ -39,6 +41,13 @@ export async function GET(req: NextRequest) {
   if (experienceLevel) filter.experienceLevel = experienceLevel;
   if (employmentType)  filter.employmentType  = employmentType;
   if (hasSalary === "true") filter.salary = { $ne: null, $exists: true };
+
+  // Work location filter
+  if (workLocation) filter.workLocation = workLocation;
+
+  // Visa sponsorship filter
+  if (visaSponsorship === "Yes") filter.visaSponsorship = "Yes";
+  if (visaSponsorship === "No") filter.visaSponsorship = { $ne: "Yes" };
 
   // Date range filter
   if (dateRange) {

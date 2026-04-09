@@ -19,6 +19,10 @@ interface FiltersModalProps {
   setFilterScore: (v: string) => void;
   filterSite: string;
   setFilterSite: (v: string) => void;
+  filterWorkLocation: string;
+  setFilterWorkLocation: (v: string) => void;
+  filterVisa: string;
+  setFilterVisa: (v: string) => void;
   siteNames: string[];
   onClear: () => void;
   onApply: () => void;
@@ -41,6 +45,10 @@ export function FiltersModal({
   setFilterScore,
   filterSite,
   setFilterSite,
+  filterWorkLocation,
+  setFilterWorkLocation,
+  filterVisa,
+  setFilterVisa,
   siteNames,
   onClear,
   onApply,
@@ -62,7 +70,7 @@ export function FiltersModal({
 
   if (!open) return null;
 
-  const activeCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite].filter(Boolean).length;
+  const activeCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite, filterWorkLocation, filterVisa].filter(Boolean).length;
 
   return (
     <div
@@ -270,6 +278,59 @@ export function FiltersModal({
                   onClick={() => setFilterSalary(opt.value)}
                   className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
                     filterSalary === opt.value
+                      ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Work Location */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span>📍</span> Work Location
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "", label: "Any Location" },
+                { value: "Remote", label: "Remote" },
+                { value: "Hybrid", label: "Hybrid" },
+                { value: "On-site", label: "On-site" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterWorkLocation(opt.value)}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    filterWorkLocation === opt.value
+                      ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Visa Sponsorship */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span>✈️</span> Visa Sponsorship
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "", label: "Any" },
+                { value: "Yes", label: "Offers Visa" },
+                { value: "No", label: "No Sponsorship" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterVisa(opt.value)}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    filterVisa === opt.value
                       ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
                       : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
                   }`}

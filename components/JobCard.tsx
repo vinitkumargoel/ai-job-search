@@ -211,6 +211,23 @@ export function JobCard({ job, onStatusChange, onRematch, onDelete, selectable, 
                 />
                 {job.siteName}
               </span>
+              {job.workLocation && job.workLocation !== "Not specified" && (
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                  job.workLocation === "Remote" ? "text-green-600 bg-green-50" :
+                  job.workLocation === "Hybrid" ? "text-blue-600 bg-blue-50" :
+                  "text-gray-600 bg-gray-100"
+                }`}>
+                  {job.workLocation === "Remote" && "🏠 "}
+                  {job.workLocation === "Hybrid" && "🔀 "}
+                  {job.workLocation === "On-site" && "🏢 "}
+                  {job.workLocation}
+                </span>
+              )}
+              {job.visaSponsorship === "Yes" && (
+                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  ✈️ Visa
+                </span>
+              )}
             </div>
 
             <h3 className="text-gray-900 font-semibold text-sm leading-snug line-clamp-2">{job.title}</h3>

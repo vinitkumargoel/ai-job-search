@@ -22,8 +22,8 @@ async function main() {
   const jobs = await Job.find({
     $or: [
       { workLocation: { $in: [null, "Not specified", ""] } },
-      { visaSponsorship: { $in: [null, "Not specified", ""] } } },
-    ],
+      { visaSponsorship: { $in: [null, "Not specified", ""] } }
+    ]
   });
 
   console.log(`Found ${jobs.length} jobs to enrich with workLocation and visaSponsorship`);

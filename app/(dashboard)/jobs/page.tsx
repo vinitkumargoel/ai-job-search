@@ -28,6 +28,8 @@ interface Job {
   benefits: string[];
   germanRequired: string | null;
   yearsOfExperience: string | null;
+  workLocation: string | null;
+  visaSponsorship: string | null;
   url: string;
   postedAt: string;
   scrapedAt: string;
@@ -66,6 +68,8 @@ export default function JobsPage() {
   const [filterDate, setFilterDate] = useState("");
   const [filterScore, setFilterScore] = useState("");
   const [filterSite, setFilterSite] = useState("");
+  const [filterWorkLocation, setFilterWorkLocation] = useState("");
+  const [filterVisa, setFilterVisa] = useState("");
 
   // Temporary filters (in modal, not yet applied)
   const [tempFilterGerman, setTempFilterGerman] = useState("");
@@ -75,8 +79,10 @@ export default function JobsPage() {
   const [tempFilterDate, setTempFilterDate] = useState("");
   const [tempFilterScore, setTempFilterScore] = useState("");
   const [tempFilterSite, setTempFilterSite] = useState("");
+  const [tempFilterWorkLocation, setTempFilterWorkLocation] = useState("");
+  const [tempFilterVisa, setTempFilterVisa] = useState("");
 
-  const activeFilterCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite].filter(Boolean).length;
+  const activeFilterCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite, filterWorkLocation, filterVisa].filter(Boolean).length;
 
   const { toast } = useToast();
 
@@ -104,6 +110,8 @@ export default function JobsPage() {
       }
     }
     if (filterSite) params.set("siteName", filterSite);
+    if (filterWorkLocation) params.set("workLocation", filterWorkLocation);
+    if (filterVisa) params.set("visaSponsorship", filterVisa);
 
     const res = await fetch(`/api/jobs?${params.toString()}`);
     if (res.ok) {
@@ -136,7 +144,7 @@ export default function JobsPage() {
   useEffect(() => {
     fetchJobs(tab, page);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, page, filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite]);
+  }, [tab, page, filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
   useEffect(() => {
     if (view === "board") fetchBoardJobs();
@@ -180,6 +188,8 @@ export default function JobsPage() {
     setTempFilterDate(filterDate);
     setTempFilterScore(filterScore);
     setTempFilterSite(filterSite);
+    setTempFilterWorkLocation(filterWorkLocation);
+    setTempFilterVisa(filterVisa);
     setShowFilters(true);
   };
 
@@ -191,6 +201,8 @@ export default function JobsPage() {
     setFilterDate(tempFilterDate);
     setFilterScore(tempFilterScore);
     setFilterSite(tempFilterSite);
+    setFilterWorkLocation(tempFilterWorkLocation);
+    setFilterVisa(tempFilterVisa);
     setPage(1);
     setShowFilters(false);
   };
@@ -203,6 +215,8 @@ export default function JobsPage() {
     setTempFilterDate("");
     setTempFilterScore("");
     setTempFilterSite("");
+    setTempFilterWorkLocation("");
+    setTempFilterVisa("");
   };
 
   const matchAll = async () => {
@@ -542,6 +556,10 @@ export default function JobsPage() {
         setFilterScore={setTempFilterScore}
         filterSite={tempFilterSite}
         setFilterSite={setTempFilterSite}
+        filterWorkLocation={tempFilterWorkLocation}
+        setFilterWorkLocation={setTempFilterWorkLocation}
+        filterVisa={tempFilterVisa}
+        setFilterVisa={setTempFilterVisa}
         siteNames={siteNames}
         onClear={clearAllFilters}
         onApply={applyFilters}

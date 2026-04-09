@@ -12,6 +12,8 @@ interface Job {
   status: string;
   isNew: boolean;
   matchScore: number | null;
+  workLocation: string | null;
+  visaSponsorship: string | null;
   url: string;
   notes: string;
 }
@@ -163,6 +165,24 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
                               View →
                             </a>
                           </div>
+                          {(job.workLocation || job.visaSponsorship === "Yes") && (
+                            <div className="flex items-center gap-1 flex-wrap">
+                              {job.workLocation && job.workLocation !== "Not specified" && (
+                                <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${
+                                  job.workLocation === "Remote" ? "text-green-600 bg-green-50" :
+                                  job.workLocation === "Hybrid" ? "text-blue-600 bg-blue-50" :
+                                  "text-gray-600 bg-gray-100"
+                                }`}>
+                                  {job.workLocation}
+                                </span>
+                              )}
+                              {job.visaSponsorship === "Yes" && (
+                                <span className="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">
+                                  Visa
+                                </span>
+                              )}
+                            </div>
+                          )}
                           {job.notes && (
                             <p className="text-[10px] text-gray-500 bg-gray-50 rounded px-2 py-1 line-clamp-1 border border-gray-100">
                               📝 {job.notes}

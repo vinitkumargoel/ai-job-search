@@ -24,6 +24,8 @@ interface Job {
   benefits: string[];
   germanRequired: string | null;
   yearsOfExperience: string | null;
+  workLocation: string | null;
+  visaSponsorship: string | null;
   url: string;
   postedAt: string;
   scrapedAt: string;
@@ -269,6 +271,23 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
                     : "bg-orange-50 text-orange-700"
                 }`}>
                   German: {job.germanRequired}
+                </span>
+              )}
+              {job.workLocation && job.workLocation !== "Not specified" && (
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                  job.workLocation === "Remote" ? "bg-green-50 text-green-700" :
+                  job.workLocation === "Hybrid" ? "bg-blue-50 text-blue-700" :
+                  "bg-gray-100 text-gray-700"
+                }`}>
+                  {job.workLocation === "Remote" && "🏠 "}
+                  {job.workLocation === "Hybrid" && "🔀 "}
+                  {job.workLocation === "On-site" && "🏢 "}
+                  {job.workLocation}
+                </span>
+              )}
+              {job.visaSponsorship === "Yes" && (
+                <span className="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full">
+                  ✈️ Visa Sponsorship
                 </span>
               )}
             </div>
