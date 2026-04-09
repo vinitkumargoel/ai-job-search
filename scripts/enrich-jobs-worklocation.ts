@@ -1,11 +1,12 @@
 /**
  * Migration script to add workLocation and visaSponsorship fields to existing jobs.
  *
- * Usage: npx ts-node scripts/enrich-jobs-worklocation.ts
+ * Usage:
+ *   MONGODB_URI=<uri> npx tsx scripts/enrich-jobs-worklocation.ts
  *
  * This script will:
  * 1. Find all jobs that don't have workLocation or visaSponsorship set
- * 2. Re-enrich them using Ollama to extract the new fields
+ * 2. Re-enrich them using Ollama (settings from DB) to extract the new fields
  * 3. Update the jobs with the new data
  */
 
@@ -14,9 +15,11 @@ import Job from "../models/Job";
 import { enrichJobDescription } from "../lib/ollama";
 import { connectDB } from "../lib/mongodb";
 
+const MONGODB_URI = process.env.MONGODB_URI ?? "mongodb://localhost:27017/ai-job-search";
+
 async function main() {
   console.log("Connecting to database...");
-  await connectDB();
+  await mongoose.connect(MONGODB_URI);
 
   // Find jobs that are missing the new fields
   const jobs = await Job.find({
