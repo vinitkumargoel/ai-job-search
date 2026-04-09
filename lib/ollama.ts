@@ -168,7 +168,7 @@ Respond ONLY in valid JSON, no markdown fences:
         format: "json",
         think: false,
       }),
-      signal: AbortSignal.timeout(300000), // 5 minutes
+      signal: AbortSignal.timeout(1800000), // 30 minutes
     });
 
     if (!res.ok) {

@@ -40,14 +40,16 @@ export interface OllamaSettings {
   model: string;
 }
 
+// Use environment variables as defaults, fallback to localhost
 export const DEFAULT_OLLAMA_SETTINGS: OllamaSettings = {
-  baseUrl: "http://localhost:11434",
-  model: "llama3",
+  baseUrl: process.env.OLLAMA_BASE_URL ?? "http://localhost:11434",
+  model: process.env.OLLAMA_MODEL ?? "llama3",
 };
 
 export async function getOllamaSettings(): Promise<OllamaSettings> {
   const baseUrl = await getSetting("ollama.baseUrl", DEFAULT_OLLAMA_SETTINGS.baseUrl);
   const model = await getSetting("ollama.model", DEFAULT_OLLAMA_SETTINGS.model);
+  console.log(`[OllamaSettings] Using baseUrl: ${baseUrl}, model: ${model}`);
   return { baseUrl, model };
 }
 
