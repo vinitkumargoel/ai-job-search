@@ -16,6 +16,18 @@ import { QuantumSystemsScraper } from "./quantumsystems";
 import { SennderScraper, Auto1Scraper, AboutYouScraper, ScalableCapitalScraper, SixtScraper } from "./smartrecruiters-companies";
 import { BabbelScraper, IdealoScraper, MambuScraper } from "./personio-companies";
 import {
+  WoltScraper,
+  IONOSScraper,
+  DoctolibScraper,
+  MOIAScraper,
+  WayveScraper,
+  WunderflatsScraper,
+  AdyenScraper,
+  TulipScraper,
+} from "./wave4-companies";
+import { HetznerScraper } from "./hetzner";
+import { TelekomITScraper } from "./telekom-it";
+import {
   N26Scraper,
   RaisinScraper,
   CommercetoolsScraper,
@@ -51,7 +63,7 @@ import {
 } from "./ashby-companies";
 
 /**
- * Scraper Registry — 48 scrapers across 7 ATS platforms
+ * Scraper Registry — 58 scrapers across 8 ATS platforms
  *
  * To add a new scraper:
  * 1. Create scrapers/<name>.ts implementing ScraperStrategy
@@ -113,20 +125,35 @@ export const scraperRegistry: Record<string, ScraperStrategy> = {
   billie:            BillieScraper,          // Ashby      — Berlin
   sennder:           SennderScraper,         // SmartRec   — Berlin
 
-  // ── Wave 3: Biggest German Product Companies (Apr 2026) ───────────────────
+  // ── Wave 3: Biggest German Product Companies (Apr 2026) ────────────────────
   // Greenhouse
-  trivago:           TrivagoScraper,         // trivago.com     — Düsseldorf
-  flaconi:           FlaconiScraper,         // flaconi.de      — Berlin
-  freenow:           FreeNowScraper,         // free-now.com    — Berlin/Hamburg
+  trivago:           TrivagoScraper,         // trivago.com      — Düsseldorf
+  flaconi:           FlaconiScraper,         // flaconi.de       — Berlin
+  freenow:           FreeNowScraper,         // free-now.com     — Berlin/Hamburg
   // SmartRecruiters
-  auto1:             Auto1Scraper,           // auto1-group.com — Berlin
-  aboutyou:          AboutYouScraper,        // aboutyou.com    — Hamburg
+  auto1:             Auto1Scraper,           // auto1-group.com  — Berlin
+  aboutyou:          AboutYouScraper,        // aboutyou.com     — Hamburg
   scalablecapital:   ScalableCapitalScraper, // scalable.capital — Berlin/Munich
-  sixt:              SixtScraper,            // sixt.com        — Munich
+  sixt:              SixtScraper,            // sixt.com         — Munich
   // Personio (verified via Personio subdomain; work on prod server)
-  babbel:            BabbelScraper,          // babbel.com      — Berlin
-  idealo:            IdealoScraper,          // idealo.de       — Berlin
-  mambu:             MambuScraper,           // mambu.com       — Berlin
+  babbel:            BabbelScraper,          // babbel.com       — Berlin
+  idealo:            IdealoScraper,          // idealo.de        — Berlin
+  mambu:             MambuScraper,           // mambu.com        — Berlin
+
+  // ── Wave 4: German IT & Service Companies (Apr 2026) ─────────────────────
+  // Greenhouse
+  wolt:              WoltScraper,            // wolt.com         — Berlin (food-delivery tech)
+  ionos:             IONOSScraper,           // ionos.com        — Karlsruhe/Berlin (cloud hosting)
+  doctolib:          DoctolibScraper,        // doctolib.de      — Berlin (healthtech)
+  moia:              MOIAScraper,            // moia.io          — Hamburg/Wolfsburg (VW mobility)
+  wayve:             WayveScraper,           // wayve.ai         — Germany (autonomous driving AI)
+  wunderflats:       WunderflatsScraper,     // wunderflats.com  — Berlin (proptech)
+  adyen:             AdyenScraper,           // adyen.com        — Berlin (payments)
+  tulip:             TulipScraper,           // tulip.co         — Munich (industrial IoT)
+  // Custom (sitemap + JSON-LD)
+  hetzner:           HetznerScraper,         // hetzner.com      — Nuremberg (cloud infrastructure)
+  // SmartRecruiters
+  "telekom-it":      TelekomITScraper,       // telekom.com      — Darmstadt/Bonn (Deutsche Telekom IT)
 };
 
 export const availableScrapers = Object.keys(scraperRegistry);

@@ -580,3 +580,45 @@ scripts/
 .npmrc                  registry=https://registry.npmjs.org/
                         (prevents ZoomInfo JFrog auth errors on npm install)
 ```
+
+---
+
+## Wave 4 — German IT & Service Companies (Apr 2026)
+
+### Companies Added (10 scrapers across 3 ATS)
+
+| Company | ATS | Slug/Tenant | City | Germany Jobs |
+|---------|-----|-------------|------|-------------|
+| Wolt | Greenhouse | `wolt` | Berlin | ~49 (5 tech) |
+| IONOS | Greenhouse | `ionos` | Karlsruhe | ~67 (30 tech) |
+| Doctolib | Greenhouse | `doctolib` | Berlin | ~56 (20 tech) |
+| MOIA | Greenhouse | `moia` | Hamburg | 52 (20 tech) |
+| Wayve | Greenhouse | `wayve` | Germany | ~8 (5 tech) |
+| Wunderflats | Greenhouse | `wunderflats` | Berlin | 17 (3 tech) |
+| Adyen | Greenhouse | `adyen` | Berlin | ~13 |
+| Tulip | Greenhouse | `tulip` | Munich | ~5 |
+| Hetzner Online | Custom sitemap+JSON-LD | — | Nuremberg | ~24 |
+| Deutsche Telekom IT Solutions | SmartRecruiters | `DeutscheTelekomITSolutions` | Darmstadt | 223 |
+
+### ATS Research Notes
+
+**Hetzner** — Uses a custom Next.js site at `career.hetzner.com`. No public JSON API.
+Strategy: Fetch `sitemap.xml` → extract `/en/jobs/<slug>/` URLs → scrape JSON-LD per page.
+All jobs are Germany-based (Nuremberg, Gunzenhausen, Falkenstein).
+
+**Deutsche Telekom IT Solutions** — Uses SmartRecruiters with slug `DeutscheTelekomITSolutions`.
+223 total postings. Many roles are Hungary-based (Budapest shared-service centre).
+The `country=de` filter returns 0 on the SR API for this tenant; the scraper falls back
+to scanning all postings and matching city names to known German cities.
+
+**Deutsche Telekom AG (parent)** — Uses a custom Next.js career portal at `careers.telekom.com`.
+All API endpoints return 403 on the ZI corporate network. Workday, SAP SuccessFactors,
+SmartRecruiters and Lever were all ruled out. Not yet scraped; use Telekom IT Solutions
+as a proxy until the production server can be tested.
+
+**BMW Group** — Uses SAP SuccessFactors at `career5.successfactors.eu` (company=`bmwag`).
+The RSS feed and OData API both return 404. Requires a session cookie from the login flow.
+Not implemented in Wave 4.
+
+**Allianz Technology / Continental / Infineon** — All use either Workday or SAP SF with
+endpoints blocked on the corporate network. Not implemented in Wave 4.

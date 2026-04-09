@@ -55,6 +55,17 @@ const SCRAPER_META: Record<string, { ats: string; city?: string }> = {
   forto:           { ats: "Ashby",           city: "Berlin" },
   billie:          { ats: "Ashby",           city: "Berlin" },
   sennder:         { ats: "SmartRecruiters", city: "Berlin" },
+  // Wave 4
+  wolt:            { ats: "Greenhouse",      city: "Berlin" },
+  ionos:           { ats: "Greenhouse",      city: "Karlsruhe" },
+  doctolib:        { ats: "Greenhouse",      city: "Berlin" },
+  moia:            { ats: "Greenhouse",      city: "Hamburg" },
+  wayve:           { ats: "Greenhouse",      city: "Germany" },
+  wunderflats:     { ats: "Greenhouse",      city: "Berlin" },
+  adyen:           { ats: "Greenhouse",      city: "Berlin" },
+  tulip:           { ats: "Greenhouse",      city: "Munich" },
+  hetzner:         { ats: "Custom",          city: "Nuremberg" },
+  "telekom-it":    { ats: "SmartRecruiters", city: "Darmstadt" },
   // Wave 3
   trivago:         { ats: "Greenhouse",      city: "Düsseldorf" },
   flaconi:         { ats: "Greenhouse",      city: "Berlin" },
