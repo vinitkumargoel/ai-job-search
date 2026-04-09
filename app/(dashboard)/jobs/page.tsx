@@ -52,6 +52,7 @@ export default function JobsPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [boardLoading, setBoardLoading] = useState(true);
   const [matchingAll, setMatchingAll] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [siteNames, setSiteNames] = useState<string[]>([]);
@@ -134,6 +135,7 @@ export default function JobsPage() {
   }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
   const fetchBoardJobs = useCallback(async () => {
+    setBoardLoading(true);
     const params = new URLSearchParams({ limit: "200" });
     if (filterGerman) params.set("germanRequired", filterGerman);
     if (filterExp) params.set("experienceLevel", filterExp);
@@ -163,6 +165,7 @@ export default function JobsPage() {
       const data = await res.json();
       setBoardJobs(data.jobs);
     }
+    setBoardLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
@@ -394,7 +397,26 @@ export default function JobsPage() {
 
       {/* Board view */}
       {view === "board" ? (
-        <KanbanBoard jobs={boardJobs} onStatusChange={handleStatusChange} />
+        boardLoading ? (
+          <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:grid md:grid-cols-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex flex-col gap-3 min-w-[260px] md:min-w-0">
+                <div className="flex items-center gap-2 px-1">
+                  <div className="w-2 h-2 rounded-full bg-gray-200 animate-pulse" />
+                  <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+                  <div className="ml-auto h-5 w-8 bg-gray-200 rounded-full animate-pulse" />
+                </div>
+                <div className="flex flex-col gap-2 min-h-[120px] rounded-xl p-2 bg-gray-50">
+                  {[...Array(3)].map((_, j) => (
+                    <div key={j} className="h-24 rounded-lg bg-gray-100 animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <KanbanBoard jobs={boardJobs} onStatusChange={handleStatusChange} />
+        )
       ) : (
         <>
           {/* Tabs */}
