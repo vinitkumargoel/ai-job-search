@@ -7,17 +7,22 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Cell,
 } from "recharts";
+import { Modal } from "@/components/ui/Modal";
 
 interface AnalyticsData {
   funnel: { label: string; value: number; color: string }[];
   scoreDistribution: { range: string; count: number }[];
   timeline: { date: string; jobs: number }[];
   topSites: { name: string; count: number }[];
+  allSources: { name: string; count: number }[];
 }
 
-function StatCard({ label, value, sub, color }: { label: string; value: number; sub?: string; color: string }) {
+function StatCard({ label, value, sub, color, onClick }: { label: string; value: number; sub?: string; color: string; onClick?: () => void }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+    <div
+      className={`bg-white rounded-xl border border-gray-100 shadow-sm p-5 ${onClick ? "cursor-pointer hover:border-indigo-200 hover:shadow-md transition-all" : ""}`}
+      onClick={onClick}
+    >
       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{label}</p>
       <p className="text-3xl font-bold mt-1" style={{ color }}>{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
@@ -35,6 +40,7 @@ function formatDate(dateStr: string) {
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSourcesModal, setShowSourcesModal] = useState(false);
 
   useEffect(() => {
     fetch("/api/analytics")
@@ -69,7 +75,7 @@ export default function AnalyticsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <StatCard label="Total Jobs" value={totalJobs} sub="scraped" color="#111827" />
+          <StatCard label="Total Jobs" value={totalJobs} sub="scraped" color="#111827" onClick={() => setShowSourcesModal(true)} />
           <StatCard label="Applied" value={appliedCount} sub={totalJobs ? `${Math.round(appliedCount / totalJobs * 100)}% conversion` : "—"} color="#16A34A" />
           <StatCard label="AI Matched" value={matchedJobs} sub="with score" color="#4F6AF5" />
           <StatCard label="Avg Match Score" value={avgScore} sub="out of 100" color="#7C3AED" />
@@ -203,6 +209,25 @@ export default function AnalyticsPage() {
           )}
         </div>
       </div>
+
+      {/* Sources Modal */}
+      <Modal open={showSourcesModal} onClose={() => setShowSourcesModal(false)} title="Jobs by Source" maxWidth="max-w-2xl">
+        {(!data || data.allSources.length === 0) ? (
+          <p className="text-gray-500 text-sm text-center py-8">No data yet</p>
+        ) : (
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {data.allSources.map((s, i) => (
+              <div key={s.name} className="flex-shrink-0 bg-gray-50 rounded-xl p-4 min-w-[140px]">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: SCORE_COLORS[i % SCORE_COLORS.length] }} />
+                  <span className="text-sm font-medium text-gray-700 truncate max-w-[100px]">{s.name}</span>
+                </div>
+                <span className="text-2xl font-bold text-gray-900">{s.count}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

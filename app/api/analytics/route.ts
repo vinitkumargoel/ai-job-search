@@ -10,6 +10,7 @@ export async function GET() {
     scoreBuckets,
     scrapedOverTime,
     topSites,
+    allSites,
   ] = await Promise.all([
     // Application funnel: count by status
     Job.aggregate([
@@ -47,11 +48,17 @@ export async function GET() {
       { $sort: { _id: 1 } },
     ]),
 
-    // Top sites by job count
+    // Top sites by job count (limited for display)
     Job.aggregate([
       { $group: { _id: "$siteName", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 8 },
+    ]),
+
+    // All sites for modal breakdown
+    Job.aggregate([
+      { $group: { _id: "$siteName", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
     ]),
   ]);
 
@@ -88,5 +95,6 @@ export async function GET() {
     scoreDistribution: scoreData,
     timeline: timelineData,
     topSites: topSites.map((s) => ({ name: s._id || "Unknown", count: s.count })),
+    allSources: allSites.map((s) => ({ name: s._id || "Unknown", count: s.count })),
   });
 }

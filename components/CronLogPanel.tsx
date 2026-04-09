@@ -25,6 +25,7 @@ const levelPrefix: Record<string, string> = {
 export function CronLogPanel({ siteId }: { siteId?: string }) {
   const [logs, setLogs] = useState<CronLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [clearing, setClearing] = useState(false);
 
   const fetchLogs = useCallback(async () => {
     const url = siteId ? `/api/cron/logs?siteId=${siteId}&limit=200` : "/api/cron/logs?limit=200";
@@ -32,6 +33,16 @@ export function CronLogPanel({ siteId }: { siteId?: string }) {
     if (res.ok) setLogs(await res.json());
     setLoading(false);
   }, [siteId]);
+
+  const clearLogs = async () => {
+    if (!confirm("Clear all cron logs? This cannot be undone.")) return;
+    setClearing(true);
+    const res = await fetch("/api/cron/logs", { method: "DELETE" });
+    if (res.ok) {
+      setLogs([]);
+    }
+    setClearing(false);
+  };
 
   useEffect(() => {
     fetchLogs();
@@ -43,12 +54,21 @@ export function CronLogPanel({ siteId }: { siteId?: string }) {
     <div className="bg-[#010D39] rounded-2xl overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
         <span className="text-white/70 text-xs font-mono uppercase tracking-wider">Cron Logs</span>
-        <button
-          onClick={fetchLogs}
-          className="text-white/40 hover:text-white text-xs transition-colors"
-        >
-          Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={clearLogs}
+            disabled={clearing || logs.length === 0}
+            className="text-white/40 hover:text-red-400 text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {clearing ? "Clearing…" : "Clear"}
+          </button>
+          <button
+            onClick={fetchLogs}
+            className="text-white/40 hover:text-white text-xs transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
       </div>
       <div className="h-[480px] overflow-y-auto p-4 font-mono text-xs flex flex-col gap-1">
         {loading && <span className="text-white/30">Loading...</span>}

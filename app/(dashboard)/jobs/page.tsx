@@ -53,6 +53,10 @@ export default function JobsPage() {
   const [matchingAll, setMatchingAll] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+
   // Actual filters (applied)
   const [filterGerman, setFilterGerman] = useState("");
   const [filterExp, setFilterExp] = useState("");
@@ -116,7 +120,7 @@ export default function JobsPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view]);
 
-  const handleTabChange = (t: TabStatus) => { setTab(t); setPage(1); };
+  const handleTabChange = (t: TabStatus) => { setTab(t); setPage(1); clearSelection(); };
 
   const handleStatusChange = (id: string, status: string) => {
     setJobs((prev) => prev.map((j) => j._id === id ? { ...j, status } : j));
@@ -168,6 +172,68 @@ export default function JobsPage() {
       toast("Match-all failed — is a resume active?", "error");
     }
     setMatchingAll(false);
+  };
+
+  // Bulk selection handlers
+  const toggleSelectAll = () => {
+    if (selectedIds.size === jobs.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(jobs.map((j) => j._id)));
+    }
+  };
+
+  const toggleSelect = (id: string, selected: boolean) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (selected) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const bulkStatusChange = async (status: string) => {
+    if (selectedIds.size === 0) return;
+    setBulkLoading(true);
+    const res = await fetch("/api/jobs/bulk", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: Array.from(selectedIds), status }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      toast(`Updated ${data.modified} job(s) to ${status}`, "success");
+      setJobs((prev) => prev.map((j) => selectedIds.has(j._id) ? { ...j, status } : j));
+      setBoardJobs((prev) => prev.map((j) => selectedIds.has(j._id) ? { ...j, status } : j));
+      clearSelection();
+    } else {
+      toast("Failed to update jobs", "error");
+    }
+    setBulkLoading(false);
+  };
+
+  const bulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`Delete ${selectedIds.size} selected job${selectedIds.size !== 1 ? "s" : ""}?`)) return;
+    setBulkLoading(true);
+    const res = await fetch("/api/jobs/bulk", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: Array.from(selectedIds) }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      toast(`Deleted ${data.deleted} job(s)`, "success");
+      setJobs((prev) => prev.filter((j) => !selectedIds.has(j._id)));
+      setBoardJobs((prev) => prev.filter((j) => !selectedIds.has(j._id)));
+      setTotal((t) => t - selectedIds.size);
+      clearSelection();
+    } else {
+      toast("Failed to delete jobs", "error");
+    }
+    setBulkLoading(false);
   };
 
   const totalPages = Math.ceil(total / 20);
@@ -285,6 +351,90 @@ export default function JobsPage() {
             </div>
           ) : (
             <>
+              {/* Bulk actions bar */}
+              {selectedIds.size > 0 && (
+                <div className="mb-4 flex items-center gap-3 bg-[#4F6AF5] text-white px-4 py-3 rounded-xl shadow-sm">
+                  <span className="text-sm font-semibold">
+                    {selectedIds.size} selected
+                  </span>
+                  <div className="flex-1" />
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => bulkStatusChange("applied")}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+                    >
+                      ✓ Applied
+                    </button>
+                    <button
+                      onClick={() => bulkStatusChange("saved")}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-white/30 text-white hover:bg-white/10 transition-colors disabled:opacity-50"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => bulkStatusChange("rejected")}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-white/30 text-white hover:bg-white/10 transition-colors disabled:opacity-50"
+                    >
+                      Reject
+                    </button>
+                    <button
+                      onClick={bulkDelete}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={clearSelection}
+                      className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                      title="Clear selection"
+                    >
+                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Select all checkbox + grid */}
+              <div className="flex items-center gap-3 mb-3">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <button
+                    onClick={toggleSelectAll}
+                    className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+                      selectedIds.size === jobs.length && jobs.length > 0
+                        ? "bg-[#4F6AF5] border-[#4F6AF5]"
+                        : selectedIds.size > 0
+                        ? "bg-[#4F6AF5]/60 border-[#4F6AF5]"
+                        : "border-gray-300 hover:border-[#4F6AF5]"
+                    }`}
+                  >
+                    {(selectedIds.size > 0) && (
+                      <svg width="10" height="10" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                        {selectedIds.size === jobs.length
+                          ? <polyline points="20 6 9 17 4 12" />
+                          : <line x1="12" y1="5" x2="12" y2="19" />}
+                      </svg>
+                    )}
+                  </button>
+                  <span className="text-xs text-gray-500 font-medium">
+                    {selectedIds.size > 0 ? `${selectedIds.size} selected` : "Select all"}
+                  </span>
+                </label>
+                {selectedIds.size > 0 && (
+                  <button
+                    onClick={clearSelection}
+                    className="text-xs text-gray-400 hover:text-gray-600"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {jobs.map((job) => (
                   <JobCard
@@ -293,6 +443,9 @@ export default function JobsPage() {
                     onStatusChange={handleStatusChange}
                     onRematch={handleRematch}
                     onDelete={handleDelete}
+                    selectable
+                    selected={selectedIds.has(job._id)}
+                    onSelect={toggleSelect}
                   />
                 ))}
               </div>
@@ -300,7 +453,7 @@ export default function JobsPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-8">
                   <button
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    onClick={() => { setPage((p) => Math.max(1, p - 1)); clearSelection(); }}
                     disabled={page === 1}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-40 transition-colors"
                   >
@@ -311,7 +464,7 @@ export default function JobsPage() {
                   </button>
                   <span className="text-sm text-gray-600 px-2">Page {page} of {totalPages}</span>
                   <button
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); clearSelection(); }}
                     disabled={page === totalPages}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-40 transition-colors"
                   >

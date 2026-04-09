@@ -193,30 +193,44 @@ export function JobDetailModal({ job, onClose, onStatusChange, onRematch, onDele
 
           {/* ════ LEFT — full description ════ */}
           <div className="flex-1 flex flex-col overflow-hidden border-r border-gray-100">
-            <div className="px-6 py-3 border-b border-gray-100 shrink-0">
+            <div className="px-6 py-4 border-b border-gray-100 shrink-0 bg-gradient-to-r from-white to-gray-50/50">
               <h2 className="text-lg font-bold text-gray-900 leading-snug">{job.title}</h2>
-              <p className="text-sm text-gray-500 mt-0.5">{job.company}</p>
+              <p className="text-sm text-gray-500 mt-1">{job.company}</p>
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-5">
               {/* AI Summary banner */}
               {job.summary && (
-                <div className="bg-[#EEF1FE] rounded-xl px-4 py-3 mb-5">
-                  <p className="text-[11px] font-semibold text-[#4F6AF5] uppercase tracking-wider mb-1">AI Summary</p>
+                <div className="bg-gradient-to-br from-[#EEF1FE] to-[#E8EBFA] rounded-xl px-5 py-4 mb-6 border border-[#4F6AF5]/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg width="14" height="14" fill="none" stroke="#4F6AF5" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <p className="text-[11px] font-semibold text-[#4F6AF5] uppercase tracking-wider">AI Summary</p>
+                  </div>
                   <p className="text-sm text-[#3B4DA8] leading-relaxed">{job.summary}</p>
                 </div>
               )}
 
               {/* Full markdown description */}
-              <div className="prose prose-sm prose-gray max-w-none
-                prose-headings:font-semibold prose-headings:text-gray-800
-                prose-h2:text-base prose-h2:mt-5 prose-h2:mb-2
-                prose-h3:text-sm prose-h3:mt-4 prose-h3:mb-1
-                prose-p:text-sm prose-p:text-gray-600 prose-p:leading-relaxed prose-p:my-1.5
-                prose-li:text-sm prose-li:text-gray-600 prose-li:my-0.5
-                prose-ul:my-2 prose-ol:my-2 prose-ul:pl-5 prose-ol:pl-5
+              <div className="prose prose-sm prose-slate max-w-none
+                prose-headings:font-semibold prose-headings:text-gray-900 prose-headings:tracking-tight
+                prose-h1:text-xl prose-h1:mt-8 prose-h1:mb-4 prose-h1:pb-2 prose-h1:border-b prose-h1:border-gray-200
+                prose-h2:text-lg prose-h2:mt-6 prose-h2:mb-3 prose-h2:text-gray-800
+                prose-h3:text-base prose-h3:mt-5 prose-h3:mb-2 prose-h3:text-gray-700
+                prose-h4:text-sm prose-h4:mt-4 prose-h4:mb-2 prose-h4:text-gray-600
+                prose-p:text-sm prose-p:text-gray-600 prose-p:leading-7 prose-p:my-3
+                prose-li:text-sm prose-li:text-gray-600 prose-li:leading-7 prose-li:my-1
+                prose-ul:my-4 prose-ol:my-4 prose-ul:pl-6 prose-ol:pl-6
+                prose-ul:list-disc prose-ol:list-decimal
+                prose-li:marker:text-gray-400
                 prose-strong:text-gray-800 prose-strong:font-semibold
-                prose-a:text-[#4F6AF5] prose-a:no-underline hover:prose-a:underline">
+                prose-a:text-[#4F6AF5] prose-a:no-underline prose-a:font-medium hover:prose-a:underline
+                prose-blockquote:border-l-[#4F6AF5] prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:my-4 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-gray-600
+                prose-code:text-xs prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-700 prose-code:before:content-none prose-code:after:content-none
+                prose-hr:border-gray-200 prose-hr:my-6
+                prose-img:rounded-lg prose-img:my-4">
                 {job.description
                   ? <ReactMarkdown>{job.description}</ReactMarkdown>
                   : <p className="text-sm italic text-gray-400">No description available for this job.</p>

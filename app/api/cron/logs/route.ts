@@ -15,3 +15,9 @@ export async function GET(req: NextRequest) {
   const logs = await CronLog.find(filter).sort({ createdAt: -1 }).limit(limit);
   return NextResponse.json(logs);
 }
+
+export async function DELETE() {
+  await connectDB();
+  await CronLog.deleteMany({});
+  return NextResponse.json({ success: true, message: "All logs cleared" });
+}

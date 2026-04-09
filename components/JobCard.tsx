@@ -35,6 +35,9 @@ interface JobCardProps {
   onStatusChange: (id: string, status: string) => void;
   onRematch: (id: string) => void;
   onDelete: (id: string) => void;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: (id: string, selected: boolean) => void;
 }
 
 const STATUS_PILL: Record<string, { bg: string; text: string; dot: string }> = {
@@ -44,7 +47,7 @@ const STATUS_PILL: Record<string, { bg: string; text: string; dot: string }> = {
   rejected: { bg: "bg-red-50",     text: "text-red-700",    dot: "bg-red-400" },
 };
 
-export function JobCard({ job, onStatusChange, onRematch, onDelete }: JobCardProps) {
+export function JobCard({ job, onStatusChange, onRematch, onDelete, selectable, selected, onSelect }: JobCardProps) {
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -75,15 +78,41 @@ export function JobCard({ job, onStatusChange, onRematch, onDelete }: JobCardPro
       <div
         role="button"
         tabIndex={0}
-        onClick={() => setShowDetail(true)}
+        onClick={(e) => {
+          // Only open detail modal if not clicking checkbox
+          if (selectable && (e.target as HTMLElement).closest('[data-checkbox]')) return;
+          setShowDetail(true);
+        }}
         onKeyDown={(e) => e.key === "Enter" && setShowDetail(true)}
-        className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md hover:border-[#4F6AF5]/30 cursor-pointer transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#4F6AF5]/40"
+        className={`bg-white rounded-xl border shadow-sm p-5 flex flex-col gap-3 hover:shadow-md cursor-pointer transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#4F6AF5]/40 ${
+          selected ? "border-[#4F6AF5] ring-2 ring-[#4F6AF5]/20" : "border-gray-100 hover:border-[#4F6AF5]/30"
+        }`}
       >
         {/* Top row */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            {/* Status + source badges */}
-            <div className="flex items-center gap-1.5 flex-wrap mb-2">
+            {/* Checkbox + Status badges */}
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              {selectable && (
+                <button
+                  data-checkbox
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect?.(job._id, !selected);
+                  }}
+                  className={`shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+                    selected
+                      ? "bg-[#4F6AF5] border-[#4F6AF5]"
+                      : "border-gray-300 hover:border-[#4F6AF5]"
+                  }`}
+                >
+                  {selected && (
+                    <svg width="10" height="10" fill="none" stroke="white" strokeWidth="3" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </button>
+              )}
               <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${pill.bg} ${pill.text}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${pill.dot}`} />
                 {job.status.charAt(0).toUpperCase() + job.status.slice(1)}

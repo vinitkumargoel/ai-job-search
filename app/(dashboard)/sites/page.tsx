@@ -261,6 +261,7 @@ export default function SitesPage() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [groupByAts, setGroupByAts] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"default" | "asc" | "desc">("default");
   const { toast } = useToast();
 
   const fetchSites = async () => {
@@ -303,7 +304,7 @@ export default function SitesPage() {
   // Filtered + searched sites
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return sites.filter((s) => {
+    let result = sites.filter((s) => {
       const meta = SCRAPER_META[s.scraperKey];
       const ats  = meta?.ats ?? "Custom";
       if (atsFilter !== "All" && ats !== atsFilter) return false;
@@ -319,7 +320,13 @@ export default function SitesPage() {
         (meta?.city ?? "").toLowerCase().includes(q)
       );
     });
-  }, [sites, search, atsFilter, statusFilter]);
+    if (sortOrder === "asc") {
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === "desc") {
+      result = [...result].sort((a, b) => b.name.localeCompare(a.name));
+    }
+    return result;
+  }, [sites, search, atsFilter, statusFilter, sortOrder]);
 
   // Group by ATS
   const grouped = useMemo(() => {
@@ -408,6 +415,17 @@ export default function SitesPage() {
           className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#4F6AF5] text-gray-700"
         >
           {["All", "Active", "Inactive", "Success", "Failed"].map((s) => <option key={s}>{s}</option>)}
+        </select>
+
+        {/* Sort dropdown */}
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as "default" | "asc" | "desc")}
+          className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#4F6AF5] text-gray-700"
+        >
+          <option value="default">Default</option>
+          <option value="asc">Name A-Z</option>
+          <option value="desc">Name Z-A</option>
         </select>
 
         {/* Result count */}

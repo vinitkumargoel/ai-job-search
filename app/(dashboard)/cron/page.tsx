@@ -226,9 +226,11 @@ export default function CronPage() {
   const [sites, setSites]         = useState<Site[]>([]);
   const [loading, setLoading]     = useState(true);
   const [runningId, setRunningId] = useState<string | null>(null);
+  const [runningAll, setRunningAll] = useState(false);
   const [search, setSearch]       = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [groupByAts, setGroupByAts] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"default" | "asc" | "desc">("default");
   const { toast } = useToast();
 
   const fetchSites = async () => {
@@ -261,10 +263,29 @@ export default function CronPage() {
     }
   };
 
+  const runAll = async () => {
+    const activeSites = sites.filter((s) => s.isActive);
+    if (activeSites.length === 0) {
+      toast("No active sites to run", "error");
+      return;
+    }
+    setRunningAll(true);
+    let successCount = 0;
+    for (const site of activeSites) {
+      setRunningId(site._id);
+      const res = await fetch(`/api/sites/${site._id}/run`, { method: "POST" });
+      if (res.ok) successCount++;
+      await new Promise((r) => setTimeout(r, 500)); // small delay between runs
+    }
+    setRunningId(null);
+    setRunningAll(false);
+    toast(`Started ${successCount}/${activeSites.length} scrapers`, successCount === activeSites.length ? "success" : "info");
+  };
+
   // Filtered sites
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return sites.filter((s) => {
+    let result = sites.filter((s) => {
       if (statusFilter === "Active"   && !s.isActive) return false;
       if (statusFilter === "Paused"   && s.isActive)  return false;
       if (statusFilter === "Success"  && s.lastRunStatus !== "success") return false;
@@ -278,7 +299,13 @@ export default function CronPage() {
         (meta?.city ?? "").toLowerCase().includes(q)
       );
     });
-  }, [sites, search, statusFilter]);
+    if (sortOrder === "asc") {
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === "desc") {
+      result = [...result].sort((a, b) => b.name.localeCompare(a.name));
+    }
+    return result;
+  }, [sites, search, statusFilter, sortOrder]);
 
   // Group by ATS
   const grouped = useMemo(() => {
@@ -369,6 +396,17 @@ export default function CronPage() {
                 ))}
               </select>
 
+              {/* Sort dropdown */}
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as "default" | "asc" | "desc")}
+                className="px-2.5 py-1.5 text-xs bg-[#F8F9FF] border border-[#E6EBF2] rounded-lg focus:outline-none focus:border-[#202B52] text-gray-700"
+              >
+                <option value="default">Default</option>
+                <option value="asc">Name A-Z</option>
+                <option value="desc">Name Z-A</option>
+              </select>
+
               {/* Group by ATS toggle */}
               <button
                 onClick={() => setGroupByAts((v) => !v)}
@@ -387,6 +425,30 @@ export default function CronPage() {
                   <rect x="13" y="17" width="8" height="4" rx="1"/>
                 </svg>
                 Group
+              </button>
+
+              {/* Run All button */}
+              <button
+                onClick={runAll}
+                disabled={runningAll || sites.filter((s) => s.isActive).length === 0}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#128986] text-white hover:bg-[#0d6d6b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {runningAll ? (
+                  <>
+                    <svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                    </svg>
+                    Running…
+                  </>
+                ) : (
+                  <>
+                    <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24">
+                      <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    Run All ({sites.filter((s) => s.isActive).length})
+                  </>
+                )}
               </button>
             </div>
           )}
