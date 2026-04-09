@@ -75,3 +75,19 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Failed to update settings" }, { status: 500 });
   }
 }
+
+// POST - Clear Ollama settings cache (useful after direct DB updates)
+export async function POST() {
+  try {
+    const user = await getSession();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    clearOllamaSettingsCache();
+    return NextResponse.json({ success: true, message: "Cache cleared" });
+  } catch (error) {
+    console.error("[Ollama Settings POST] Error:", error);
+    return NextResponse.json({ error: "Failed to clear cache" }, { status: 500 });
+  }
+}

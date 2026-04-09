@@ -74,22 +74,27 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
 
       // Enrich description with Ollama immediately after saving
       await log(siteId, site.name, `Enriching: ${scraped.title}`, "info");
-      const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
-      if (enriched) {
-        await Job.findByIdAndUpdate(created._id, {
-          description: enriched.description,
-          summary: enriched.summary,
-          skills: enriched.skills,
-          experienceLevel: enriched.experienceLevel,
-          employmentType: enriched.employmentType,
-          salary: enriched.salary,
-          benefits: enriched.benefits,
-          germanRequired: enriched.germanRequired,
-          yearsOfExperience: enriched.yearsOfExperience,
-        }, { strict: false });
-        await log(siteId, site.name, `Enriched: ${scraped.title} | German: ${enriched.germanRequired} | Skills: ${enriched.skills.slice(0,3).join(", ")}`, "success");
-      } else {
-        await log(siteId, site.name, `Enrichment failed for: ${scraped.title}`, "error");
+      try {
+        const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
+        if (enriched) {
+          await Job.findByIdAndUpdate(created._id, {
+            description: enriched.description,
+            summary: enriched.summary,
+            skills: enriched.skills,
+            experienceLevel: enriched.experienceLevel,
+            employmentType: enriched.employmentType,
+            salary: enriched.salary,
+            benefits: enriched.benefits,
+            germanRequired: enriched.germanRequired,
+            yearsOfExperience: enriched.yearsOfExperience,
+          }, { strict: false });
+          await log(siteId, site.name, `Enriched: ${scraped.title} | German: ${enriched.germanRequired} | Skills: ${enriched.skills.slice(0,3).join(", ")}`, "success");
+        } else {
+          await log(siteId, site.name, `Enrichment failed for: ${scraped.title} (no result)`, "error");
+        }
+      } catch (enrichErr) {
+        const errMsg = enrichErr instanceof Error ? enrichErr.message : String(enrichErr);
+        await log(siteId, site.name, `Enrichment error for: ${scraped.title} - ${errMsg}`, "error");
       }
 
       newJobIds.push(String(created._id));

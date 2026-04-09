@@ -123,9 +123,13 @@ export async function enrichJobDescription(
   // Always prefer rawHtml — it has the full original content.
   // Only fall back to plainDescription if rawHtml is absent or empty.
   const source = rawHtml?.trim() || plainDescription?.trim();
-  if (!source) return null;
+  if (!source) {
+    console.error("[enrichJobDescription] No source content provided");
+    return null;
+  }
 
   const settings = await getSettings();
+  console.log(`[enrichJobDescription] Using model: ${settings.model} at ${settings.baseUrl}`);
 
   const prompt = `You are an expert job description parser. Extract ALL information from the job posting content below.
 
@@ -172,7 +176,8 @@ Respond ONLY in valid JSON, no markdown fences:
     });
 
     if (!res.ok) {
-      console.error(`[enrichJobDescription] Ollama HTTP ${res.status}`);
+      const errorText = await res.text().catch(() => "unknown error");
+      console.error(`[enrichJobDescription] Ollama HTTP ${res.status}: ${errorText.slice(0, 200)}`);
       return null;
     }
 
@@ -215,7 +220,7 @@ Respond ONLY in valid JSON, no markdown fences:
         : null,
     };
   } catch (err) {
-    console.error("[enrichJobDescription] Error:", err);
+    console.error("[enrichJobDescription] Error:", err instanceof Error ? err.message : String(err));
     return null;
   }
 }

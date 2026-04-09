@@ -32,7 +32,7 @@ import { withPage } from "../lib/puppeteerBrowser";
 
 const SEARCH_BASE  = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs";
 const PAGE_TIMEOUT = 30_000;
-const BATCH_SIZE   = 2;       // detail pages fetched in parallel (keep small to free pool pages)
+const BATCH_SIZE   = 5;       // match puppeteerBrowser POOL_SIZE for max parallelism
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
@@ -64,12 +64,16 @@ function buildSearchUrl(keywords: string): string {
 async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<RawJob[]> {
   return withPage(async (page) => {
     const jobs: RawJob[] = [];
+    const startUrl = buildSearchUrl(keywords);
 
-    await page.goto(buildSearchUrl(keywords), {
-      waitUntil: "networkidle2",
+    console.log(`[Siemens] Fetching job list from: ${startUrl}`);
+
+    await page.goto(startUrl, {
+      waitUntil: "domcontentloaded",
       timeout: PAGE_TIMEOUT,
     });
 
+    let pageNum = 1;
     while (true) {
       // Wait for Avature to render job article cards
       await page.waitForSelector("article.article--result", { timeout: PAGE_TIMEOUT })
@@ -97,6 +101,7 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
         return results;
       });
 
+      console.log(`[Siemens] Page ${pageNum}: found ${pageJobs.length} jobs (total: ${jobs.length + pageJobs.length})`);
       jobs.push(...pageJobs);
 
       if (firstPageOnly) break;
@@ -108,20 +113,28 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
         return next?.href ?? null;
       });
 
-      if (!nextHref) break;
+      if (!nextHref) {
+        console.log(`[Siemens] No more pages after ${pageNum}`);
+        break;
+      }
 
-      await page.goto(nextHref, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
-      await sleep(500);
+      pageNum++;
+      await page.goto(nextHref, { waitUntil: "domcontentloaded", timeout: PAGE_TIMEOUT });
+      await sleep(200); // reduced from 500ms
     }
 
+    console.log(`[Siemens] Total jobs found: ${jobs.length}`);
     return jobs;
   });
 }
 
 /** Fetch full job description from Avature ViewJob detail page */
-async function fetchJobDescription(url: string): Promise<string> {
+async function fetchJobDescription(url: string): Promise<{ description: string; rawHtml: string }> {
   return withPage(async (page) => {
-    await page.goto(url, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: PAGE_TIMEOUT });
+
+    // Wait for content to render
+    await page.waitForSelector("body", { timeout: 5000 }).catch(() => {});
 
     // Try JSON-LD first (most reliable on Avature detail pages)
     const ldJson = await page.evaluate(() => {
@@ -134,12 +147,14 @@ async function fetchJobDescription(url: string): Promise<string> {
     if (ldJson) {
       try {
         const posting = JSON.parse(ldJson);
-        if (posting.description) return posting.description.replace(/<[^>]+>/g, " ").trim();
+        if (posting.description) {
+          return { description: posting.description.replace(/<[^>]+>/g, " ").trim(), rawHtml: posting.description };
+        }
       } catch { /* fall through */ }
     }
 
     // Fallback: extract from rendered HTML
-    return page.evaluate(() => {
+    const result = await page.evaluate(() => {
       const selectors = [
         ".section--job-description", ".jobdescription", ".jobDescription",
         "#jobDescription", ".iContent .description", "#iContent",
@@ -147,10 +162,14 @@ async function fetchJobDescription(url: string): Promise<string> {
       ];
       for (const s of selectors) {
         const el = document.querySelector(s);
-        if (el?.textContent?.trim()) return el.textContent.trim();
+        if (el?.textContent?.trim()) {
+          return { description: el.textContent.trim(), rawHtml: el.innerHTML };
+        }
       }
-      return "";
+      return { description: "", rawHtml: "" };
     });
+
+    return result;
   });
 }
 
@@ -159,39 +178,58 @@ export const SiemensScraper: ScraperStrategy = {
 
   async scrape(config: SiteConfig): Promise<ScrapedJob[]> {
     const keywords = config.keywords ?? "software engineer";
+    console.log(`[Siemens] Starting scrape with keywords: "${keywords}"`);
 
     // Step 1: scrape paginated job list
     const rawJobs = await scrapeJobList(keywords, config.firstPageOnly);
-    if (!rawJobs.length) return [];
+    if (!rawJobs.length) {
+      console.log(`[Siemens] No jobs found, returning empty array`);
+      return [];
+    }
+
+    console.log(`[Siemens] Fetching descriptions for ${rawJobs.length} jobs in batches of ${BATCH_SIZE}...`);
 
     // Step 2: fetch full descriptions in batches
     const jobs: ScrapedJob[] = [];
+    const total = rawJobs.length;
 
-    for (let i = 0; i < rawJobs.length; i += BATCH_SIZE) {
+    for (let i = 0; i < total; i += BATCH_SIZE) {
       const batch = rawJobs.slice(i, i + BATCH_SIZE);
+      const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+      const totalBatches = Math.ceil(total / BATCH_SIZE);
+
+      console.log(`[Siemens] Batch ${batchNum}/${totalBatches}: fetching ${batch.length} descriptions...`);
+
       const descriptions = await Promise.allSettled(
         batch.map((j) => fetchJobDescription(j.url))
       );
 
       batch.forEach((raw, idx) => {
-        const desc =
+        const result =
           descriptions[idx].status === "fulfilled"
-            ? stripHtml(descriptions[idx].value)
-            : "";
+            ? descriptions[idx].value
+            : { description: "", rawHtml: "" };
+
+        const desc = result.description || stripHtml(result.rawHtml) || "";
 
         jobs.push({
           title:       raw.title,
           url:         raw.url,
           description: desc,
+          rawHtml:     result.rawHtml || undefined,
           company:     "Siemens",
           location:    raw.location,
           postedAt:    raw.postedAt,
         });
       });
 
-      await sleep(400);
+      // Small delay between batches to avoid rate limiting
+      if (i + BATCH_SIZE < total) {
+        await sleep(100);
+      }
     }
 
+    console.log(`[Siemens] Scrape complete: ${jobs.length} jobs with descriptions`);
     return jobs;
   },
 };
