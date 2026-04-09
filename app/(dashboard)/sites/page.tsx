@@ -260,6 +260,7 @@ export default function SitesPage() {
   const [atsFilter, setAtsFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [groupByAts, setGroupByAts] = useState(false);
   const { toast } = useToast();
 
   const fetchSites = async () => {
@@ -416,6 +417,28 @@ export default function SitesPage() {
 
         <div className="flex-1" />
 
+        {/* Group by ATS toggle — only relevant in grid mode */}
+        {viewMode === "grid" && (
+          <button
+            onClick={() => setGroupByAts((v) => !v)}
+            title={groupByAts ? "Ungroup" : "Group by ATS platform"}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-xl border transition-colors ${
+              groupByAts
+                ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
+                : "bg-white text-gray-500 border-gray-200 hover:border-[#4F6AF5] hover:text-[#4F6AF5]"
+            }`}
+          >
+            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="4" rx="1"/>
+              <rect x="3" y="10" width="8" height="4" rx="1"/>
+              <rect x="3" y="17" width="8" height="4" rx="1"/>
+              <rect x="13" y="10" width="8" height="4" rx="1"/>
+              <rect x="13" y="17" width="8" height="4" rx="1"/>
+            </svg>
+            Group
+          </button>
+        )}
+
         {/* View mode toggle */}
         <div className="flex items-center bg-gray-100 rounded-xl p-1 gap-0.5">
           {(["grid", "list"] as const).map((mode) => (
@@ -464,40 +487,58 @@ export default function SitesPage() {
           </button>
         </div>
       ) : viewMode === "grid" ? (
-        /* ── GRID VIEW: grouped by ATS ─────────────────────────────────── */
-        <div className="flex flex-col gap-8">
-          {grouped.map(([ats, atsSites]) => {
-            const atsColor = ATS_COLORS[ats] ?? ATS_COLORS.Custom;
-            return (
-              <section key={ats}>
-                {/* Group header */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full ${atsColor.bg} ${atsColor.text}`}>
-                    <span className={`w-2 h-2 rounded-full ${atsColor.dot}`} />
-                    {ats}
-                  </span>
-                  <span className="text-xs text-gray-400 font-medium">{atsSites.length} site{atsSites.length !== 1 ? "s" : ""}</span>
-                  <div className="flex-1 h-px bg-gray-100" />
-                </div>
+        /* ── GRID VIEW ─────────────────────────────────────────────────── */
+        groupByAts ? (
+          /* Grouped by ATS platform */
+          <div className="flex flex-col gap-8">
+            {grouped.map(([ats, atsSites]) => {
+              const atsColor = ATS_COLORS[ats] ?? ATS_COLORS.Custom;
+              return (
+                <section key={ats}>
+                  {/* Group header */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full ${atsColor.bg} ${atsColor.text}`}>
+                      <span className={`w-2 h-2 rounded-full ${atsColor.dot}`} />
+                      {ats}
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium">{atsSites.length} site{atsSites.length !== 1 ? "s" : ""}</span>
+                    <div className="flex-1 h-px bg-gray-100" />
+                  </div>
 
-                {/* Cards grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-                  {atsSites.map((site) => (
-                    <SiteCard
-                      key={site._id}
-                      site={site}
-                      running={runningId === site._id}
-                      onRun={() => runNow(site)}
-                      onEdit={() => openEdit(site)}
-                      onDelete={() => deleteSite(site._id, site.name)}
-                      onToggle={() => toggleActive(site)}
-                    />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </div>
+                  {/* Cards grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+                    {atsSites.map((site) => (
+                      <SiteCard
+                        key={site._id}
+                        site={site}
+                        running={runningId === site._id}
+                        onRun={() => runNow(site)}
+                        onEdit={() => openEdit(site)}
+                        onDelete={() => deleteSite(site._id, site.name)}
+                        onToggle={() => toggleActive(site)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        ) : (
+          /* Flat grid — all cards together */
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+            {filtered.map((site) => (
+              <SiteCard
+                key={site._id}
+                site={site}
+                running={runningId === site._id}
+                onRun={() => runNow(site)}
+                onEdit={() => openEdit(site)}
+                onDelete={() => deleteSite(site._id, site.name)}
+                onToggle={() => toggleActive(site)}
+              />
+            ))}
+          </div>
+        )
       ) : (
         /* ── LIST VIEW: compact table ───────────────────────────────────── */
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

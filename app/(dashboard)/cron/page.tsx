@@ -228,6 +228,7 @@ export default function CronPage() {
   const [runningId, setRunningId] = useState<string | null>(null);
   const [search, setSearch]       = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [groupByAts, setGroupByAts] = useState(false);
   const { toast } = useToast();
 
   const fetchSites = async () => {
@@ -367,6 +368,26 @@ export default function CronPage() {
                   <option key={s}>{s}</option>
                 ))}
               </select>
+
+              {/* Group by ATS toggle */}
+              <button
+                onClick={() => setGroupByAts((v) => !v)}
+                title={groupByAts ? "Ungroup" : "Group by ATS platform"}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${
+                  groupByAts
+                    ? "bg-[#202B52] text-white border-[#202B52]"
+                    : "bg-[#F8F9FF] text-[#3F486B] border-[#E6EBF2] hover:border-[#202B52] hover:text-[#202B52]"
+                }`}
+              >
+                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="4" rx="1"/>
+                  <rect x="3" y="10" width="8" height="4" rx="1"/>
+                  <rect x="3" y="17" width="8" height="4" rx="1"/>
+                  <rect x="13" y="10" width="8" height="4" rx="1"/>
+                  <rect x="13" y="17" width="8" height="4" rx="1"/>
+                </svg>
+                Group
+              </button>
             </div>
           )}
         </div>
@@ -395,40 +416,56 @@ export default function CronPage() {
               </button>
             </div>
           ) : (
-            /* Grouped by ATS */
-            <div className="flex flex-col gap-7">
-              {grouped.map(([ats, atsSites]) => {
-                const atsColor = ATS_COLORS[ats] ?? ATS_COLORS.Custom;
-                return (
-                  <section key={ats}>
-                    {/* Group label */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full ${atsColor.bg} ${atsColor.text}`}>
-                        <span className={`w-2 h-2 rounded-full ${atsColor.dot}`} />
-                        {ats}
-                      </span>
-                      <span className="text-xs text-gray-400 font-medium">
-                        {atsSites.length} site{atsSites.length !== 1 ? "s" : ""}
-                      </span>
-                      <div className="flex-1 h-px bg-[#E6EBF2]" />
-                    </div>
+            /* Cards — flat or grouped */
+            groupByAts ? (
+              /* Grouped by ATS platform */
+              <div className="flex flex-col gap-7">
+                {grouped.map(([ats, atsSites]) => {
+                  const atsColor = ATS_COLORS[ats] ?? ATS_COLORS.Custom;
+                  return (
+                    <section key={ats}>
+                      {/* Group label */}
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full ${atsColor.bg} ${atsColor.text}`}>
+                          <span className={`w-2 h-2 rounded-full ${atsColor.dot}`} />
+                          {ats}
+                        </span>
+                        <span className="text-xs text-gray-400 font-medium">
+                          {atsSites.length} site{atsSites.length !== 1 ? "s" : ""}
+                        </span>
+                        <div className="flex-1 h-px bg-[#E6EBF2]" />
+                      </div>
 
-                    {/* Cards */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-                      {atsSites.map((site) => (
-                        <ScheduleCard
-                          key={site._id}
-                          site={site}
-                          running={runningId === site._id}
-                          onRun={() => runNow(site)}
-                          onToggle={() => toggleActive(site)}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
-            </div>
+                      {/* Cards */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+                        {atsSites.map((site) => (
+                          <ScheduleCard
+                            key={site._id}
+                            site={site}
+                            running={runningId === site._id}
+                            onRun={() => runNow(site)}
+                            onToggle={() => toggleActive(site)}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            ) : (
+              /* Flat grid — all cards together */
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+                {filtered.map((site) => (
+                  <ScheduleCard
+                    key={site._id}
+                    site={site}
+                    running={runningId === site._id}
+                    onRun={() => runNow(site)}
+                    onToggle={() => toggleActive(site)}
+                  />
+                ))}
+              </div>
+            )
           )}
         </div>
       </div>
