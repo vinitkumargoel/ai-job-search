@@ -123,7 +123,7 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex gap-3 overflow-x-auto pb-4 -mx-4 px-4">
+      <div className="flex gap-3 overflow-x-auto pb-4">
         {COLUMNS.map((col) => {
           const allJobs = grouped[col.key];
           const isExpanded = expandedColumns[col.key];
@@ -131,9 +131,9 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
           const hasMore = allJobs.length > INITIAL_VISIBLE;
 
           return (
-            <div key={col.key} className="flex flex-col gap-2 flex-shrink-0 w-[300px]">
+            <div key={col.key} className="flex flex-col gap-2 flex-shrink-0" style={{ width: '300px' }}>
               {/* Column header */}
-              <div className="flex items-center gap-2 px-1 sticky top-0 bg-[#F3F4F8] py-1 z-10">
+              <div className="flex items-center gap-2 px-1">
                 <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`} />
                 <span className="text-sm font-semibold text-gray-700">{col.label}</span>
                 <span className="ml-auto text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
@@ -146,7 +146,7 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`flex flex-col gap-2 min-h-[120px] rounded-xl p-2 transition-colors flex-1 ${
+                    className={`flex flex-col gap-2 min-h-[120px] rounded-xl p-2 transition-colors ${
                       snapshot.isDraggingOver ? col.color : "bg-gray-50"
                     }`}
                   >
