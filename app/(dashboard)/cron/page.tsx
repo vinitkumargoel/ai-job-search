@@ -16,67 +16,67 @@ interface Site {
 }
 
 // ── Shared metadata (same as Sites page) ──────────────────────────────────────
-const SCRAPER_META: Record<string, { ats: string; city?: string }> = {
-  amazon:          { ats: "Custom",          city: "Global" },
-  bosch:           { ats: "SmartRecruiters", city: "Stuttgart" },
-  celonis:         { ats: "Greenhouse",      city: "Munich" },
-  check24:         { ats: "Custom",          city: "Munich" },
-  commercetools:   { ats: "Greenhouse",      city: "Munich" },
-  contentful:      { ats: "Greenhouse",      city: "Berlin" },
-  deliveryhero:    { ats: "Custom",          city: "Berlin" },
-  flix:            { ats: "Greenhouse",      city: "Munich" },
-  getyourguide:    { ats: "Greenhouse",      city: "Berlin" },
-  hellofresh:      { ats: "Greenhouse",      city: "Berlin" },
-  n26:             { ats: "Greenhouse",      city: "Berlin" },
-  raisin:          { ats: "Greenhouse",      city: "Berlin" },
-  sap:             { ats: "SuccessFactors",  city: "Walldorf" },
-  sapfioneer:      { ats: "Custom",          city: "Walldorf" },
-  scout24:         { ats: "Greenhouse",      city: "Munich" },
-  siemens:         { ats: "Avature",         city: "Munich" },
-  softwareag:      { ats: "Dayforce",        city: "Darmstadt" },
-  teamviewer:      { ats: "Teamtailor",      city: "Göppingen" },
-  zalando:         { ats: "Custom",          city: "Berlin" },
-  zeiss:           { ats: "Workday",         city: "Jena" },
-  parloa:          { ats: "Greenhouse",      city: "Berlin" },
-  helsing:         { ats: "Greenhouse",      city: "Munich" },
-  blackforestlabs: { ats: "Greenhouse",      city: "Freiburg" },
-  n8n:             { ats: "Ashby",           city: "Berlin" },
-  deepl:           { ats: "Ashby",           city: "Cologne" },
-  alephalpha:      { ats: "Ashby",           city: "Heidelberg" },
-  sereact:         { ats: "Ashby",           city: "Stuttgart" },
-  quantumsystems:  { ats: "Personio",        city: "Munich" },
-  sumup:           { ats: "Greenhouse",      city: "Berlin" },
-  traderepublic:   { ats: "Greenhouse",      city: "Berlin" },
-  grover:          { ats: "Greenhouse",      city: "Berlin" },
-  staffbase:       { ats: "Greenhouse",      city: "Chemnitz" },
-  isaraerospace:   { ats: "Greenhouse",      city: "Munich" },
-  personio:        { ats: "Ashby",           city: "Munich" },
-  enpal:           { ats: "Ashby",           city: "Berlin" },
-  forto:           { ats: "Ashby",           city: "Berlin" },
-  billie:          { ats: "Ashby",           city: "Berlin" },
-  sennder:         { ats: "SmartRecruiters", city: "Berlin" },
+const SCRAPER_META: Record<string, { ats: string; city?: string; icon?: string }> = {
+  amazon:          { ats: "Custom",          city: "Global",      icon: "📦" },
+  bosch:           { ats: "SmartRecruiters", city: "Stuttgart",   icon: "🔧" },
+  celonis:         { ats: "Greenhouse",      city: "Munich",      icon: "⚡" },
+  check24:         { ats: "Custom",          city: "Munich",      icon: "✓" },
+  commercetools:   { ats: "Greenhouse",      city: "Munich",      icon: "🛒" },
+  contentful:      { ats: "Greenhouse",      city: "Berlin",      icon: "📝" },
+  deliveryhero:    { ats: "Custom",          city: "Berlin",      icon: "🍔" },
+  flix:            { ats: "Greenhouse",      city: "Munich",      icon: "🚌" },
+  getyourguide:    { ats: "Greenhouse",      city: "Berlin",      icon: "🗺️" },
+  hellofresh:      { ats: "Greenhouse",      city: "Berlin",      icon: "🥗" },
+  n26:             { ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
+  raisin:          { ats: "Greenhouse",      city: "Berlin",      icon: "🍇" },
+  sap:             { ats: "SuccessFactors",  city: "Walldorf",    icon: "💼" },
+  sapfioneer:      { ats: "Custom",          city: "Walldorf",    icon: "🏦" },
+  scout24:         { ats: "Greenhouse",      city: "Munich",      icon: "🔍" },
+  siemens:         { ats: "Avature",         city: "Munich",      icon: "⚙️" },
+  softwareag:      { ats: "Dayforce",        city: "Darmstadt",   icon: "🖥️" },
+  teamviewer:      { ats: "Teamtailor",      city: "Göppingen",   icon: "🖥️" },
+  zalando:         { ats: "Custom",          city: "Berlin",      icon: "👗" },
+  zeiss:           { ats: "Workday",         city: "Jena",        icon: "🔬" },
+  parloa:          { ats: "Greenhouse",      city: "Berlin",      icon: "🎙️" },
+  helsing:         { ats: "Greenhouse",      city: "Munich",      icon: "🛡️" },
+  blackforestlabs: { ats: "Greenhouse",      city: "Freiburg",    icon: "🎨" },
+  n8n:             { ats: "Ashby",           city: "Berlin",      icon: "🔗" },
+  deepl:           { ats: "Ashby",           city: "Cologne",     icon: "🌐" },
+  alephalpha:      { ats: "Ashby",           city: "Heidelberg",  icon: "🧠" },
+  sereact:         { ats: "Ashby",           city: "Stuttgart",   icon: "🤖" },
+  quantumsystems:  { ats: "Personio",        city: "Munich",      icon: "🚁" },
+  sumup:           { ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
+  traderepublic:   { ats: "Greenhouse",      city: "Berlin",      icon: "📈" },
+  grover:          { ats: "Greenhouse",      city: "Berlin",      icon: "📱" },
+  staffbase:       { ats: "Greenhouse",      city: "Chemnitz",    icon: "👥" },
+  isaraerospace:   { ats: "Greenhouse",      city: "Munich",      icon: "🚀" },
+  personio:        { ats: "Ashby",           city: "Munich",      icon: "👥" },
+  enpal:           { ats: "Ashby",           city: "Berlin",      icon: "☀️" },
+  forto:           { ats: "Ashby",           city: "Berlin",      icon: "📦" },
+  billie:          { ats: "Ashby",           city: "Berlin",      icon: "💳" },
+  sennder:         { ats: "SmartRecruiters", city: "Berlin",      icon: "🚚" },
   // Wave 4
-  wolt:            { ats: "Greenhouse",      city: "Berlin" },
-  ionos:           { ats: "Greenhouse",      city: "Karlsruhe" },
-  doctolib:        { ats: "Greenhouse",      city: "Berlin" },
-  moia:            { ats: "Greenhouse",      city: "Hamburg" },
-  wayve:           { ats: "Greenhouse",      city: "Germany" },
-  wunderflats:     { ats: "Greenhouse",      city: "Berlin" },
-  adyen:           { ats: "Greenhouse",      city: "Berlin" },
-  tulip:           { ats: "Greenhouse",      city: "Munich" },
-  hetzner:         { ats: "Custom",          city: "Nuremberg" },
-  "telekom-it":    { ats: "SmartRecruiters", city: "Darmstadt" },
+  wolt:            { ats: "Greenhouse",      city: "Berlin",      icon: "🛵" },
+  ionos:           { ats: "Greenhouse",      city: "Karlsruhe",   icon: "🌐" },
+  doctolib:        { ats: "Greenhouse",      city: "Berlin",      icon: "🏥" },
+  moia:            { ats: "Greenhouse",      city: "Hamburg",     icon: "🚐" },
+  wayve:           { ats: "Greenhouse",      city: "Germany",     icon: "🚗" },
+  wunderflats:     { ats: "Greenhouse",      city: "Berlin",      icon: "🏠" },
+  adyen:           { ats: "Greenhouse",      city: "Berlin",      icon: "💳" },
+  tulip:           { ats: "Greenhouse",      city: "Munich",      icon: "🌷" },
+  hetzner:         { ats: "Custom",          city: "Nuremberg",   icon: "🖥️" },
+  "telekom-it":    { ats: "SmartRecruiters", city: "Darmstadt",   icon: "📡" },
   // Wave 3
-  trivago:         { ats: "Greenhouse",      city: "Düsseldorf" },
-  flaconi:         { ats: "Greenhouse",      city: "Berlin" },
-  freenow:         { ats: "Greenhouse",      city: "Hamburg" },
-  auto1:           { ats: "SmartRecruiters", city: "Berlin" },
-  aboutyou:        { ats: "SmartRecruiters", city: "Hamburg" },
-  scalablecapital: { ats: "SmartRecruiters", city: "Munich" },
-  sixt:            { ats: "SmartRecruiters", city: "Munich" },
-  babbel:          { ats: "Personio",        city: "Berlin" },
-  idealo:          { ats: "Personio",        city: "Berlin" },
-  mambu:           { ats: "Personio",        city: "Berlin" },
+  trivago:         { ats: "Greenhouse",      city: "Düsseldorf",  icon: "🏨" },
+  flaconi:         { ats: "Greenhouse",      city: "Berlin",      icon: "💄" },
+  freenow:         { ats: "Greenhouse",      city: "Hamburg",     icon: "🚕" },
+  auto1:           { ats: "SmartRecruiters", city: "Berlin",      icon: "🚗" },
+  aboutyou:        { ats: "SmartRecruiters", city: "Hamburg",     icon: "👕" },
+  scalablecapital: { ats: "SmartRecruiters", city: "Munich",      icon: "💰" },
+  sixt:            { ats: "SmartRecruiters", city: "Munich",      icon: "🚙" },
+  babbel:          { ats: "Personio",        city: "Berlin",      icon: "🗣️" },
+  idealo:          { ats: "Personio",        city: "Berlin",      icon: "💰" },
+  mambu:           { ats: "Personio",        city: "Berlin",      icon: "🏦" },
 };
 
 const ATS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
@@ -150,17 +150,24 @@ function ScheduleCard({
       <div className="px-4 pt-4 pb-3 flex flex-col gap-2.5">
         {/* Name + toggle */}
         <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate leading-tight">{site.name}</p>
-            {meta.city && (
-              <p className="text-[11px] text-gray-400 mt-0.5 flex items-center gap-1">
-                <svg width="9" height="9" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M12 21s-8-6.686-8-12a8 8 0 0 1 16 0c0 5.314-8 12-8 12z"/>
-                  <circle cx="12" cy="9" r="2.5"/>
-                </svg>
-                {meta.city}
-              </p>
+          <div className="flex items-start gap-2 min-w-0">
+            {meta.icon && (
+              <span className="text-base shrink-0 mt-0.5" role="img" aria-label={site.name}>
+                {meta.icon}
+              </span>
             )}
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-gray-900 truncate leading-tight">{site.name}</p>
+              {meta.city && (
+                <p className="text-[11px] text-gray-400 mt-0.5 flex items-center gap-1">
+                  <svg width="9" height="9" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M12 21s-8-6.686-8-12a8 8 0 0 1 16 0c0 5.314-8 12-8 12z"/>
+                    <circle cx="12" cy="9" r="2.5"/>
+                  </svg>
+                  {meta.city}
+                </p>
+              )}
+            </div>
           </div>
           <button
             onClick={onToggle}
