@@ -144,10 +144,17 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
       // Use networkidle2 for detail pages - content is rendered dynamically
       await page.goto(url, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
 
-      // Wait for main content to appear
-      await page.waitForSelector(".main__content, main, article", { timeout: 5000 }).catch(() => {});
+      // Wait for main content to appear - critical for JS-rendered content
+      try {
+        await page.waitForSelector(".main__content, main, .section__content--view", { timeout: 10000 });
+      } catch {
+        console.log(`[Siemens] Timeout waiting for selector on: ${url}`);
+      }
+
+      // Small delay to ensure content is fully rendered
+      await new Promise(r => setTimeout(r, 500));
     } catch (e) {
-      console.log(`[Siemens] Page load failed for ${url}: ${e.message}`);
+      console.log(`[Siemens] Page load failed for ${url}: ${e instanceof Error ? e.message : String(e)}`);
       return { description: "", rawHtml: "" };
     }
 
@@ -182,7 +189,7 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
         const el = document.querySelector<HTMLElement>(sel);
         const text = el?.innerText?.trim();
         if (text && text.length > 100) {
-          return { description: text, rawHtml: el!.innerHTML };
+          return { description: text, rawHtml: el!.innerHTML, found: sel };
         }
       }
 
@@ -191,16 +198,22 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
       const bodyHtml = document.body?.innerHTML || "";
 
       if (bodyText.length > 200) {
-        return { description: bodyText.slice(0, 15000), rawHtml: bodyHtml.slice(0, 50000) };
+        return { description: bodyText.slice(0, 15000), rawHtml: bodyHtml.slice(0, 50000), found: "body" };
       }
 
-      return { description: "", rawHtml: "" };
+      return { description: "", rawHtml: "", found: "none" };
     });
 
     if (mainContent.description) {
-      console.log(`[Siemens] Extracted content: ${mainContent.description.length} chars`);
+      console.log(`[Siemens] Extracted ${mainContent.description.length} chars from ${mainContent.found}`);
     } else {
-      console.log(`[Siemens] No content found for: ${url}`);
+      // Debug: log what's on the page
+      const debug = await page.evaluate(() => ({
+        title: document.title,
+        bodyLen: document.body?.innerText?.length || 0,
+        mainLen: (document.querySelector('.main__content') as HTMLElement)?.innerText?.length || 0,
+      }));
+      console.log(`[Siemens] No content for ${url} | title: ${debug.title} | body: ${debug.bodyLen} | main: ${debug.mainLen}`);
     }
 
     return mainContent;
