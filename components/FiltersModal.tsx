@@ -13,6 +13,13 @@ interface FiltersModalProps {
   setFilterEmployment: (v: string) => void;
   filterSalary: boolean;
   setFilterSalary: (v: boolean) => void;
+  filterDate: string;
+  setFilterDate: (v: string) => void;
+  filterScore: string;
+  setFilterScore: (v: string) => void;
+  filterSite: string;
+  setFilterSite: (v: string) => void;
+  siteNames: string[];
   onClear: () => void;
   onApply: () => void;
 }
@@ -28,6 +35,13 @@ export function FiltersModal({
   setFilterEmployment,
   filterSalary,
   setFilterSalary,
+  filterDate,
+  setFilterDate,
+  filterScore,
+  setFilterScore,
+  filterSite,
+  setFilterSite,
+  siteNames,
   onClear,
   onApply,
 }: FiltersModalProps) {
@@ -48,7 +62,7 @@ export function FiltersModal({
 
   if (!open) return null;
 
-  const activeCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : ""].filter(Boolean).length;
+  const activeCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite].filter(Boolean).length;
 
   return (
     <div
@@ -81,6 +95,80 @@ export function FiltersModal({
 
         {/* Content */}
         <div className="px-6 py-5 space-y-5 max-h-[60vh] overflow-y-auto">
+          {/* Date Posted */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span>📅</span> Date Scraped
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "", label: "All Time" },
+                { value: "today", label: "Today" },
+                { value: "7d", label: "Last 7 Days" },
+                { value: "30d", label: "Last 30 Days" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterDate(opt.value)}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    filterDate === opt.value
+                      ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Match Score */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span>🎯</span> Match Score
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "", label: "Any Score" },
+                { value: "high", label: "High (80-100)" },
+                { value: "medium", label: "Medium (50-79)" },
+                { value: "low", label: "Low (0-49)" },
+                { value: "none", label: "No Score" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterScore(opt.value)}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    filterScore === opt.value
+                      ? "bg-[#4F6AF5] text-white border-[#4F6AF5]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Source / Site */}
+          {siteNames.length > 0 && (
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                <span>🌐</span> Source Site
+              </label>
+              <select
+                value={filterSite}
+                onChange={(e) => setFilterSite(e.target.value)}
+                className="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#4F6AF5] text-gray-700"
+              >
+                <option value="">All Sites</option>
+                {siteNames.map((name) => (
+                  <option key={name} value={name}>{name}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           {/* German Requirement */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">

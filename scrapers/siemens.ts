@@ -131,10 +131,8 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
 /** Fetch full job description from Avature ViewJob detail page */
 async function fetchJobDescription(url: string): Promise<{ description: string; rawHtml: string }> {
   return withPage(async (page) => {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: PAGE_TIMEOUT });
-
-    // Wait for content to render
-    await page.waitForSelector("body", { timeout: 5000 }).catch(() => {});
+    // Use networkidle2 for detail pages - content is rendered dynamically
+    await page.goto(url, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
 
     // Try JSON-LD first (most reliable on Avature detail pages)
     const ldJson = await page.evaluate(() => {
@@ -147,27 +145,41 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
     if (ldJson) {
       try {
         const posting = JSON.parse(ldJson);
-        if (posting.description) {
+        if (posting.description && posting.description.length > 50) {
           return { description: posting.description.replace(/<[^>]+>/g, " ").trim(), rawHtml: posting.description };
         }
       } catch { /* fall through */ }
     }
 
-    // Fallback: extract from rendered HTML
+    // Fallback: extract from rendered HTML - try multiple selectors
     const result = await page.evaluate(() => {
       const selectors = [
         ".section--job-description", ".jobdescription", ".jobDescription",
         "#jobDescription", ".iContent .description", "#iContent",
         ".job-description", "[class*='description']",
+        ".content", ".posting", ".job-content", "article",
       ];
       for (const s of selectors) {
         const el = document.querySelector(s);
-        if (el?.textContent?.trim()) {
-          return { description: el.textContent.trim(), rawHtml: el.innerHTML };
+        const text = el?.textContent?.trim();
+        if (text && text.length > 50) {
+          return { description: text, rawHtml: el!.innerHTML };
         }
       }
+
+      // Last resort: get body text (truncated)
+      const body = document.body;
+      const text = body?.textContent?.trim() || "";
+      if (text.length > 100) {
+        return { description: text.slice(0, 8000), rawHtml: body?.innerHTML?.slice(0, 15000) || "" };
+      }
+
       return { description: "", rawHtml: "" };
     });
+
+    if (!result.description) {
+      console.log(`[Siemens] No description found for: ${url}`);
+    }
 
     return result;
   });

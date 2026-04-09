@@ -52,6 +52,7 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true);
   const [matchingAll, setMatchingAll] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [siteNames, setSiteNames] = useState<string[]>([]);
 
   // Bulk selection state
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -62,14 +63,20 @@ export default function JobsPage() {
   const [filterExp, setFilterExp] = useState("");
   const [filterEmployment, setFilterEmployment] = useState("");
   const [filterSalary, setFilterSalary] = useState(false);
+  const [filterDate, setFilterDate] = useState("");
+  const [filterScore, setFilterScore] = useState("");
+  const [filterSite, setFilterSite] = useState("");
 
   // Temporary filters (in modal, not yet applied)
   const [tempFilterGerman, setTempFilterGerman] = useState("");
   const [tempFilterExp, setTempFilterExp] = useState("");
   const [tempFilterEmployment, setTempFilterEmployment] = useState("");
   const [tempFilterSalary, setTempFilterSalary] = useState(false);
+  const [tempFilterDate, setTempFilterDate] = useState("");
+  const [tempFilterScore, setTempFilterScore] = useState("");
+  const [tempFilterSite, setTempFilterSite] = useState("");
 
-  const activeFilterCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : ""].filter(Boolean).length;
+  const activeFilterCount = [filterGerman, filterExp, filterEmployment, filterSalary ? "1" : "", filterDate, filterScore, filterSite].filter(Boolean).length;
 
   const { toast } = useToast();
 
@@ -81,6 +88,22 @@ export default function JobsPage() {
     if (filterExp) params.set("experienceLevel", filterExp);
     if (filterEmployment) params.set("employmentType", filterEmployment);
     if (filterSalary) params.set("hasSalary", "true");
+    if (filterDate) params.set("dateRange", filterDate);
+    if (filterScore) {
+      if (filterScore === "high") {
+        params.set("minScore", "80");
+        params.set("maxScore", "100");
+      } else if (filterScore === "medium") {
+        params.set("minScore", "50");
+        params.set("maxScore", "79");
+      } else if (filterScore === "low") {
+        params.set("minScore", "0");
+        params.set("maxScore", "49");
+      } else if (filterScore === "none") {
+        params.set("minScore", "none");
+      }
+    }
+    if (filterSite) params.set("siteName", filterSite);
 
     const res = await fetch(`/api/jobs?${params.toString()}`);
     if (res.ok) {
@@ -100,7 +123,7 @@ export default function JobsPage() {
     }
     setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterGerman, filterExp, filterEmployment, filterSalary]);
+  }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite]);
 
   const fetchBoardJobs = useCallback(async () => {
     const res = await fetch("/api/jobs?limit=200");
@@ -113,12 +136,23 @@ export default function JobsPage() {
   useEffect(() => {
     fetchJobs(tab, page);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, page, filterGerman, filterExp, filterEmployment, filterSalary]);
+  }, [tab, page, filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite]);
 
   useEffect(() => {
     if (view === "board") fetchBoardJobs();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view]);
+
+  // Fetch site names for filter dropdown
+  useEffect(() => {
+    fetch("/api/sites")
+      .then((res) => res.ok ? res.json() : [])
+      .then((sites) => {
+        const names = [...new Set(sites.map((s: { name: string }) => s.name))].sort() as string[];
+        setSiteNames(names);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleTabChange = (t: TabStatus) => { setTab(t); setPage(1); clearSelection(); };
 
@@ -143,6 +177,9 @@ export default function JobsPage() {
     setTempFilterExp(filterExp);
     setTempFilterEmployment(filterEmployment);
     setTempFilterSalary(filterSalary);
+    setTempFilterDate(filterDate);
+    setTempFilterScore(filterScore);
+    setTempFilterSite(filterSite);
     setShowFilters(true);
   };
 
@@ -151,6 +188,9 @@ export default function JobsPage() {
     setFilterExp(tempFilterExp);
     setFilterEmployment(tempFilterEmployment);
     setFilterSalary(tempFilterSalary);
+    setFilterDate(tempFilterDate);
+    setFilterScore(tempFilterScore);
+    setFilterSite(tempFilterSite);
     setPage(1);
     setShowFilters(false);
   };
@@ -160,6 +200,9 @@ export default function JobsPage() {
     setTempFilterExp("");
     setTempFilterEmployment("");
     setTempFilterSalary(false);
+    setTempFilterDate("");
+    setTempFilterScore("");
+    setTempFilterSite("");
   };
 
   const matchAll = async () => {
@@ -492,6 +535,13 @@ export default function JobsPage() {
         setFilterEmployment={setTempFilterEmployment}
         filterSalary={tempFilterSalary}
         setFilterSalary={setTempFilterSalary}
+        filterDate={tempFilterDate}
+        setFilterDate={setTempFilterDate}
+        filterScore={tempFilterScore}
+        setFilterScore={setTempFilterScore}
+        filterSite={tempFilterSite}
+        setFilterSite={setTempFilterSite}
+        siteNames={siteNames}
         onClear={clearAllFilters}
         onApply={applyFilters}
       />

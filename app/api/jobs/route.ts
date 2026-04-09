@@ -8,12 +8,14 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status           = searchParams.get("status");
   const siteId           = searchParams.get("siteId");
+  const siteName         = searchParams.get("siteName");
   const minScore         = searchParams.get("minScore");
   const maxScore         = searchParams.get("maxScore");
   const germanRequired   = searchParams.get("germanRequired");   // "Not required" | "any-required"
   const experienceLevel  = searchParams.get("experienceLevel");  // exact value
   const employmentType   = searchParams.get("employmentType");   // exact value
   const hasSalary        = searchParams.get("hasSalary");        // "true"
+  const dateRange        = searchParams.get("dateRange");        // "today" | "7d" | "30d" | "month"
   const page  = parseInt(searchParams.get("page")  ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "20");
 
@@ -21,8 +23,11 @@ export async function GET(req: NextRequest) {
   const filter: any = {};
   if (status && status !== "all") filter.status = status;
   if (siteId) filter.siteId = siteId;
+  if (siteName) filter.siteName = siteName;
 
-  if (minScore || maxScore) {
+  if (minScore === "none") {
+    filter.matchScore = null;
+  } else if (minScore || maxScore) {
     filter.matchScore = {};
     if (minScore) filter.matchScore.$gte = parseInt(minScore);
     if (maxScore) filter.matchScore.$lte = parseInt(maxScore);
@@ -34,6 +39,29 @@ export async function GET(req: NextRequest) {
   if (experienceLevel) filter.experienceLevel = experienceLevel;
   if (employmentType)  filter.employmentType  = employmentType;
   if (hasSalary === "true") filter.salary = { $ne: null, $exists: true };
+
+  // Date range filter
+  if (dateRange) {
+    const now = new Date();
+    let startDate: Date;
+    switch (dateRange) {
+      case "today":
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case "7d":
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case "30d":
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case "month":
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      default:
+        startDate = new Date(0);
+    }
+    filter.scrapedAt = { $gte: startDate };
+  }
 
   const [jobs, total] = await Promise.all([
     Job.find(filter)
