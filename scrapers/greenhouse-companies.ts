@@ -132,3 +132,56 @@ export const BlackForestLabsScraper = makeGreenhouseScraper(
   "Black Forest Labs",
   "blackforestlabs"
 );
+
+/**
+ * SumUp Scraper
+ * ATS: Greenhouse (board slug: sumup)
+ * Career page: https://www.sumup.com/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/sumup/jobs?content=true
+ * Germany jobs: ~90 of 537 total (Berlin, Cologne, etc.)
+ */
+export const SumUpScraper = makeGreenhouseScraper("sumup", "SumUp", "sumup");
+
+/**
+ * Trade Republic Scraper
+ * ATS: Greenhouse (board slug: TradeRepublicBank)
+ * Career page: https://traderepublic.com/en-de/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/TradeRepublicBank/jobs?content=true
+ * Germany jobs: ~25 of 55 total (Berlin HQ)
+ */
+export const TradeRepublicScraper = makeGreenhouseScraper(
+  "traderepublic",
+  "Trade Republic",
+  "TradeRepublicBank"
+);
+
+/**
+ * Grover Scraper
+ * ATS: Greenhouse (board slug: Grover)
+ * Career page: https://www.grover.com/de-en/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/Grover/jobs?content=true
+ * Germany jobs: 9 of 9 total (all Berlin HQ)
+ */
+export const GroverScraper = makeGreenhouseScraper("grover", "Grover", "Grover");
+
+/**
+ * Staffbase Scraper
+ * ATS: Greenhouse (board slug: Staffbase)
+ * Career page: https://staffbase.com/jobs
+ * Site URL to use: https://api.greenhouse.io/v1/boards/Staffbase/jobs?content=true
+ * Germany jobs: ~28 of 42 total (Berlin, Munich, Chemnitz, Dresden, Cologne)
+ */
+export const StaffbaseScraper = makeGreenhouseScraper("staffbase", "Staffbase", "Staffbase");
+
+/**
+ * Isar Aerospace Scraper
+ * ATS: Greenhouse (board slug: IsarAerospace)
+ * Career page: https://www.isaraerospace.com/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/IsarAerospace/jobs?content=true
+ * Germany jobs: ~78 of 89 total (Ottobrunn/Munich area)
+ */
+export const IsarAerospaceScraper = makeGreenhouseScraper(
+  "isaraerospace",
+  "Isar Aerospace",
+  "IsarAerospace"
+);

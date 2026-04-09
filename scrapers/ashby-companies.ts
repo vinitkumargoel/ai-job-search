@@ -238,3 +238,42 @@ export const AlephAlphaScraper = makeAshbyScraper(
  * Note: All jobs are in Stuttgart — all pass the Germany filter.
  */
 export const SereactScraper = makeAshbyScraper("sereact", "Sereact", "sereact");
+
+/**
+ * Personio Scraper
+ * ATS: Ashby (slug: personio)
+ * Career page: https://www.personio.com/about-personio/careers/
+ * Site URL to use: https://jobs.ashbyhq.com/personio
+ * Germany jobs: ~79 of 95 total (Munich, Berlin)
+ */
+export const PersonioScraper = makeAshbyScraper("personio", "Personio", "personio");
+
+/**
+ * Enpal Scraper
+ * ATS: Ashby (slug: enpal)
+ * Career page: https://www.enpal.de/en/jobs
+ * Site URL to use: https://jobs.ashbyhq.com/enpal
+ * Germany jobs: ~153 of 204 total (Berlin, remote Germany)
+ * Note: jobs.ashbyhq.com is blocked by ZI corporate TLS proxy — works on production server.
+ */
+export const EnpalScraper = makeAshbyScraper("enpal", "Enpal", "enpal");
+
+/**
+ * Forto Scraper
+ * ATS: Ashby (slug: forto)
+ * Career page: https://forto.com/en/careers/
+ * Site URL to use: https://jobs.ashbyhq.com/forto
+ * Germany jobs: ~6 of 10 total (Berlin, Hamburg, Remote Germany)
+ * Note: jobs.ashbyhq.com is blocked by ZI corporate TLS proxy — works on production server.
+ */
+export const FortoScraper = makeAshbyScraper("forto", "Forto", "forto");
+
+/**
+ * Billie Scraper
+ * ATS: Ashby (slug: billie)
+ * Career page: https://www.billie.io/careers
+ * Site URL to use: https://jobs.ashbyhq.com/billie
+ * Germany jobs: 5 of 5 total (all Berlin)
+ * Note: jobs.ashbyhq.com is blocked by ZI corporate TLS proxy — works on production server.
+ */
+export const BillieScraper = makeAshbyScraper("billie", "Billie", "billie");
