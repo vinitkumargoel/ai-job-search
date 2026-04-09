@@ -49,7 +49,11 @@ function makeGreenhouseScraper(scraperName: string, companyName: string, boardTo
 
     async scrape(config: SiteConfig): Promise<ScrapedJob[]> {
       const jobs: ScrapedJob[] = [];
-      const url = config.url; // Should be https://api.greenhouse.io/v1/boards/{boardToken}/jobs?content=true
+      // Always derive URL from the registry board token — never rely on config.url
+      // (config.url may be empty in test mode or stale in DB)
+      const url = config.url && config.url.startsWith("http")
+        ? config.url
+        : `https://api.greenhouse.io/v1/boards/${boardToken}/jobs?content=true`;
       const keywords = config.keywords?.toLowerCase();
 
       try {
@@ -97,3 +101,34 @@ export const HelloFreshScraper = makeGreenhouseScraper("hellofresh", "HelloFresh
 export const GetYourGuideScraper = makeGreenhouseScraper("getyourguide", "GetYourGuide", "getyourguide");
 export const FlixScraper = makeGreenhouseScraper("flix", "Flix", "flix");
 export const Scout24Scraper = makeGreenhouseScraper("scout24", "Scout24", "scout24");
+
+/**
+ * Parloa Technologies Scraper
+ * ATS: Greenhouse (board slug: parloa)
+ * Career page: https://www.parloa.com/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/parloa/jobs?content=true
+ * Germany jobs: ~27 of 57 total (Berlin & Munich offices)
+ */
+export const ParloaScraper = makeGreenhouseScraper("parloa", "Parloa", "parloa");
+
+/**
+ * Helsing Scraper
+ * ATS: Greenhouse (board slug: helsing)
+ * Career page: https://helsing.ai/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/helsing/jobs?content=true
+ * Germany jobs: ~80 of 105 total (Berlin, Munich)
+ */
+export const HelsingScraper = makeGreenhouseScraper("helsing", "Helsing", "helsing");
+
+/**
+ * Black Forest Labs Scraper
+ * ATS: Greenhouse (board slug: blackforestlabs)
+ * Career page: https://blackforestlabs.ai/careers
+ * Site URL to use: https://api.greenhouse.io/v1/boards/blackforestlabs/jobs?content=true
+ * Germany jobs: ~6 of 10 total (Freiburg, Germany)
+ */
+export const BlackForestLabsScraper = makeGreenhouseScraper(
+  "blackforestlabs",
+  "Black Forest Labs",
+  "blackforestlabs"
+);

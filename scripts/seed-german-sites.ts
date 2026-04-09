@@ -4,9 +4,23 @@
  * Usage:
  *   MONGODB_URI=<uri> npx tsx scripts/seed-german-sites.ts
  *
- * Safe to re-run — uses upsert (match on scraperKey) so existing sites
- * are updated in-place without creating duplicates.
+ * Safe to re-run — skips any site whose scraperKey already exists in the DB.
+ * Only creates sites that are genuinely new; never overwrites existing config.
  */
+
+// Load .env.local manually (Next.js convention) without requiring dotenv package.
+// This lets the script run with `npx tsx` without needing MONGODB_URI prefix.
+import { readFileSync, existsSync } from "fs";
+import { resolve } from "path";
+const envPath = resolve(process.cwd(), ".env.local");
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, "utf-8").split("\n")) {
+    const [key, ...rest] = line.split("=");
+    if (key && !key.startsWith("#") && rest.length) {
+      process.env[key.trim()] ??= rest.join("=").trim();
+    }
+  }
+}
 
 import mongoose from "mongoose";
 import Site from "../models/Site";
@@ -75,24 +89,23 @@ async function main() {
   console.log(`${D}Connected to MongoDB${X}\n`);
 
   let created = 0;
-  let updated = 0;
+  let skipped = 0;
 
   for (const seed of GERMAN_SITES) {
     const existing = await Site.findOne({ scraperKey: seed.scraperKey });
 
     if (existing) {
-      await Site.updateOne({ scraperKey: seed.scraperKey }, { $set: seed });
-      console.log(`  ${C}↻  Updated ${X} ${B}${seed.name}${X} ${D}(${seed.scraperKey})${X}`);
-      updated++;
+      console.log(`  ${D}–  Skipped${X}  ${B}${seed.name}${X} ${D}(${seed.scraperKey} already exists)${X}`);
+      skipped++;
     } else {
       await Site.create({ ...seed, lastRunAt: null, nextRunAt: null, lastRunStatus: "never" });
-      console.log(`  ${G}+  Created ${X} ${B}${seed.name}${X} ${D}(${seed.scraperKey} · ${seed.cronSchedule})${X}`);
+      console.log(`  ${G}+  Created${X}  ${B}${seed.name}${X} ${D}(${seed.scraperKey} · ${seed.cronSchedule})${X}`);
       created++;
     }
   }
 
-  console.log(`\n${B}Done.${X} ${G}${created} created${X}  ${C}${updated} updated${X}`);
-  console.log(`${D}Total sites seeded: ${GERMAN_SITES.length}${X}\n`);
+  console.log(`\n${B}Done.${X}  ${G}${created} created${X}  ${D}${skipped} skipped (already existed)${X}`);
+  console.log(`${D}Total sites checked: ${GERMAN_SITES.length}${X}\n`);
 
   await mongoose.disconnect();
 }
