@@ -1,5 +1,25 @@
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL ?? "http://localhost:11434";
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "llama3";
+import { getOllamaSettings, OllamaSettings } from "@/models/Setting";
+
+// Cache settings for 60 seconds to avoid repeated DB queries
+let cachedSettings: OllamaSettings | null = null;
+let cacheTime = 0;
+const CACHE_TTL = 60_000; // 60 seconds
+
+async function getSettings(): Promise<OllamaSettings> {
+  const now = Date.now();
+  if (cachedSettings && now - cacheTime < CACHE_TTL) {
+    return cachedSettings;
+  }
+  cachedSettings = await getOllamaSettings();
+  cacheTime = now;
+  return cachedSettings;
+}
+
+// Clear cache when settings are updated (called from API)
+export function clearOllamaSettingsCache(): void {
+  cachedSettings = null;
+  cacheTime = 0;
+}
 
 export interface MatchResult {
   score: number;
@@ -12,6 +32,7 @@ export async function matchJobToResume(
   jobCompany: string,
   jobDescription: string
 ): Promise<MatchResult | null> {
+  const settings = await getSettings();
   const prompt = `You are a career assistant. Given a resume and a job description, evaluate how well the candidate matches the job.
 
 RESUME:
@@ -29,11 +50,11 @@ Respond ONLY in valid JSON with this exact structure:
 }`;
 
   try {
-    const res = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
+    const res = await fetch(`${settings.baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: OLLAMA_MODEL,
+        model: settings.model,
         prompt,
         stream: false,
         format: "json",
@@ -62,7 +83,8 @@ Respond ONLY in valid JSON with this exact structure:
 
 export async function isOllamaAvailable(): Promise<boolean> {
   try {
-    const res = await fetch(`${OLLAMA_BASE_URL}/api/tags`, {
+    const settings = await getSettings();
+    const res = await fetch(`${settings.baseUrl}/api/tags`, {
       signal: AbortSignal.timeout(3000),
     });
     return res.ok;
@@ -103,6 +125,8 @@ export async function enrichJobDescription(
   const source = rawHtml?.trim() || plainDescription?.trim();
   if (!source) return null;
 
+  const settings = await getSettings();
+
   const prompt = `You are an expert job description parser. Extract ALL information from the job posting content below.
 
 RULES:
@@ -134,11 +158,11 @@ Respond ONLY in valid JSON, no markdown fences:
 }`;
 
   try {
-    const res = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
+    const res = await fetch(`${settings.baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: OLLAMA_MODEL,
+        model: settings.model,
         prompt,
         stream: false,
         format: "json",
@@ -223,16 +247,17 @@ export async function isGermanyLocation(
     return false;
   }
 
+  const settings = await getSettings();
   const prompt = `Is this job located in Germany? Answer only "yes" or "no".
 Job title: ${title}
 Company: ${company}
 Location: ${location}`;
 
   try {
-    const res = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
+    const res = await fetch(`${settings.baseUrl}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: OLLAMA_MODEL, prompt, stream: true, think: false }),
+      body: JSON.stringify({ model: settings.model, prompt, stream: true, think: false }),
       signal: AbortSignal.timeout(15000),
     });
 
