@@ -140,8 +140,16 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
 /** Fetch full job description from Avature ViewJob detail page */
 async function fetchJobDescription(url: string): Promise<{ description: string; rawHtml: string }> {
   return withPage(async (page) => {
-    // Use networkidle2 for detail pages - content is rendered dynamically
-    await page.goto(url, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
+    try {
+      // Use networkidle2 for detail pages - content is rendered dynamically
+      await page.goto(url, { waitUntil: "networkidle2", timeout: PAGE_TIMEOUT });
+
+      // Wait for main content to appear
+      await page.waitForSelector(".main__content, main, article", { timeout: 5000 }).catch(() => {});
+    } catch (e) {
+      console.log(`[Siemens] Page load failed for ${url}: ${e.message}`);
+      return { description: "", rawHtml: "" };
+    }
 
     // Try JSON-LD first (most reliable on Avature detail pages)
     const ldJson = await page.evaluate(() => {
@@ -166,13 +174,14 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
       // Try specific selectors first
       const selectors = [
         ".main__content", ".section__content--view", "main",
-        ".section--job-description", ".jobdescription", ".jobDescription"
+        ".section--job-description", ".jobdescription", ".jobDescription",
+        "article.article--details", ".article__content"
       ];
 
       for (const sel of selectors) {
         const el = document.querySelector<HTMLElement>(sel);
         const text = el?.innerText?.trim();
-        if (text && text.length > 200) {
+        if (text && text.length > 100) {
           return { description: text, rawHtml: el!.innerHTML };
         }
       }
@@ -181,7 +190,7 @@ async function fetchJobDescription(url: string): Promise<{ description: string; 
       const bodyText = (document.body as HTMLElement)?.innerText?.trim() || "";
       const bodyHtml = document.body?.innerHTML || "";
 
-      if (bodyText.length > 500) {
+      if (bodyText.length > 200) {
         return { description: bodyText.slice(0, 15000), rawHtml: bodyHtml.slice(0, 50000) };
       }
 
