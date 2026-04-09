@@ -13,6 +13,10 @@ export interface SiteConfig {
   keywords?: string;
   /** If true, Puppeteer scrapers stop after the first page (used in smoke tests) */
   firstPageOnly?: boolean;
+  /** URLs already in DB - scraper can skip these to focus on new jobs */
+  existingUrls?: Set<string>;
+  /** Maximum number of NEW jobs to fetch descriptions for */
+  maxNewJobs?: number;
 }
 
 export interface ScraperStrategy {

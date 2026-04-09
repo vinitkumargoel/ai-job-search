@@ -38,7 +38,18 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
   }
 
   try {
-    const scrapedJobs = await scraper.scrape({ url: site.url, keywords: site.keywords });
+    // Get existing URLs for this site so scraper can skip them
+    const existingJobs = await Job.find({ siteId: site._id }, { url: 1 }).lean();
+    const existingUrls = new Set(existingJobs.map(j => j.url));
+    const existingSkipped = await SkippedUrl.find({}, { url: 1 }).lean();
+    existingSkipped.forEach(s => existingUrls.add(s.url));
+
+    const scrapedJobs = await scraper.scrape({
+      url: site.url,
+      keywords: site.keywords,
+      existingUrls,
+      maxNewJobs: 200,
+    });
     await log(siteId, site.name, `Scraper returned ${scrapedJobs.length} jobs`, "info");
 
     // First pass: filter and create all new jobs

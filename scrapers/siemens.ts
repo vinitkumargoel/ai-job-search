@@ -33,7 +33,7 @@ import { withPage } from "../lib/puppeteerBrowser";
 const SEARCH_BASE  = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs";
 const PAGE_TIMEOUT = 30_000;
 const BATCH_SIZE   = 10;      // parallel fetch of detail pages (reduced to avoid rate limiting)
-const MAX_JOBS     = 200;      // limit total jobs to scrape
+const MAX_NEW_JOBS = 200;      // limit NEW jobs to enrich per run
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
@@ -76,12 +76,6 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
 
     let pageNum = 1;
     while (true) {
-      // Stop if we've reached the max
-      if (jobs.length >= MAX_JOBS) {
-        console.log(`[Siemens] Reached max limit of ${MAX_JOBS} jobs, stopping pagination`);
-        break;
-      }
-
       // Wait for Avature to render job article cards
       await page.waitForSelector("article.article--result", { timeout: PAGE_TIMEOUT })
         .catch(() => {});
@@ -130,10 +124,8 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
       await sleep(200); // reduced from 500ms
     }
 
-    // Trim to max jobs
-    const trimmed = jobs.slice(0, MAX_JOBS);
-    console.log(`[Siemens] Total jobs found: ${jobs.length}, returning: ${trimmed.length}`);
-    return trimmed;
+    console.log(`[Siemens] Total jobs found: ${jobs.length}`);
+    return jobs;
   });
 }
 
@@ -225,23 +217,38 @@ export const SiemensScraper: ScraperStrategy = {
 
   async scrape(config: SiteConfig): Promise<ScrapedJob[]> {
     const keywords = config.keywords ?? "software engineer";
-    console.log(`[Siemens] Starting scrape with keywords: "${keywords}"`);
+    const existingUrls = config.existingUrls ?? new Set();
+    const maxNewJobs = config.maxNewJobs ?? 200;
 
-    // Step 1: scrape paginated job list
-    const rawJobs = await scrapeJobList(keywords, config.firstPageOnly);
-    if (!rawJobs.length) {
+    console.log(`[Siemens] Starting scrape with keywords: "${keywords}"`);
+    console.log(`[Siemens] Existing URLs to skip: ${existingUrls.size}, max new jobs: ${maxNewJobs}`);
+
+    // Step 1: scrape paginated job list (ALL URLs, no limit)
+    const allJobs = await scrapeJobList(keywords, config.firstPageOnly);
+    if (!allJobs.length) {
       console.log(`[Siemens] No jobs found, returning empty array`);
       return [];
     }
 
-    console.log(`[Siemens] Fetching descriptions for ${rawJobs.length} jobs in batches of ${BATCH_SIZE}...`);
+    // Step 2: filter out existing URLs to find new jobs
+    const newJobs = allJobs.filter(job => !existingUrls.has(job.url));
+    console.log(`[Siemens] Total: ${allJobs.length} jobs, New: ${newJobs.length}, Existing: ${allJobs.length - newJobs.length}`);
 
-    // Step 2: fetch full descriptions in batches
+    if (!newJobs.length) {
+      console.log(`[Siemens] No new jobs to process`);
+      return [];
+    }
+
+    // Step 3: limit to maxNewJobs
+    const jobsToProcess = newJobs.slice(0, maxNewJobs);
+    console.log(`[Siemens] Processing ${jobsToProcess.length} new jobs (limit: ${maxNewJobs})`);
+
+    // Step 4: fetch full descriptions in batches
     const jobs: ScrapedJob[] = [];
-    const total = rawJobs.length;
+    const total = jobsToProcess.length;
 
     for (let i = 0; i < total; i += BATCH_SIZE) {
-      const batch = rawJobs.slice(i, i + BATCH_SIZE);
+      const batch = jobsToProcess.slice(i, i + BATCH_SIZE);
       const batchNum = Math.floor(i / BATCH_SIZE) + 1;
       const totalBatches = Math.ceil(total / BATCH_SIZE);
 
@@ -276,7 +283,7 @@ export const SiemensScraper: ScraperStrategy = {
       }
     }
 
-    console.log(`[Siemens] Scrape complete: ${jobs.length} jobs with descriptions`);
+    console.log(`[Siemens] Scrape complete: ${jobs.length} new jobs with descriptions`);
     return jobs;
   },
 };
