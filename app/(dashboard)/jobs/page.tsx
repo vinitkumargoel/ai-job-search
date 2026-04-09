@@ -131,15 +131,40 @@ export default function JobsPage() {
     }
     setLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite]);
+  }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
   const fetchBoardJobs = useCallback(async () => {
-    const res = await fetch("/api/jobs?limit=200");
+    const params = new URLSearchParams({ limit: "200" });
+    if (filterGerman) params.set("germanRequired", filterGerman);
+    if (filterExp) params.set("experienceLevel", filterExp);
+    if (filterEmployment) params.set("employmentType", filterEmployment);
+    if (filterSalary) params.set("hasSalary", "true");
+    if (filterDate) params.set("dateRange", filterDate);
+    if (filterScore) {
+      if (filterScore === "high") {
+        params.set("minScore", "80");
+        params.set("maxScore", "100");
+      } else if (filterScore === "medium") {
+        params.set("minScore", "50");
+        params.set("maxScore", "79");
+      } else if (filterScore === "low") {
+        params.set("minScore", "0");
+        params.set("maxScore", "49");
+      } else if (filterScore === "none") {
+        params.set("minScore", "none");
+      }
+    }
+    if (filterSite) params.set("siteName", filterSite);
+    if (filterWorkLocation) params.set("workLocation", filterWorkLocation);
+    if (filterVisa) params.set("visaSponsorship", filterVisa);
+
+    const res = await fetch(`/api/jobs?${params.toString()}`);
     if (res.ok) {
       const data = await res.json();
       setBoardJobs(data.jobs);
     }
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
   useEffect(() => {
     fetchJobs(tab, page);
@@ -149,7 +174,7 @@ export default function JobsPage() {
   useEffect(() => {
     if (view === "board") fetchBoardJobs();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view]);
+  }, [view, filterGerman, filterExp, filterEmployment, filterSalary, filterDate, filterScore, filterSite, filterWorkLocation, filterVisa]);
 
   // Fetch site names for filter dropdown
   useEffect(() => {
