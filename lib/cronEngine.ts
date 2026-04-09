@@ -78,7 +78,8 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
         const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
         if (enriched) {
           await Job.findByIdAndUpdate(created._id, {
-            description: enriched.description,
+            // NOTE: Do NOT overwrite description - keep original scraped content
+            // description: enriched.description,  // <-- removed
             summary: enriched.summary,
             skills: enriched.skills,
             experienceLevel: enriched.experienceLevel,
