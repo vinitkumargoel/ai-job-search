@@ -32,7 +32,7 @@ import { withPage } from "../lib/puppeteerBrowser";
 
 const SEARCH_BASE  = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs";
 const PAGE_TIMEOUT = 30_000;
-const BATCH_SIZE   = 20;      // parallel fetch of detail pages
+const BATCH_SIZE   = 10;      // parallel fetch of detail pages (reduced to avoid rate limiting)
 const MAX_JOBS     = 200;      // limit total jobs to scrape
 
 function sleep(ms: number) {
@@ -270,9 +270,9 @@ export const SiemensScraper: ScraperStrategy = {
         });
       });
 
-      // Small delay between batches to avoid rate limiting
+      // Delay between batches to avoid rate limiting
       if (i + BATCH_SIZE < total) {
-        await sleep(100);
+        await sleep(500);
       }
     }
 
