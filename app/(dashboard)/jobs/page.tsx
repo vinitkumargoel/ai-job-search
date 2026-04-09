@@ -6,7 +6,7 @@ import { KanbanBoard } from "@/components/KanbanBoard";
 import { FiltersModal } from "@/components/FiltersModal";
 import { useToast } from "@/components/ui/Toast";
 
-type TabStatus = "new" | "all" | "applied" | "saved" | "rejected";
+type TabStatus = "new" | "all" | "applied" | "call" | "interviewing" | "selected" | "saved" | "rejected";
 type ViewMode = "grid" | "board";
 
 interface Job {
@@ -39,8 +39,11 @@ interface Job {
 const TABS: { key: TabStatus; label: string }[] = [
   { key: "new", label: "New" },
   { key: "all", label: "All" },
-  { key: "applied", label: "Applied" },
   { key: "saved", label: "Saved" },
+  { key: "applied", label: "Applied" },
+  { key: "call", label: "Call" },
+  { key: "interviewing", label: "Interview" },
+  { key: "selected", label: "Selected" },
   { key: "rejected", label: "Rejected" },
 ];
 
@@ -325,11 +328,14 @@ export default function JobsPage() {
   const totalPages = Math.ceil(total / 20);
 
   const emptyMessages: Record<TabStatus, { title: string; sub: string }> = {
-    new:      { title: "No new jobs", sub: "Run a scrape on the Sites page to discover new listings" },
-    all:      { title: "No jobs found", sub: "Add a site and run a scrape to get started" },
-    applied:  { title: "No applications yet", sub: "Mark jobs as applied to track them here" },
-    saved:    { title: "Nothing saved", sub: "Save interesting jobs to revisit them later" },
-    rejected: { title: "No rejected jobs", sub: "Jobs you pass on will appear here" },
+    new:         { title: "No new jobs", sub: "Run a scrape on the Sites page to discover new listings" },
+    all:         { title: "No jobs found", sub: "Add a site and run a scrape to get started" },
+    applied:     { title: "No applications yet", sub: "Mark jobs as applied to track them here" },
+    call:        { title: "No calls yet", sub: "Jobs where you received a call will appear here" },
+    interviewing: { title: "No interviews yet", sub: "Jobs where you're interviewing will appear here" },
+    selected:    { title: "No offers yet", sub: "Jobs where you received an offer will appear here" },
+    saved:       { title: "Nothing saved", sub: "Save interesting jobs to revisit them later" },
+    rejected:    { title: "No rejected jobs", sub: "Jobs you pass on will appear here" },
   };
 
   return (
@@ -458,18 +464,39 @@ export default function JobsPage() {
             <>
               {/* Bulk actions bar */}
               {selectedIds.size > 0 && (
-                <div className="mb-4 flex items-center gap-3 bg-[#4F6AF5] text-white px-4 py-3 rounded-xl shadow-sm">
+                <div className="mb-4 flex items-center gap-2 flex-wrap bg-[#4F6AF5] text-white px-4 py-3 rounded-xl shadow-sm">
                   <span className="text-sm font-semibold">
                     {selectedIds.size} selected
                   </span>
                   <div className="flex-1" />
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <button
                       onClick={() => bulkStatusChange("applied")}
                       disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    >
+                      Applied
+                    </button>
+                    <button
+                      onClick={() => bulkStatusChange("call")}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors disabled:opacity-50"
+                    >
+                      Got Call
+                    </button>
+                    <button
+                      onClick={() => bulkStatusChange("interviewing")}
+                      disabled={bulkLoading}
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors disabled:opacity-50"
+                    >
+                      Interview
+                    </button>
+                    <button
+                      onClick={() => bulkStatusChange("selected")}
+                      disabled={bulkLoading}
                       className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
                     >
-                      ✓ Applied
+                      Selected
                     </button>
                     <button
                       onClick={() => bulkStatusChange("saved")}
@@ -481,7 +508,7 @@ export default function JobsPage() {
                     <button
                       onClick={() => bulkStatusChange("rejected")}
                       disabled={bulkLoading}
-                      className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-white/30 text-white hover:bg-white/10 transition-colors disabled:opacity-50"
+                      className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50"
                     >
                       Reject
                     </button>

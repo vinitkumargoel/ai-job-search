@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-export type JobStatus = "new" | "applied" | "saved" | "rejected";
+export type JobStatus = "new" | "applied" | "call" | "interviewing" | "selected" | "saved" | "rejected";
 
 export interface IJob extends Document {
   siteId: Types.ObjectId;
@@ -53,7 +53,7 @@ const JobSchema = new Schema(
     postedAt: { type: String, default: "" },
     status: {
       type: String,
-      enum: ["new", "applied", "saved", "rejected"],
+      enum: ["new", "applied", "call", "interviewing", "selected", "saved", "rejected"],
       default: "new",
     },
     isNew: { type: Boolean, default: true },

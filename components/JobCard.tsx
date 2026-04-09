@@ -43,10 +43,13 @@ interface JobCardProps {
 }
 
 const STATUS_PILL: Record<string, { bg: string; text: string; dot: string }> = {
-  new:      { bg: "bg-[#EEF1FE]",  text: "text-[#4F6AF5]", dot: "bg-[#4F6AF5]" },
-  saved:    { bg: "bg-amber-50",   text: "text-amber-700",  dot: "bg-amber-400" },
-  applied:  { bg: "bg-green-50",   text: "text-green-700",  dot: "bg-green-500" },
-  rejected: { bg: "bg-red-50",     text: "text-red-700",    dot: "bg-red-400" },
+  new:         { bg: "bg-[#EEF1FE]",  text: "text-[#4F6AF5]", dot: "bg-[#4F6AF5]" },
+  applied:     { bg: "bg-blue-50",    text: "text-blue-700",   dot: "bg-blue-500" },
+  call:        { bg: "bg-purple-50",  text: "text-purple-700", dot: "bg-purple-500" },
+  interviewing: { bg: "bg-amber-50",  text: "text-amber-700",  dot: "bg-amber-400" },
+  selected:    { bg: "bg-green-50",   text: "text-green-700", dot: "bg-green-500" },
+  saved:       { bg: "bg-cyan-50",     text: "text-cyan-700",   dot: "bg-cyan-500" },
+  rejected:    { bg: "bg-red-50",      text: "text-red-700",    dot: "bg-red-400" },
 };
 
 // Domain mapping for favicon lookup
@@ -274,7 +277,7 @@ export function JobCard({ job, onStatusChange, onRematch, onDelete, selectable, 
           <p className="text-[11px] text-gray-400">
             {new Date(job.scrapedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
           </p>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap justify-end">
             <a
               href={job.url}
               target="_blank"
@@ -284,16 +287,8 @@ export function JobCard({ job, onStatusChange, onRematch, onDelete, selectable, 
             >
               Open
             </a>
-            {job.status !== "applied" && (
-              <button
-                onClick={(e) => handleStatus(e, "applied")}
-                disabled={loading}
-                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
-              >
-                Applied
-              </button>
-            )}
-            {job.status !== "saved" && job.status !== "applied" && (
+            {/* Save button - show for new jobs */}
+            {job.status === "new" && (
               <button
                 onClick={(e) => handleStatus(e, "saved")}
                 disabled={loading}
@@ -302,6 +297,47 @@ export function JobCard({ job, onStatusChange, onRematch, onDelete, selectable, 
                 Save
               </button>
             )}
+            {/* Applied button - show for new and saved */}
+            {(job.status === "new" || job.status === "saved") && (
+              <button
+                onClick={(e) => handleStatus(e, "applied")}
+                disabled={loading}
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                Applied
+              </button>
+            )}
+            {/* Got Call button - show for applied */}
+            {job.status === "applied" && (
+              <button
+                onClick={(e) => handleStatus(e, "call")}
+                disabled={loading}
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors disabled:opacity-50"
+              >
+                Got Call
+              </button>
+            )}
+            {/* Interviewing button - show for call */}
+            {job.status === "call" && (
+              <button
+                onClick={(e) => handleStatus(e, "interviewing")}
+                disabled={loading}
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors disabled:opacity-50"
+              >
+                Interview
+              </button>
+            )}
+            {/* Selected button - show for interviewing */}
+            {job.status === "interviewing" && (
+              <button
+                onClick={(e) => handleStatus(e, "selected")}
+                disabled={loading}
+                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+              >
+                Selected
+              </button>
+            )}
+            {/* Pass/Reject button - show for all except rejected */}
             {job.status !== "rejected" && (
               <button
                 onClick={(e) => handleStatus(e, "rejected")}
