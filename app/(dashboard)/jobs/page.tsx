@@ -136,7 +136,7 @@ export default function JobsPage() {
 
   const fetchBoardJobs = useCallback(async () => {
     setBoardLoading(true);
-    const params = new URLSearchParams({ limit: "200" });
+    const params = new URLSearchParams({ limit: "9999" }); // Fetch all jobs
     if (filterGerman) params.set("germanRequired", filterGerman);
     if (filterExp) params.set("experienceLevel", filterExp);
     if (filterEmployment) params.set("employmentType", filterEmployment);

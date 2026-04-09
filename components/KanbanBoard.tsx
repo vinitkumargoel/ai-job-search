@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { useToast } from "./ui/Toast";
 
@@ -29,6 +30,8 @@ const COLUMNS: { key: string; label: string; color: string; dot: string }[] = [
   { key: "applied",  label: "Applied",  color: "bg-green-50",   dot: "bg-green-500" },
   { key: "rejected", label: "Rejected", color: "bg-gray-50",    dot: "bg-gray-300" },
 ];
+
+const INITIAL_VISIBLE = 50; // Show first 50 jobs per column
 
 // Domain mapping for favicon lookup
 const SITE_DOMAINS: Record<string, string> = {
@@ -66,6 +69,14 @@ function scoreColor(score: number | null) {
 
 export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
   const { toast } = useToast();
+  const [expandedColumns, setExpandedColumns] = useState<Record<string, boolean>>({});
+
+  const toggleColumn = (columnKey: string) => {
+    setExpandedColumns((prev) => ({
+      ...prev,
+      [columnKey]: !prev[columnKey],
+    }));
+  };
 
   const grouped: Record<string, Job[]> = { new: [], saved: [], applied: [], rejected: [] };
   for (const job of jobs) {
@@ -108,15 +119,21 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
             </div>
 
             <Droppable droppableId={col.key}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={`flex flex-col gap-2 min-h-[120px] rounded-xl p-2 transition-colors ${
-                    snapshot.isDraggingOver ? col.color : "bg-gray-50"
-                  }`}
-                >
-                  {grouped[col.key].map((job, index) => (
+              {(provided, snapshot) => {
+                const allJobs = grouped[col.key];
+                const isExpanded = expandedColumns[col.key];
+                const visibleJobs = isExpanded ? allJobs : allJobs.slice(0, INITIAL_VISIBLE);
+                const hasMore = allJobs.length > INITIAL_VISIBLE;
+
+                return (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className={`flex flex-col gap-2 min-h-[120px] rounded-xl p-2 transition-colors ${
+                      snapshot.isDraggingOver ? col.color : "bg-gray-50"
+                    }`}
+                  >
+                    {visibleJobs.map((job, index) => (
                     <Draggable key={job._id} draggableId={job._id} index={index}>
                       {(provided, snapshot) => (
                         <div
@@ -193,13 +210,26 @@ export function KanbanBoard({ jobs, onStatusChange }: KanbanBoardProps) {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  {grouped[col.key].length === 0 && (
+                  {allJobs.length === 0 && (
                     <div className="flex-1 flex items-center justify-center py-6 text-[11px] text-gray-400">
                       Drop jobs here
                     </div>
                   )}
+                  {hasMore && (
+                    <button
+                      onClick={() => toggleColumn(col.key)}
+                      className="w-full py-2 text-xs font-semibold text-[#4F6AF5] hover:bg-[#4F6AF5]/5 rounded-lg transition-colors"
+                    >
+                      {isExpanded ? (
+                        <span>Show less</span>
+                      ) : (
+                        <span>View all {allJobs.length} jobs</span>
+                      )}
+                    </button>
+                  )}
                 </div>
-              )}
+              );
+            }}
             </Droppable>
           </div>
         ))}
