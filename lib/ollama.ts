@@ -103,6 +103,8 @@ export interface EnrichedJob {
   benefits: string[];
   germanRequired: string; // "Not required" | "A1-A2 (Basic)" | "B1-B2 (Conversational)" | "C1-C2 (Fluent)" | "Native"
   yearsOfExperience: string | null; // e.g. "3-5 years", "5+ years", null if not mentioned
+  workLocation: string; // "Remote" | "Hybrid" | "On-site" | "Not specified"
+  visaSponsorship: string; // "Yes" | "No" | "Not specified"
 }
 
 /**
@@ -141,6 +143,8 @@ RULES:
 - salary: exact text if mentioned, otherwise null (not the string "null").
 - germanRequired: look for any mention of German language requirements. Respond with one of: "Not required" | "A1-A2 (Basic)" | "B1-B2 (Conversational)" | "C1-C2 (Fluent)" | "Native". If no mention of German at all, use "Not required". If the job description is written entirely in German, that's a strong signal — use "C1-C2 (Fluent)" at minimum.
 - yearsOfExperience: extract the required years of experience as a range string like "3-5 years" or "5+ years". If not mentioned, use null.
+- workLocation: Determine the work arrangement. Look for keywords like "remote", "work from home", "hybrid", "on-site", "office", "flexible location". Respond with one of: "Remote" | "Hybrid" | "On-site" | "Not specified". If it says "remote" or "work from anywhere" or "fully remote", use "Remote". If it says "hybrid" or "2-3 days in office", use "Hybrid". If it says "on-site" or requires being in office, use "On-site".
+- visaSponsorship: Determine if the company offers visa sponsorship. Look for phrases like "visa sponsorship", "work permit", "relocation support", "we sponsor visas", "eligible to work". Respond with one of: "Yes" | "No" | "Not specified". Use "Yes" only if explicitly stated they offer sponsorship. Use "No" if they explicitly say no sponsorship. Use "Not specified" if not mentioned.
 - The content may contain raw HTML tags — strip them and use only the text.
 
 JOB TITLE: ${title}
@@ -158,7 +162,9 @@ Respond ONLY in valid JSON, no markdown fences:
   "salary": <string with salary info, or null>,
   "benefits": ["every", "benefit", "mentioned"],
   "germanRequired": "<Not required | A1-A2 (Basic) | B1-B2 (Conversational) | C1-C2 (Fluent) | Native>",
-  "yearsOfExperience": <"3-5 years" or "5+ years" string, or null>
+  "yearsOfExperience": <"3-5 years" or "5+ years" string, or null>,
+  "workLocation": "<Remote | Hybrid | On-site | Not specified>",
+  "visaSponsorship": "<Yes | No | Not specified>"
 }`;
 
   try {
@@ -218,6 +224,12 @@ Respond ONLY in valid JSON, no markdown fences:
       yearsOfExperience: typeof parsed.yearsOfExperience === "string" && parsed.yearsOfExperience !== "null"
         ? parsed.yearsOfExperience
         : null,
+      workLocation: typeof parsed.workLocation === "string"
+        ? parsed.workLocation
+        : "Not specified",
+      visaSponsorship: typeof parsed.visaSponsorship === "string"
+        ? parsed.visaSponsorship
+        : "Not specified",
     };
   } catch (err) {
     console.error("[enrichJobDescription] Error:", err instanceof Error ? err.message : String(err));

@@ -17,6 +17,8 @@ export interface IJob extends Document {
   benefits: string[];
   germanRequired: string | null;
   yearsOfExperience: string | null; // e.g. "3-5 years", "5+ years"
+  workLocation: string | null; // "Remote" | "Hybrid" | "On-site" | "Not specified"
+  visaSponsorship: string | null; // "Yes" | "No" | "Not specified"
   company: string;
   location: string;
   postedAt: string;
@@ -44,6 +46,8 @@ const JobSchema = new Schema(
     benefits: { type: [String], default: [] },
     germanRequired: { type: String, default: null },
     yearsOfExperience: { type: String, default: null },
+    workLocation: { type: String, default: null },
+    visaSponsorship: { type: String, default: null },
     company: { type: String, default: "" },
     location: { type: String, default: "" },
     postedAt: { type: String, default: "" },

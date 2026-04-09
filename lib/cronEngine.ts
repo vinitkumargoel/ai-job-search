@@ -5,6 +5,8 @@ import { matchJobToResume, isGermanyLocation, enrichJobDescription } from "./oll
 // Keep a map of running tasks so we can cancel/replace them
 const activeTasks = new Map<string, ScheduledTask>();
 
+const ENRICHMENT_BATCH_SIZE = 3; // Process enrichment in batches of 3
+
 async function log(siteId: string | null, siteName: string, message: string, level: "info" | "error" | "success" = "info") {
   try {
     const { default: CronLog } = await import("../models/CronLog");
@@ -39,8 +41,8 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
     const scrapedJobs = await scraper.scrape({ url: site.url, keywords: site.keywords });
     await log(siteId, site.name, `Scraper returned ${scrapedJobs.length} jobs`, "info");
 
-    let newCount = 0;
-    const newJobIds: string[] = [];
+    // First pass: filter and create all new jobs
+    const newJobsToCreate: { scraped: typeof scrapedJobs[0]; created: typeof Job.prototype }[] = [];
 
     for (const scraped of scrapedJobs) {
       // Skip if already in jobs DB (dedup) or previously classified as non-Germany
@@ -72,14 +74,38 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
         isNew: true,
       });
 
-      // Enrich description with Ollama immediately after saving
-      await log(siteId, site.name, `Enriching: ${scraped.title}`, "info");
-      try {
-        const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
-        if (enriched) {
+      newJobsToCreate.push({ scraped, created });
+    }
+
+    const newCount = newJobsToCreate.length;
+    const newJobIds = newJobsToCreate.map(j => String(j.created._id));
+
+    // Second pass: enrich in batches of ENRICHMENT_BATCH_SIZE
+    await log(siteId, site.name, `Enriching ${newCount} new jobs in batches of ${ENRICHMENT_BATCH_SIZE}`, "info");
+
+    for (let i = 0; i < newJobsToCreate.length; i += ENRICHMENT_BATCH_SIZE) {
+      const batch = newJobsToCreate.slice(i, i + ENRICHMENT_BATCH_SIZE);
+      const batchNum = Math.floor(i / ENRICHMENT_BATCH_SIZE) + 1;
+      const totalBatches = Math.ceil(newJobsToCreate.length / ENRICHMENT_BATCH_SIZE);
+
+      await log(siteId, site.name, `Enrichment batch ${batchNum}/${totalBatches}: ${batch.length} jobs`, "info");
+
+      // Process batch in parallel
+      const enrichResults = await Promise.allSettled(
+        batch.map(async ({ scraped, created }) => {
+          const enriched = await enrichJobDescription(scraped.title, scraped.company, scraped.description, scraped.rawHtml);
+          return { scraped, created, enriched };
+        })
+      );
+
+      // Update each job with enrichment results
+      for (let j = 0; j < batch.length; j++) {
+        const { scraped, created } = batch[j];
+        const result = enrichResults[j];
+
+        if (result.status === "fulfilled" && result.value.enriched) {
+          const enriched = result.value.enriched;
           await Job.findByIdAndUpdate(created._id, {
-            // NOTE: Do NOT overwrite description - keep original scraped content
-            // description: enriched.description,  // <-- removed
             summary: enriched.summary,
             skills: enriched.skills,
             experienceLevel: enriched.experienceLevel,
@@ -89,17 +115,12 @@ export async function runScrapeForSite(siteId: string): Promise<void> {
             germanRequired: enriched.germanRequired,
             yearsOfExperience: enriched.yearsOfExperience,
           }, { strict: false });
-          await log(siteId, site.name, `Enriched: ${scraped.title} | German: ${enriched.germanRequired} | Skills: ${enriched.skills.slice(0,3).join(", ")}`, "success");
+          await log(siteId, site.name, `Enriched: ${scraped.title} | German: ${enriched.germanRequired}`, "success");
         } else {
-          await log(siteId, site.name, `Enrichment failed for: ${scraped.title} (no result)`, "error");
+          const errMsg = result.status === "rejected" ? result.reason?.message : "no result";
+          await log(siteId, site.name, `Enrichment failed: ${scraped.title} (${errMsg})`, "error");
         }
-      } catch (enrichErr) {
-        const errMsg = enrichErr instanceof Error ? enrichErr.message : String(enrichErr);
-        await log(siteId, site.name, `Enrichment error for: ${scraped.title} - ${errMsg}`, "error");
       }
-
-      newJobIds.push(String(created._id));
-      newCount++;
     }
 
     await log(siteId, site.name, `Saved ${newCount} new jobs`, "success");

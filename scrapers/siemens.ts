@@ -32,7 +32,8 @@ import { withPage } from "../lib/puppeteerBrowser";
 
 const SEARCH_BASE  = "https://jobs.siemens.com/en_US/externaljobs/SearchJobs";
 const PAGE_TIMEOUT = 30_000;
-const BATCH_SIZE   = 5;       // match puppeteerBrowser POOL_SIZE for max parallelism
+const BATCH_SIZE   = 20;      // parallel fetch of detail pages
+const MAX_JOBS     = 200;      // limit total jobs to scrape
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
@@ -75,6 +76,12 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
 
     let pageNum = 1;
     while (true) {
+      // Stop if we've reached the max
+      if (jobs.length >= MAX_JOBS) {
+        console.log(`[Siemens] Reached max limit of ${MAX_JOBS} jobs, stopping pagination`);
+        break;
+      }
+
       // Wait for Avature to render job article cards
       await page.waitForSelector("article.article--result", { timeout: PAGE_TIMEOUT })
         .catch(() => {});
@@ -123,8 +130,10 @@ async function scrapeJobList(keywords: string, firstPageOnly = false): Promise<R
       await sleep(200); // reduced from 500ms
     }
 
-    console.log(`[Siemens] Total jobs found: ${jobs.length}`);
-    return jobs;
+    // Trim to max jobs
+    const trimmed = jobs.slice(0, MAX_JOBS);
+    console.log(`[Siemens] Total jobs found: ${jobs.length}, returning: ${trimmed.length}`);
+    return trimmed;
   });
 }
 

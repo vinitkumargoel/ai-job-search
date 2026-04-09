@@ -24,6 +24,8 @@ interface Job {
   benefits: string[];
   germanRequired: string | null;
   yearsOfExperience: string | null;
+  workLocation: string | null;
+  visaSponsorship: string | null;
   url: string;
   postedAt: string;
   scrapedAt: string;
